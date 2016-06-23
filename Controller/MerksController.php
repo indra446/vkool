@@ -21,8 +21,18 @@ class MerksController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Merk->recursive = 0;
-		$this->set('merks', $this->Paginator->paginate());
+		// $this->Merk->recursive = 0;
+		$merks=$this->Merk->find('all',array('recursive'=>0,'order'=>array('Merk.lft'=>'asc')));
+		// debug($merks);
+		$this->set(compact('merks'));
+		// $this->set('merks', $this->Paginator->paginate());
+	}
+        public function merk($id = null) {
+		if (!$this->Merk->exists($id)) {
+			throw new NotFoundException(__('Invalid Merk'));
+		}
+		$data=$this->Merk->find('all',array('recursive'=>-1,'fields'=>array('Merk.id','Merk.nama'),'conditions'=>array('Merk.parent_id'=>$id)));
+		$this->set(compact('data'));
 	}
 
 /**
@@ -55,7 +65,7 @@ class MerksController extends AppController {
 				$this->Session->setFlash(__('The merk could not be saved. Please, try again.'));
 			}
 		}
-		$parentMerks = $this->Merk->ParentMerk->find('list');
+		$parentMerks = $this->Merk->ParentMerk->find('list' ,array('fields'=>array('id','nama'),'conditions' => array('parent_id' => NULL)));
 		$this->set(compact('parentMerks'));
 	}
 
@@ -81,8 +91,9 @@ class MerksController extends AppController {
 			$options = array('conditions' => array('Merk.' . $this->Merk->primaryKey => $id));
 			$this->request->data = $this->Merk->find('first', $options);
 		}
-		$parentMerks = $this->Merk->ParentMerk->find('list');
-		$this->set(compact('parentMerks'));
+		$edit=$this->request->data;
+		$parentMerks = $this->Merk->ParentMerk->find('list',array('fields'=>array('id','nama'),'conditions' => array('parent_id' => NULL)));
+		$this->set(compact('parentMerks','edit'));
 	}
 
 /**

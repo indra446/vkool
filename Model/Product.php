@@ -75,4 +75,7 @@ class Product extends AppModel {
 		)
 	);
 
+        
+        
+        public $virtualFields = array('rego'=>'CONCAT(Product.id, ",", Product.nama_produk)','name' => 'CONCAT(Product.nama_produk, "-", Product.harga)');
 }

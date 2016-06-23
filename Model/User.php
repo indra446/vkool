@@ -9,12 +9,7 @@ App::uses('AppModel', 'Model');
  * @property TbRenja $TbRenja
  */
 class User extends AppModel {
-public function beforeSave($options = array()) {
-		/*
-		$this -> data['User']['password'] = AuthComponent::password($this -> data['User']['password']);
-				return true;*/
-		
-	}
+
 	public $validate = array(
 	'nama_admin' => array(
 	'rule' => 'notEmpty',
@@ -54,20 +49,8 @@ public function beforeSave($options = array()) {
                                     'required' => true)
         
 );
-function identicalFieldValues( $field=array(), $compare_field=null ) 
-    {
-        foreach( $field as $key => $value ){
-            $v1 = $value;
-            $v2 = $this->data[$this->name][ $compare_field ];                 
-            if($v1 !== $v2) {
-                return FALSE;
-            } else {
-                continue;
-            }
-        }
-        return TRUE;
-    }
-    function confirmPassword($data) {
+
+    public function confirmPassword($data) {
         $valid = false;
 
         if ($data['password'] == $this->data['User']['password']) {
@@ -97,12 +80,7 @@ function identicalFieldValues( $field=array(), $compare_field=null )
 			return array('Group' => array('id' => $groupId));
 		}
 	}
-/**
- * Display field
- *
- * @var string
- */
-	public $displayField = 'tb_skpd_id';
+
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -116,6 +94,13 @@ function identicalFieldValues( $field=array(), $compare_field=null )
 		'Group' => array(
 			'className' => 'Group',
 			'foreignKey' => 'group_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Karyawan' => array(
+			'className' => 'Karyawan',
+			'foreignKey' => 'karyawan_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

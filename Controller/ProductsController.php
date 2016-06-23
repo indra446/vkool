@@ -26,6 +26,31 @@ class ProductsController extends AppController {
 	}
 
 	/**
+	 * index method
+	 *
+	 * @return void
+	 */
+	public function stock() {
+		$products=$this->Product->query("SELECT
+				products.id,
+				products.nama_produk,
+				IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))-IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty)) AS jml,
+				products.satuan
+				FROM
+				products
+				LEFT JOIN pembelians ON pembelians.product_id = products.id
+				LEFT JOIN detail_penjualans ON detail_penjualans.product_id = products.id
+				GROUP BY
+				pembelians.product_id,
+				products.id,
+				products.nama_produk,
+				products.satuan
+				ORDER BY
+				products.nama_produk ASC");	
+		$this->set(compact('products'));
+	}
+
+	/**
 	 * view method
 	 *
 	 * @throws NotFoundException
@@ -36,7 +61,7 @@ class ProductsController extends AppController {
 		if (!$this -> Product -> exists($id)) {
 			throw new NotFoundException(__('Invalid product'));
 		}
-		$options = array('conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
+		$options = array('recursive'=>2,'conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
 		$this -> set('product', $this -> Product -> find('first', $options));
 	}
 
@@ -114,9 +139,9 @@ class ProductsController extends AppController {
 		if (!$this -> Product -> exists()) {
 			throw new NotFoundException(__('Invalid product'));
 		}
-		$this -> request -> allowMethod('post', 'delete');
+		$this -> request -> onlyAllow('post', 'delete');
 		if ($this -> Product -> delete()) {
-			$this -> Session -> setFlash(__('The product has been deleted.'));
+				$this -> Session -> setFlash('Data berhasil dihapus', 'success');
 		} else {
 			$this -> Session -> setFlash(__('The product could not be deleted. Please, try again.'));
 		}

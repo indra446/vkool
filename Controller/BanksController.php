@@ -1,12 +1,12 @@
 <?php
 App::uses('AppController', 'Controller');
 /**
- * Karyawans Controller
+ * Banks Controller
  *
- * @property Karyawan $Karyawan
+ * @property Bank $Bank
  * @property PaginatorComponent $Paginator
  */
-class KaryawansController extends AppController {
+class BanksController extends AppController {
 
 /**
  * Components
@@ -21,8 +21,10 @@ class KaryawansController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Karyawan->recursive = 0;
-		$this->set('karyawans', $this->Paginator->paginate());
+                $grup=$this->Session->read('Auth.User.group_id');
+		$this->Bank->recursive = 0;
+		$this->set('banks', $this->Paginator->paginate());
+                $this->set(compact('grup'));
 	}
 
 /**
@@ -33,11 +35,11 @@ class KaryawansController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-		if (!$this->Karyawan->exists($id)) {
-			throw new NotFoundException(__('Invalid karyawan'));
+		if (!$this->Bank->exists($id)) {
+			throw new NotFoundException(__('Invalid bank'));
 		}
-		$options = array('conditions' => array('Karyawan.' . $this->Karyawan->primaryKey => $id));
-		$this->set('karyawan', $this->Karyawan->find('first', $options));
+		$options = array('conditions' => array('Bank.' . $this->Bank->primaryKey => $id));
+		$this->set('bank', $this->Bank->find('first', $options));
 	}
 
 /**
@@ -47,15 +49,15 @@ class KaryawansController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->Karyawan->create();
-			if ($this->Karyawan->save($this->request->data)) {
+			$this->Bank->create();
+			if ($this->Bank->save($this->request->data)) {
 				$this->Session->setFlash('Data berhasil disimpan', 'success');
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The karyawan could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The bank could not be saved. Please, try again.'));
 			}
 		}
-		$units = $this->Karyawan->Unit->find('list');
+//		$units = $this->Bank->Unit->find('list');
 		$this->set(compact('units'));
 	}
 
@@ -67,22 +69,22 @@ class KaryawansController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-		if (!$this->Karyawan->exists($id)) {
-			throw new NotFoundException(__('Invalid karyawan'));
+		if (!$this->Bank->exists($id)) {
+			throw new NotFoundException(__('Invalid bank'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Karyawan->save($this->request->data)) {
+			if ($this->Bank->save($this->request->data)) {
 				$this->Session->setFlash('Data berhasil diupdate', 'success');
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The karyawan could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The bank could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('Karyawan.' . $this->Karyawan->primaryKey => $id));
-			$this->request->data = $this->Karyawan->find('first', $options);
+			$options = array('conditions' => array('Bank.' . $this->Bank->primaryKey => $id));
+			$this->request->data = $this->Bank->find('first', $options);
 		}
-		$units = $this->Karyawan->Unit->find('list');
-		$this->set(compact('units'));
+                $edit=$this->request->data;
+		$this->set(compact('units','edit'));
 	}
 
 /**
@@ -93,15 +95,15 @@ class KaryawansController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
-		$this->Karyawan->id = $id;
-		if (!$this->Karyawan->exists()) {
-			throw new NotFoundException(__('Invalid karyawan'));
+		$this->Bank->id = $id;
+		if (!$this->Bank->exists()) {
+			throw new NotFoundException(__('Invalid bank'));
 		}
 		$this->request->onlyAllow('post', 'delete');
-		if ($this->Karyawan->delete()) {
+		if ($this->Bank->delete()) {
 			$this->Session->setFlash('Data berhasil dihapus', 'success');
 		} else {
-			$this->Session->setFlash(__('The karyawan could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('The bank could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
 	}

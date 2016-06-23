@@ -1,12 +1,12 @@
 <div class="categories form">
-    <?php echo $this->Form->create('Category', array('class' => 'form-horizontal j-forms')); ?>
+    <?php echo $this->Form->create('Category', array('id'=>'j-forms-validation','class' => 'form-horizontal j-forms')); ?>
     <div class="form-group">
         <label class="col-md-2 control-label">Parent Kategori</label>
         <div class=" col-md-8">
             <?php echo $this->Form->input('parent_id', array('class' => 'form-control', 'label' => false, 'options' => $parentCategories, 'empty' => 'kosong')); ?>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group unit">
         <label class="col-md-2 control-label">Nama Kategori</label>
         <div class=" col-md-8">
             <?php echo $this->Form->input('kategori', array('class' => 'form-control', 'label' => false)); ?>

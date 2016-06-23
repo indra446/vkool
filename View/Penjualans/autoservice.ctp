@@ -1,10 +1,7 @@
 <?php
 
 foreach ($data as $value) {
-//    print_r($value);
-    $row['value'] = $value['customers']['nama'];
-    $row['hp'] = $value['customers']['hp'];
-    $row['alamat'] = $value['customers']['alamat'];
+    $row['value'] = $value['products']['id'].','.$value['products']['nama_produk'];
     $row_set[] = $row;
 }
 echo json_encode($row_set);

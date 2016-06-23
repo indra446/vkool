@@ -1,15 +1,15 @@
 <div class="products form">
-	<?php echo $this -> Form -> create('Product', array('class' => 'form-horizontal j-forms')); ?>
-	<div class="form-group">
+	<?php echo $this -> Form -> create('Product', array('id'=>'j-forms-validation','class' => 'form-horizontal j-forms')); ?>
+	<div class="form-group unit">
 		<label class="col-md-2 control-label">Nama Produk</label>
 		<div class=" col-md-8">
-			<?php echo $this -> Form -> input('nama_produk', array('class' => 'form-control', 'label' => false)); ?>
+			<?php echo $this -> Form -> input('nama_produk', array('class' => 'form-control', 'label' => false,'required'=>true)); ?>
 		</div>
 	</div>
-	<div class="form-group">
+	<div class="form-group unit">
 		<label class="col-md-2 control-label">Parent Kategori</label>
 		<div class=" col-md-8">
-			<?php echo $this -> Form -> input('parent_id', array('class' => 'form-control', 'options' => $parentCat, 'empty' => 'kosong', 'label' => false)); ?>
+			<?php echo $this -> Form -> input('parent_id', array('class' => 'form-control', 'options' => $parentCat, 'empty' => 'kosong', 'label' => false,'required'=>true)); ?>
 		</div>
 	</div>
 	<div class="form-group">
@@ -19,22 +19,22 @@
 		</div>
 		<div class="col-md-2" style="width: 10%" id="loading"></div>
 	</div>
-	<div class="form-group">
+	<div class="form-group unit check">
 		<label class="col-md-2 control-label">Tipe Produk</label>
 		<div class=" col-md-8">
 			<div class="inline-group">
 				<label class="radio">
-					<input type="radio" name="data[Product][tipe]" value="Luas" id="luas">
+					<input type="radio" name="data[Product][tipe]" value="Luas" id="luas" required="">
 					<i></i> Luas </label>
 				<label class="radio">
-					<input type="radio" name="data[Product][tipe]" value="Unit" id="unit">
+					<input type="radio" name="data[Product][tipe]" value="Unit" id="unit" required="">
 					<i></i> Unit </label>
 			</div>
 		</div>
 	</div>
 	<div class="row" id="dimensi">
 		<label class="col-md-2 control-label">Dimensi</label>
-		<div class="col-md-2 unit">
+		<div class="col-md-2">
 			<div class="widget right-10">
 				<div class="input">
 					<input type="text" placeholder="panjang" id="@" class="form-control" name="data[Product][panjang]">
@@ -42,7 +42,7 @@
 				<label for="@" class="addon adn-50 adn-right"> mm</label>
 			</div>
 		</div>
-		<div class="col-md-2 unit">
+		<div class="col-md-2">
 			<div class="widget right-10">
 				<div class="input">
 					<input type="text" placeholder="lebar" id="$" class="form-control" name="data[Product][lebar]">
@@ -51,16 +51,16 @@
 			</div>
 		</div>
 	</div>
-	<div class="form-group">
+	<div class="form-group unit">
 		<label class="col-md-2 control-label">Satuan Produk</label>
 		<div class=" col-md-8">
-			<?php echo $this -> Form -> input('satuan', array('class' => 'form-control', 'label' => false)); ?>
+			<?php echo $this -> Form -> input('satuan', array('class' => 'form-control', 'label' => false,'required'=>true)); ?>
 		</div>
 	</div>	
 	<div class="form-group">
 		<label class="col-md-2 control-label">Deskripsi</label>
-		<div class=" col-md-8">
-			<?php echo $this -> Form -> textarea('deskripsi', array('class' => 'form-control', 'label' => false)); ?>
+		<div class="input col-md-8">
+			<?php echo $this -> Form -> input('deskripsi', array('type'=>'textarea','id'=>'textarea','class' => 'form-control', 'label' => false)); ?>
 		</div>
 	</div>	
 	<div class="form-group">

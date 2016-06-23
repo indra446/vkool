@@ -2,7 +2,7 @@
 
 foreach ($data as $value) {
 //    print_r($value);
-    $row['value'] = $value['customers']['nama'];
+    $row['value'] = $value['customers']['id'].'-'.$value['customers']['nama'];
     $row['hp'] = $value['customers']['hp'];
     $row['alamat'] = $value['customers']['alamat'];
     $row_set[] = $row;

@@ -30,24 +30,25 @@ App::uses('AppController', 'Controller');
  */
 class PagesController extends AppController {
 
-/**
- * This controller does not use a model
- *
- * @var array
- */
+	/**
+	 * This controller does not use a model
+	 *
+	 * @var array
+	 */
 	public $uses = array();
 
-/**
- * Displays a view
- *
- * @param string What page to display
- */
+	/**
+	 * Displays a view
+	 *
+	 * @param string What page to display
+	 */
 	public function display() {
+
 		$path = func_get_args();
 
 		$count = count($path);
 		if (!$count) {
-			$this->redirect('/');
+			$this -> redirect('/');
 		}
 		$page = $subpage = $title = null;
 
@@ -60,17 +61,16 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title = Inflector::humanize($path[$count - 1]);
 		}
-		$this->set(compact('page', 'subpage'));
-		$this->set('title_for_layout', $title);
-		$this->render(implode('/', $path));
+		$this -> set(compact('page', 'subpage'));
+		$this -> set('title_for_layout', $title);
+		$this -> render(implode('/', $path));
 	}
+
+
 	function depan() {
-        $this->layout= 'home';
-		$idm=$this->Session->read('Auth.User.ucc_m_member_id');
-		
+		$this -> layout = 'home';
+		$idm = $this -> Session -> read('Auth.User.ucc_m_member_id');
 
-
-            
-        }
+	}
 
 }

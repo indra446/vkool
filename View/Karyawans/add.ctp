@@ -18,34 +18,12 @@
             <?php echo $this->Form->input('alamat', array('class' => 'form-control', 'label' => false)); ?>
         </div>
     </div>
-<!--        <div class="form-group">
-            <label class="col-md-2 control-label">Unit </label>
-            <div class=" col-md-8">
-    <?php // echo $this->Form->input('unit_id', array('class' => 'form-control', 'label' => false)); ?>
-            </div>
-        </div>-->
-<!--    <div class="form-group">
-        <label class="col-md-2 control-label">Unit</label>
-        <div class="form-content col-md-8">
-             start cloned right side buttons element 
-            <div class="clone-rightside-btn-1">
-                <div class="j-row toclone-widget-right toclone">
-                    <div class="col-md-8 unit">
-                        <div class="input">
-                            <?php echo $this->Form->input('unit_id', array('name' => 'data[Karyawan][unit_id][]', 'placeholder' => 'telepon', 'class' => 'form-control', 'label' => false)); ?>
-                        </div>
-                    </div>
-                    <button type="button" class="primary-btn clone-btn-right clone">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                    <button type="button" class="secondary-btn clone-btn-right delete">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                </div>
-            </div>
-             end cloned right side buttons element 		
+    <div class="form-group">
+        <label class="col-md-2 control-label">Keterangan</label>
+        <div class=" col-md-8">
+            <?php echo $this->Form->input('ket', array('class' => 'form-control', 'label' => false)); ?>
         </div>
-    </div>-->
+    </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Aktifkan</label>
         <div class=" col-md-8">

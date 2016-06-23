@@ -24,6 +24,15 @@ class VendorsController extends AppController {
 		$this -> Vendor -> recursive = 0;
 		$this -> set('vendors', $this -> Paginator -> paginate());
 	}
+	/**
+	 * index method
+	 *
+	 * @return void
+	 */
+	public function all() {
+		$this -> Vendor -> recursive = 0;
+		$this -> set('vendors', $this -> Paginator -> paginate());
+	}
 
 	/**
 	 * view method
@@ -36,7 +45,7 @@ class VendorsController extends AppController {
 		if (!$this -> Vendor -> exists($id)) {
 			throw new NotFoundException(__('Invalid vendor'));
 		}
-		$options = array('conditions' => array('Vendor.' . $this -> Vendor -> primaryKey => $id));
+		$options = array('recursive'=>1,'conditions' => array('Vendor.' . $this -> Vendor -> primaryKey => $id));
 		$this -> set('vendor', $this -> Vendor -> find('first', $options));
 	}
 
@@ -45,14 +54,14 @@ class VendorsController extends AppController {
 	 *
 	 * @return void
 	 */
-	public function add() {
+	public function add() {           
 		if ($this -> request -> is('post')) {
 			// debug($this->request->data);die();
 			$this -> loadModel('PicVendor');
 			$this -> Vendor -> create();
 			if ($this -> Vendor -> save($this -> request -> data)) {
 				$jml = sizeof($this -> request -> data['Vendor']['telp']) - 1;
-				for ($x = 0; $x <= 1; $x++) {
+				for ($x = 0; $x <= $jml; $x++) {
 					$a['PicVendor']['vendor_id'] = $this -> Vendor -> id;
 					$a['PicVendor']['telp'] = $this -> request -> data['Vendor']['telp'][$x];
 					$a['PicVendor']['pic'] = $this -> request -> data['Vendor']['pic'][$x];
@@ -68,6 +77,8 @@ class VendorsController extends AppController {
 				$this -> Session -> setFlash(__('The vendor could not be saved. Please, try again.'));
 			}
 		}
+                 $banks = $this->Vendor->Bank->find('list', array('fields'=>array('id','nama')));
+                 $this->set(compact('banks'));
 	}
 
 	/**
@@ -78,6 +89,7 @@ class VendorsController extends AppController {
 	 * @return void
 	 */
 	public function edit($id = null) {
+            $this->loadModel('Bank');
 		if (!$this -> Vendor -> exists($id)) {
 			throw new NotFoundException(__('Invalid vendor'));
 		}
@@ -104,8 +116,8 @@ class VendorsController extends AppController {
 			$options = array('conditions' => array('Vendor.' . $this -> Vendor -> primaryKey => $id));
 			$this -> request -> data = $this -> Vendor -> find('first', $options);
 			$edit = $this -> request -> data;
-			// debug($edit);
-			$this -> set(compact('edit'));
+                        $banks = $this->Vendor->Bank->find('list', array('fields'=>array('id','nama')));
+			$this -> set(compact('edit','banks'));
 
 		}
 

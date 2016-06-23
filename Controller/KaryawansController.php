@@ -21,11 +21,19 @@ class KaryawansController extends AppController {
  * @return void
  */
 	public function index() {
+                $grup=$this->Session->read('Auth.User.group_id');
 		$this->Karyawan->recursive = 0;
 		$this->set('karyawans', $this->Paginator->paginate());
+                $this->set(compact('grup'));
 	}
+        public function ajax(){
+            $this->layout='ajax';
+            @$term=$_GET['term'];
+            $karyawans=$this->Karyawan->find('all',array('conditions'=>array('Karyawan.nama like'=>"%$term%")));
+            $this->set(compact('karyawans'));
+        }
 
-/**
+        /**
  * view method
  *
  * @throws NotFoundException
@@ -55,7 +63,7 @@ class KaryawansController extends AppController {
 				$this->Session->setFlash(__('The karyawan could not be saved. Please, try again.'));
 			}
 		}
-		$units = $this->Karyawan->Unit->find('list');
+//		$units = $this->Karyawan->Unit->find('list');
 		$this->set(compact('units'));
 	}
 
@@ -81,8 +89,8 @@ class KaryawansController extends AppController {
 			$options = array('conditions' => array('Karyawan.' . $this->Karyawan->primaryKey => $id));
 			$this->request->data = $this->Karyawan->find('first', $options);
 		}
-		$units = $this->Karyawan->Unit->find('list');
-		$this->set(compact('units'));
+                $edit=$this->request->data;
+		$this->set(compact('units','edit'));
 	}
 
 /**

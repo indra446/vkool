@@ -16,7 +16,7 @@
                     <label class="icon-left" for="login">
                         <i class="zmdi zmdi-account"></i>
                     </label>
-                    <input class="form-control login-frm-input"  type="text" id="login" name="data[User][username]" placeholder="Username / Email">
+                    <input class="form-control login-frm-input"  type="text" id="login" name="data[User][username]" placeholder="Username">
                 </div>
             </div>
             <!-- end login -->

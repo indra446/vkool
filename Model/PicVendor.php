@@ -3,8 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * PicVendor Model
  *
- * @property Karyawan $Karyawan
- * @property Pic $Pic
+ * @property Vendor $Vendor
  */
 class PicVendor extends AppModel {
 
@@ -14,7 +13,7 @@ class PicVendor extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'karyawan_id' => array(
+		'vendor_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -24,9 +23,9 @@ class PicVendor extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'pic_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
+		'telp' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -44,16 +43,9 @@ class PicVendor extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Karyawan' => array(
-			'className' => 'Karyawan',
-			'foreignKey' => 'karyawan_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'Pic' => array(
-			'className' => 'Pic',
-			'foreignKey' => 'pic_id',
+		'Vendor' => array(
+			'className' => 'Vendor',
+			'foreignKey' => 'vendor_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
