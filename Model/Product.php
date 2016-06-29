@@ -36,7 +36,7 @@ class Product extends AppModel {
 	public $hasMany = array(
 		'DetailPenjualan' => array(
 			'className' => 'DetailPenjualan',
-			'foreignKey' => 'product_id',
+			'foreignKey' => 'id_product',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',

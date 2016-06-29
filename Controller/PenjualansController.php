@@ -286,7 +286,13 @@ class PenjualansController extends AppController {
         $this->loadModel('Customer');
         $this->loadModel('Product');
         
-        
+
+        @$previ=$_POST['add'];
+        if(!empty($previ)){
+//            return $this->redirect(array('action' => 'bahanbaku','target'=>'_blank'));
+        echo " <script>window.open('$this->webroot;penjualans/preview/1/ok');</script>";
+//        window.open('http://www.smkproduction.eu5.org','_blank');
+        }else {
 
         if ($this->request->is('post')) {
 
@@ -319,6 +325,8 @@ class PenjualansController extends AppController {
                 @$data['DetailPenjualan']['qty'] = $d['jml'];
                 @$data['DetailPenjualan']['harga'] = $d['harga'];
                 @$data['DetailPenjualan']['id_karyawan'] = explode("-",$reqdata['Penjualan']['id_karyawan'])['1'];
+                @$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
+                @$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
                 @$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
 //                print_r($data);exit;
                 $this->DetailPenjualan->create();
@@ -329,9 +337,12 @@ class PenjualansController extends AppController {
                 $data['DetailPenjualan']['penjualan_id'] = $lastin;
                 @$data['DetailPenjualan']['id_product'] = $s['id'];
                 @$data['DetailPenjualan']['qty'] = $s['jml'];
-                @$data['DetailPenjualan']['harga'] = $_SESSION['cart_samping'][$i]['harga'];
+                @$data['DetailPenjualan']['harga'] = $s['harga'];
                 @$data['DetailPenjualan']['id_karyawan'] = explode("-",$reqdata['Penjualan']['id_karyawan'])['1'];
+                @$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
+                @$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
                 @$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
+//                print_r($data);exit;
                 $this->DetailPenjualan->create();
                 $this->DetailPenjualan->save($data,false);}
                 unset($_SESSION["cart_samping"]);
@@ -340,9 +351,12 @@ class PenjualansController extends AppController {
                 $data['DetailPenjualan']['penjualan_id'] = $lastin;
                 @$data['DetailPenjualan']['id_product'] = $b['id'];
                 @$data['DetailPenjualan']['qty'] = $b['jml'];
-                @$data['DetailPenjualan']['harga'] = $h['harga'];
+                @$data['DetailPenjualan']['harga'] = $b['harga'];
                 @$data['DetailPenjualan']['id_karyawan'] = explode("-",$reqdata['Penjualan']['id_karyawan'])['1'];
+                @$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
+                @$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
                 @$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
+//                  print_r($data);exit;
                 $this->DetailPenjualan->create();
                 $this->DetailPenjualan->save($data,false);}
                 unset($_SESSION["cart_belakang"]);
@@ -353,7 +367,10 @@ class PenjualansController extends AppController {
                 @$data['DetailPenjualan']['qty'] = $a['jml'];
                 @$data['DetailPenjualan']['harga'] = $a['harga'];
                 @$data['DetailPenjualan']['id_karyawan'] = explode("-",$reqdata['Penjualan']['id_karyawan'])['1'];
+                @$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
+                @$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
                 @$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
+//                  print_r($data);exit;
                 $this->DetailPenjualan->create();
                 $this->DetailPenjualan->save($data,false);}
                 unset($_SESSION["cart_aksesoris"]);
@@ -364,7 +381,10 @@ class PenjualansController extends AppController {
                 @$data['DetailPenjualan']['qty'] = $sc['jml'];
                 @$data['DetailPenjualan']['harga'] = $sc['harga'];
                 @$data['DetailPenjualan']['id_karyawan'] = explode("-",$reqdata['Penjualan']['id_karyawan'])['1'];
+                @$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
+                @$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
                 @$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
+//                  print_r($data);exit;
                 $this->DetailPenjualan->create();
                 $this->DetailPenjualan->save($data,false);}
                 unset($_SESSION["cart_service"]);
@@ -374,7 +394,7 @@ class PenjualansController extends AppController {
             } else {
                 $this->Session->setFlash(__('The penjualan could not be saved. Please, try again.'));
             }
-        }
+        }}
         $customers = $this->Penjualan->Customer->find('list');
         $merks = $this->Penjualan->Merk->ParentMerk->find('list', array('fields' => array('id', 'nama'), 'conditions' => array('parent_id' => NULL)));
         $users = $this->Penjualan->User->find('list');
@@ -384,6 +404,10 @@ class PenjualansController extends AppController {
     }
     public function bahanbaku(){
         
+    }
+    public function preview(){
+        $ok=$this->request->is('post');
+        print_r($ok);exit;
     }
 
     /**
@@ -450,7 +474,7 @@ class PenjualansController extends AppController {
     public function autoproduk($t = null) {
         $this->layout = 'ajax';
         @$term=$_GET['term'];
-        $data = $this->Penjualan->query("SELECT * FROM `products` WHERE category_id='1' and nama_produk LIKE '%$term%' ");
+        $data = $this->Penjualan->query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE (category_id='4' OR parent_id='1') and nama_produk LIKE '%$term%' ");
         $this->set(compact('data'));
     }
     public function autoaksesoris($t = null) {

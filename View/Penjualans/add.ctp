@@ -84,20 +84,15 @@ var $$e=jQuery.noConflict();
 }
 </script>
 <script>
-    function kalkulatorTambah(PenjualanProductId,qty) { 
-        var hasil =eval(qty) * eval(PenjualanProductId);
-        var h=document.getElementById('harga');
-        h.value=hasil;
-        document.getElementById('harga').innerHTML = hasil;
-    }
-</script>
-<script>
-    function kalkulatorTambah1(PenjualanProductId1,qty1) { 
-        var hasil1 =eval(qty1) * eval(PenjualanProductId1);
-        var h1=document.getElementById('harga1');
-        h1.value=hasil1;
-        document.getElementById('harga1').innerHTML = hasil1;
-    }
+  function sum() {
+            var txttotal = document.getElementById('total').value;
+            var txtdiscount = document.getElementById('discount').value;
+            var txthiddendiscount = document.getElementById('hiddendiscount').value;
+            var result = parseInt(txttotal) - parseInt(txtdiscount)-parseInt(txthiddendiscount);
+            if (!isNaN(result)) {
+                document.getElementById('totalall').value = result;
+            }
+        }
 </script>
 <div class="row">
     <div class="col-md-12">
@@ -107,6 +102,7 @@ var $$e=jQuery.noConflict();
                     <?php echo $this->Form->create('Penjualan', array('class' => 'j-forms j-multistep', 'id' => 'j-forms')); ?>
                     <!--<form action="php/demo.php" method="post" class="j-forms j-multistep" id="j-forms" novalidate>-->
                     <!-- end /.header-->
+                  
                     <div class="form-content">
                         <!-- start steps -->
                         <div class="wizard-breadcrumb default-style">
@@ -197,7 +193,7 @@ var $$e=jQuery.noConflict();
                                         <label class="icon-right" for="email">
                                             <i class="zmdi zmdi-time zmdi-hc-fw"></i>
                                         </label>
-                                        <?php echo $this->Form->input('thn', array('class' => 'form-control','type'=>'number', 'label' => false, 'required')); ?>
+                                        <?php echo $this->Form->input('thn', array('class' => 'form-control','type'=>'number', 'label' => false, 'required','maxlength'=>4)); ?>
                                     </div>
                                 </div>
                                 <div class="col-md-8 unit">
@@ -239,13 +235,19 @@ var $$e=jQuery.noConflict();
                         <fieldset>
                             <!-- start guests -->
                             <div class="row">
-                                <p>Waktu <?php echo Date('Y-m-d\TH:i:s.u'); ?></p>
-                                <p>Nama Kasir</p>
+                                <table>
+                                    <tr>
+                                        <td>Waktu</td> <td>:</td> <td><?php date_default_timezone_set('Asia/Jakarta'); echo Date('Y-m-d H:i:s'); ?></td>
+                                    </tr><tr>
+                                        <td>Nama Kasir</td> <td>:</td><td> <?php echo $infousr['Auth']['User']['nama_admin'];?></td>
+                                    </tr>
+                                </table>
+                                
                                 <div class="w-section-header">
-                                    <h2>Depan</h2>
+                                    <!--<h2>Depan</h2>-->
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Depan</label>
+                                    <label class="col-md-2 control-label"><h3>Depan</h3></label>
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false)); ?>
                                     </div>
@@ -261,10 +263,10 @@ var $$e=jQuery.noConflict();
                                 </div>
                                 <div id="isi_cart"></div>
                                 <div class="w-section-header">
-                                    <h2>Samping</h2>
+                                    <!--<h2>Samping</h2>-->
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Samping</label>
+                                    <label class="col-md-2 control-label"><h3>Samping</h3></label>
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'samping')); ?>
                                     </div>
@@ -280,10 +282,10 @@ var $$e=jQuery.noConflict();
                                 </div>
                                 <div id="samping_view"></div>
                                 <div class="w-section-header">
-                                    <h2>Belakang</h2>
+                                    <!--<h2>Belakang</h2>-->
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Belakang</label>
+                                    <label class="col-md-2 control-label"><h3>Belakang</h3></label>
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'belakang')); ?>
                                     </div>
@@ -299,10 +301,10 @@ var $$e=jQuery.noConflict();
                                 </div>
                                 <div id="belakang_view"></div>
                                             <div class="w-section-header">
-                                    <h2>Aksesoris</h2>
+                                    <!--<h2>Aksesoris</h2>-->
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Aksesoris</label>
+                                    <label class="col-md-2 control-label"><h3>Aksesoris</h3></label>
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'aksesoris')); ?>
                                     </div>
@@ -318,10 +320,10 @@ var $$e=jQuery.noConflict();
                                 </div>
                                 <div id="aksesoris_view"></div>
                                             <div class="w-section-header">
-                                    <h2>Service</h2>
+                                    <!--<h2>Service</h2>-->
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Service</label>
+                                    <label class="col-md-2 control-label"><h3>Service</h3></label>
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'service')); ?>
                                     </div>
@@ -351,19 +353,19 @@ var $$e=jQuery.noConflict();
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Discount</label>
                                     <div class=" col-md-4">
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" id="discount" name="data[Penjualan][discount]" onkeyup="sum();">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Hidden Discount</label>
                                     <div class=" col-md-4">
-                                        <input type="text" class="form-control" >
+                                        <input type="text" class="form-control" id="hiddendiscount" name="data[Penjualan][hiddendiscount]" onkeyup="sum();">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Total All</label>
                                     <div class=" col-md-4">
-                                        Rp 10000
+                                        <input type="text" class="form-control" id="totalall" name="totalall">
                                     </div>
                                 </div>
                                 <hr align="right">
@@ -386,7 +388,8 @@ var $$e=jQuery.noConflict();
                     <!-- end /.content -->
 
                     <div class="form-footer block-form-footer">
-                        <button type="button" class="btn btn-xs primary-btn multi-submit-btn">Preview Work Order</button>
+                        <input type="submit" class="btn btn-xs primary-btn multi-submit-btn" name="add" value="Preview Work Order">
+                        <button type="button" class="btn btn-warning btn-xs multi-submit-btn" id="printe">print</button>
                          <?php echo $this->Form->button('Simpan', array('type' => 'submit', 'class' => 'btn btn-primary multi-submit-btn')); ?>
                         <button type="button" class="btn btn-primary primary-btn multi-next-btn">Selanjutnya</button>
                         <button type="button" class="btn btn-info secondary-btn multi-prev-btn">Back</button>
@@ -529,5 +532,10 @@ $(document).ready(function(){
 $("#hit").click(function(){
 $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
 });
+
+$("#printe").click(function(){
+window.print();
+});
 });
 </script>
+

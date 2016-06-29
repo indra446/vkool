@@ -24,6 +24,15 @@ class ProductsController extends AppController {
 		$this -> Product -> recursive = 0;
 		$this -> set('products', $this -> Paginator -> paginate());
 	}
+	/**
+	 * index method
+	 *
+	 * @return void
+	 */
+	public function LabaRugi() {
+		$this -> Product -> recursive = 0;
+		$this -> set('products', $this -> Paginator -> paginate());
+	}
 
 	/**
 	 * index method
@@ -31,23 +40,32 @@ class ProductsController extends AppController {
 	 * @return void
 	 */
 	public function stock() {
-		$products=$this->Product->query("SELECT
-				products.id,
-				products.nama_produk,
-				IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))-IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty)) AS jml,
-				products.satuan
-				FROM
-				products
-				LEFT JOIN pembelians ON pembelians.product_id = products.id
-				LEFT JOIN detail_penjualans ON detail_penjualans.product_id = products.id
-				GROUP BY
-				pembelians.product_id,
-				products.id,
-				products.nama_produk,
-				products.satuan
-				ORDER BY
-				products.nama_produk ASC");	
-		$this->set(compact('products'));
+		$products = $this -> Product -> query("SELECT
+					products.id,
+					products.nama_produk,IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))beli,
+					a.jual,
+					IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))-a.jual AS sisa,stoks.jml,
+					products.satuan
+					FROM
+					products
+					LEFT JOIN pembelians ON pembelians.product_id = products.id
+					LEFT JOIN (SELECT
+							products.id,
+							products.nama_produk,
+							IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty))jual,
+							products.satuan
+							FROM
+							products
+							INNER JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+							GROUP BY
+							products.id
+							ORDER BY
+							products.nama_produk ASC
+							)a ON a.id=products.id
+					LEFT JOIN stoks ON stoks.product_id=products.id
+					GROUP BY
+					products.id");
+		$this -> set(compact('products'));
 	}
 
 	/**
@@ -61,8 +79,72 @@ class ProductsController extends AppController {
 		if (!$this -> Product -> exists($id)) {
 			throw new NotFoundException(__('Invalid product'));
 		}
-		$options = array('recursive'=>2,'conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
+		$options = array('recursive' => 2, 'conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
 		$this -> set('product', $this -> Product -> find('first', $options));
+	}
+
+	/**
+	 * view method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function check($id = null) {
+		if (!$this -> Product -> exists($id)) {
+			throw new NotFoundException(__('Invalid product'));
+		}
+		$cek = $this -> Product -> query("SELECT
+					products.id,
+					products.nama_produk,IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))beli,
+					a.jual,
+					IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))-a.jual AS sisa,if(stoks.jml IS NULL,0,stoks.jml)jml,
+					products.satuan
+					FROM
+					products
+					LEFT JOIN pembelians ON pembelians.product_id = products.id
+					LEFT JOIN (SELECT
+							products.id,
+							products.nama_produk,
+							IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty))jual,
+							products.satuan
+							FROM
+							products
+							INNER JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+							GROUP BY
+							products.id
+							ORDER BY
+							products.nama_produk ASC
+							)a ON a.id=products.id
+					LEFT JOIN stoks ON stoks.product_id=products.id
+					WHERE a.id='" . $id . "'
+					GROUP BY
+					products.id
+					ORDER BY
+					products.nama_produk ASC");
+		$this -> set(compact('cek'));
+		$options = array('recursive' => 2, 'conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
+		$this -> set('product', $this -> Product -> find('first', $options));
+		if ($this -> request -> is('post')) {
+			$this -> loadModel('Stok');
+			$d = $this -> Stok -> find('first', array('conditions' => array('Stok.product_id' => $id)));
+			// debug($d);die();
+			$a['Stok']['product_id'] = $id;
+			$a['Stok']['jml'] = $this -> request -> data['Product']['jml'];
+			$a['Stok']['ket'] = $this -> request -> data['Product']['alasan'];
+			if (empty($d)) {
+				$this -> Stok -> create();
+			} else {
+				$a['Stok']['id'] = $d['Stok']['id'];
+			}
+			if ($this -> Stok -> save($a,false)) {
+				$this -> Session -> setFlash('Data berhasil disimpan', 'success');
+				return $this -> redirect(array('action' => 'stock'));
+			} else {
+				$this -> Session -> setFlash(__('The product could not be saved. Please, try again.'));
+			}
+		}
+
 	}
 
 	/**
@@ -141,7 +223,7 @@ class ProductsController extends AppController {
 		}
 		$this -> request -> onlyAllow('post', 'delete');
 		if ($this -> Product -> delete()) {
-				$this -> Session -> setFlash('Data berhasil dihapus', 'success');
+			$this -> Session -> setFlash('Data berhasil dihapus', 'success');
 		} else {
 			$this -> Session -> setFlash(__('The product could not be deleted. Please, try again.'));
 		}

@@ -50,7 +50,7 @@
 				<label for="$" class="addon adn-50 adn-right">mm</label>
 			</div>
 		</div>
-	</div>
+	</div><br>
 	<div class="form-group unit">
 		<label class="col-md-2 control-label">Satuan Produk</label>
 		<div class=" col-md-8">
