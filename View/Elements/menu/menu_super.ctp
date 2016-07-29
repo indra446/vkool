@@ -16,15 +16,18 @@
         <ul>
             <li> <?php echo $this->Html->link("Pembelian", array('controller' => 'Pembelians', 'action' => 'index'), array('escape' => false)); ?></li>
             <li> <?php echo $this->Html->link("Penjualan", array('controller' => 'Penjualans', 'action' => 'index'), array('escape' => false)); ?></li>
+            <li> <?php echo $this->Html->link("Penjualan Outstanding", array('controller' => 'bahanbakuses', 'action' => 'index'), array('escape' => false)); ?></li>
+            <li> <?php echo $this->Html->link("History Penjualan", array('controller' => 'Penjualans', 'action' => 'histori'), array('escape' => false)); ?></li>
         </ul>
     </li>
     <li><?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'zmdi zmdi-truck')) . "<span class='list-label'>Inventory</span>", array('controller' => 'Products', 'action' => 'stock'), array('escape' => false)); ?>  </li>
-    <!-- <li>
+    <li><?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'zmdi zmdi-refresh')) . "<span class='list-label'>Retur</span>", array('controller' => 'Returs', 'action' => 'index'), array('escape' => false)); ?>  </li>
+     <!-- <li>
         <a href="#"><i class="zmdi zmdi-file-text"></i><span class="list-label">Laporan</span></a>
         <ul>
             <li> <?php echo $this->Html->link("Laba Rugi", array('controller' => 'Products', 'action' => 'LabaRugi'), array('escape' => false)); ?></li>
         </ul>
-    </li> -->
+    </li>  -->
     <li>
         <a href="#"><i class="zmdi zmdi-settings zmdi-hc-fw"></i><span class="list-label">Pengaturan</span></a>
         <ul>

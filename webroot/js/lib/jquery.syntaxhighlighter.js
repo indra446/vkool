@@ -320,6 +320,7 @@
      * @license MIT License {@link http://creativecommons.org/licenses/MIT/}
      */
     if ( !($.SyntaxHighlighter||false) ) {
+
         $.SyntaxHighlighter = {
             // Configuration
             'config': {
@@ -387,13 +388,13 @@
                  * The baseUrl to load Google's Prettify from.
                  * This is used to load in Google's Prettify if the load option is true and it was not found.
                  */
-                'prettifyBaseUrl': false ? 'js' : '../js',
+                'prettifyBaseUrl': false ? 'js' : 'js',
 
                 /**
                  * The baseUrl to load our Syntax Highlighter from.
                  * This is used to load in the stylesheet and additional themes.
                  */
-                'baseUrl': false ? 'css' : '../css'
+                'baseUrl': false ? 'css' : 'css'
             },
 
             // Init

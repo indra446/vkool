@@ -45,7 +45,7 @@ class PembeliansController extends AppController {
 	 */
 	public function index() {
 		// $this -> Pembelian -> recursive = 0;
-		$pembelians = $this -> Pembelian -> find('all', array('recursive' => 1, 'group' => 'Pembelian.nomor','order'=>array('Pembelian.tgl_transaksi')));
+		$pembelians = $this -> Pembelian -> find('all', array('recursive' => 1, 'group' => 'Pembelian.nomor', 'order' => array('Pembelian.tgl_transaksi')));
 		$this -> set(compact('pembelians'));
 		// $this -> set('pembelians', $this -> Paginator -> paginate());
 	}
@@ -63,14 +63,15 @@ class PembeliansController extends AppController {
 			// debug($k);die();
 			// if($_POST["idp"] == $k)
 			unset($_SESSION["cart_item"][$_POST["idp"]]);
-			if (empty($_POST["idp"]))
-				unset($_SESSION["cart_item"]);
-			// }
+		} elseif (empty($_POST["idp"])) {
+			unset($_SESSION["cart_item"]);
 		}
+
 	}
 
 	public function cart() {
 		// debug($_POST);die();
+		// if ($_POST) {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Pembelian -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		// debug($data);
@@ -103,6 +104,7 @@ class PembeliansController extends AppController {
 		// array_push($_SESSION['cart-item'], $data);
 		// array_push($_SESSION['cart-item'], $post);
 		$this -> set(compact('data', 'post'));
+	// }
 	}
 
 	/**
@@ -113,7 +115,7 @@ class PembeliansController extends AppController {
 	 * @return void
 	 */
 	public function view($id = null) {
-		$data = $this -> Pembelian -> find('all', array('conditions' => array('Pembelian.nomor' => $id)));
+		$data = $this -> Pembelian -> find('all', array('recursive' => 1, 'conditions' => array('Pembelian.nomor' => base64_decode($id))));
 		$tgl = $this -> konversi_tanggal("d M Y", $data[0]['Pembelian']['tgl_transaksi']);
 		// debug($tgl);
 		$this -> set(compact('data', 'tgl'));
@@ -215,14 +217,14 @@ class PembeliansController extends AppController {
 	public function delete($id = null) {
 		// $this -> Pembelian -> id = $id;
 		// if (!$this -> Pembelian -> exists()) {
-			// throw new NotFoundException(__('Invalid pembelian'));
+		// throw new NotFoundException(__('Invalid pembelian'));
 		// }
 		// $this -> request -> onlyAllow('post', 'delete');
 		// if ($this -> Pembelian -> deleteAll(array('Pembelian.nomor'=>$id))) {
 		// } else {
-			// $this -> Session -> setFlash(__('The pembelian could not be deleted. Please, try again.'));
+		// $this -> Session -> setFlash(__('The pembelian could not be deleted. Please, try again.'));
 		// }
-		$this->Pembelian->query("DELETE FROM pembelians WHERE nomor=".$id);
+		$this -> Pembelian -> query("DELETE FROM pembelians WHERE nomor=" . base64_decode($id));
 		$this -> Session -> setFlash('Data berhasil dihapus', 'success');
 		return $this -> redirect(array('action' => 'index'));
 	}

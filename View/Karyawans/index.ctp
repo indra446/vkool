@@ -29,7 +29,7 @@
                     } else {
                         echo "<button class='btn btn-danger  btn-xs'><i class='zmdi zmdi-minus-circle-outline zmdi-hc-fw'></i></button>";
                     } ?>&nbsp;</td>
-                    <td><?php echo substr($karyawan['Karyawan']['created'], 0, 10); ?>&nbsp;</td>
+                    <td><?php echo h($karyawan['Karyawan']['date_join']); ?>&nbsp;</td>
                     <td class="actions">
                 <?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'fa fa-edit')) . "", array('action' => 'edit', $karyawan['Karyawan']['id']), array('title'=>'edit','escape' => false, 'class' => 'btn btn-primary btn-xs')); ?> 
     			<?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $karyawan['Karyawan']['id']), array('title'=>'hapus','escape' => false, 'class' => 'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $karyawan['Karyawan']['id'])); ?>

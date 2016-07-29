@@ -26,6 +26,12 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="col-md-2 control-label">Tanggal Join</label>
+        <div class=" col-md-8">
+            <?php echo $this->Form->input('date_join', array('class' => 'form-contro', 'label' => false)); ?>
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-md-2 control-label">Aktifkan</label>
         <div class=" col-md-8">
             <label class="col-md-8 checkbox-toggle">

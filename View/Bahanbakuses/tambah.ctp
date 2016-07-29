@@ -2,13 +2,30 @@
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>-->
 <script>
     $(function () {
-            $("#BahanbakusesNama").autocomplete({
-                source: "<?php echo $this->webroot; ?>penjualans/autoproduk",
-                minLength: 1,
+//            $("#BahanbakusesNama").autocomplete({
+//                source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
+//                minLength: 1,
+//            });
+        });
+        
+           var jq = jQuery.noConflict();
+        jq("#BahanbakusesParentId").change(function () {
+            jq('#loading').html('<img src="<?php echo $this->webroot; ?>img/loading.gif" />');
+            var id = jq("#BahanbakusesParentId").val();
+//         alert(id);
+            jq.ajax({
+                type: "POST",
+                url: "<?php echo $this->webroot; ?>products/produk/" + id,
+                // data: { id : jq("#ProductParentId").val()},
+                success: function (html) {
+                    jq("#BahanbakusesProductId").html(html);
+                    jq("#loading").hide();
+                }
             });
         });
+        
      $("#hide").click(function(){
-    $("#sembunyi").hide();
+     $("#sembunyi").hide();
 });
 </script>
 <div id="sembunyi" class="bahanbakuses form">
@@ -22,7 +39,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">Nama</label>
         <div class=" col-md-8">
-            <?php echo $this->Form->input('nama', array('class' => 'form-control', 'label' => false,'required','placeholder'=>'Ketikkan Nama')); ?>
+            <?php echo $this->Form->input('product_id', array('class' => 'form-control', 'label' => false,'required','placeholder'=>'Ketikkan Nama')); ?>
         </div>
     </div>
     <div class="form-group">

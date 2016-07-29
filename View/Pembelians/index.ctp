@@ -26,8 +26,8 @@
 		</td> -->
 		<td class="actions">
             <!-- <a onClick="configurator(this)" href="#"  class="btn btn-info btn-xs" id="<?php echo h($pembelian['Pembelian']['id']); ?>"><i class="fa fa-folder-open"></i></a> -->
-			<?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-folder-open')) . "", array( 'action' => 'view', $pembelian['Pembelian']['nomor']), array('escape' => false,'class'=>'btn btn-primary btn-xs')); ?> 
-			<?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $pembelian['Pembelian']['nomor']),  array('escape' => false,'class'=>'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $pembelian['Pembelian']['nomor'])); ?>
+			<?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-folder-open')) . "", array( 'action' => 'view', base64_encode($pembelian['Pembelian']['nomor'])), array('escape' => false,'class'=>'btn btn-primary btn-xs')); ?> 
+			<?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', base64_encode($pembelian['Pembelian']['nomor'])),  array('escape' => false,'class'=>'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $pembelian['Pembelian']['nomor'])); ?>
 		</td>	</tr>
 <?php endforeach; ?>
 	</tbody>

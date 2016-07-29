@@ -65,15 +65,15 @@
 			?>
 		<tfoot>
 			<tr>
-				<td colspan="6" align="right">Potongan =</td><td align="right"><?php echo number_format($data['Pembelian']['potongan'],2,',','.');?>
+				<td colspan="6" align="right">Potongan =</td><td align="right"><?php if(!empty($data['Pembelian']['potongan'])){echo number_format($data['Pembelian']['potongan'],2,',','.');}?>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="6" align="right">Biaya Kirim =</td><td align="right"><?php echo number_format($data['Pembelian']['biaya_kirim'],2,',','.');?>
+				<td colspan="6" align="right">Biaya Kirim =</td><td align="right"><?php if(!empty($data['Pembelian']['biaya_kirim'])){ echo number_format($data['Pembelian']['biaya_kirim'],2,',','.');}?>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="6" align="right">PPN =</td><td align="right"><?php echo number_format($data['Pembelian']['ppn'],2,',','.');?>
+				<td colspan="6" align="right">PPN =</td><td align="right"><?php if(!empty($data['Pembelian']['ppn'])){echo number_format($data['Pembelian']['ppn'],2,',','.');}?>
 				</td>
 			</tr>
 			<tr class="success">

@@ -44,7 +44,7 @@
             // The frame lives
             for (var i=0; i < window.frames.length; i++) {
                 if (window.frames[i].name == "print-frame") {    
-                    var print_frame_ref = window.frames[i].document;
+                    var print_frame_ref = window.frames[0].document;
                     break;
                 }
             }

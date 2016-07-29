@@ -1,5 +1,6 @@
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>
+<script src="<?php echo $this->webroot; ?>js/jQuery.print.js"></script>
 <script type="text/javascript">
     $(function () {
         $("#namane").autocomplete({
@@ -17,15 +18,15 @@
             minLength: 1,
         });
         $("#PenjualanIdProduct").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoproduk",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         $("#samping").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoproduk",
+        source: "<?php echo $this->webroot; ?>penjualans/autoproduks",
         minLength: 1,
         });
         $("#belakang").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoproduk",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukb",
         minLength: 1,
         });
         $("#aksesoris").autocomplete({
@@ -94,12 +95,20 @@ var $$e=jQuery.noConflict();
             }
         }
 </script>
+
 <div class="row">
     <div class="col-md-12">
         <div class="widget-wrap">
             <div class="widget-container margin-top-0">
                 <div class="widget-content">
-                    <?php echo $this->Form->create('Penjualan', array('class' => 'j-forms j-multistep', 'id' => 'j-forms')); ?>
+				<div class="widget-header block-header clearfix">
+					<div class="btn-group btn-group-justified">
+				    <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-cart-plus')) . "&nbsp;<span>Tambah Penjualan</span>", array('controller' => 'Penjualans','action' => 'add'), array('escape' => false, 'class' => 'btn btn-danger')); ?> 
+				    <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-shopping-cart','aria-hidden'=>true)) . "&nbsp;<span>Daftar Penjualan Outstanding</span>", array('controller' => 'bahanbakuses'), array('escape' => false, 'class' => 'btn btn-default')); ?> 
+				    <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-file-text-o')) . "&nbsp;<span>History Penjualan</span>", array('controller' => 'Penjualans','action' => 'histori'), array('escape' => false, 'class' => 'btn btn-default')); ?> 
+				     </div>
+				</div>                    
+				<?php echo $this->Form->create('Penjualan', array('class' => 'j-forms j-multistep', 'id' => 'j-forms')); ?>
                     <!--<form action="php/demo.php" method="post" class="j-forms j-multistep" id="j-forms" novalidate>-->
                     <!-- end /.header-->
                   
@@ -122,8 +131,19 @@ var $$e=jQuery.noConflict();
                             </div>
                         </div>
                         <!-- end steps -->
-                        <fieldset>
+                        <div id="diprin">
+                        <fieldset >
                             <!-- start name -->
+                            <div class="unit">
+                                <label class="label">Nomor Nota</label>
+                                <div class="input">
+                                    <label class="icon-right" for="name">
+                                        <i class="fa fa-bars"></i>
+                                    </label>
+                                    <input type="text" id="nota" name="data[Penjualan][nomor]" value="<?php echo $nonota;?>"  readonly class="form-control">
+                                    <input type="hidden" id="nota" name="data[Penjualan][noorder]" value="<?php echo $order;?>"  readonly class="form-control">
+                                </div>
+                            </div>
                             <div class="unit">
                                 <label class="label">Nama Pelanggan</label>
                                 <div class="input">
@@ -252,10 +272,10 @@ var $$e=jQuery.noConflict();
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false)); ?>
                                     </div>
                                     <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false, 'required' => true, 'placeholder' => 'qty')); ?>
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','type'=>'number')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'required' => true, 'placeholder' => 'harga')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'placeholder' => 'harga','type'=>'number')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_produk">+</button>
@@ -271,10 +291,10 @@ var $$e=jQuery.noConflict();
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'samping')); ?>
                                     </div>
                                     <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false, 'required' => true, 'placeholder' => 'qty','id'=>'qtysamping')); ?>
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtysamping','type'=>'number')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'required' => true, 'placeholder' => 'harga','id'=>'hargasamping')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargasamping','type'=>'number')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_samping">+</button>
@@ -290,10 +310,10 @@ var $$e=jQuery.noConflict();
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'belakang')); ?>
                                     </div>
                                     <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false, 'required' => true, 'placeholder' => 'qty','id'=>'qtybelakang')); ?>
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtybelakang','type'=>'number')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'required' => true, 'placeholder' => 'harga','id'=>'hargabelakang')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargabelakang','type'=>'number')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_belakang">+</button>
@@ -309,10 +329,10 @@ var $$e=jQuery.noConflict();
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'aksesoris')); ?>
                                     </div>
                                     <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false, 'required' => true, 'placeholder' => 'qty','id'=>'qtyaksesoris')); ?>
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtyaksesoris','type'=>'number')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'required' => true, 'placeholder' => 'harga','id'=>'hargaaksesoris')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargaaksesoris','type'=>'number')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_aksesoris">+</button>
@@ -328,10 +348,10 @@ var $$e=jQuery.noConflict();
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'service')); ?>
                                     </div>
                                     <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false, 'required' => true, 'placeholder' => 'qty','id'=>'qtyservice')); ?>
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtyservice','type'=>'number')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'required' => true, 'placeholder' => 'harga','id'=>'hargaservice')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargaservice','type'=>'number')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_service">+</button>
@@ -346,9 +366,9 @@ var $$e=jQuery.noConflict();
                                        <?php // echo $this->Form->input('total', array('class' => 'form-control', 'label' => false)); ?>
                                         <div id="PenjualanTotal"></div>
                                     </div>
-                                    <span class="input-group-btn">
+<!--                                    <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="hit">Hitung</button>
-                                    </span>
+                                    </span>-->
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Discount</label>
@@ -382,13 +402,15 @@ var $$e=jQuery.noConflict();
                                     </div>
                                 </div>
                             </div>
+                            
                             <!-- end guests -->
                         </fieldset>
+                        </div>
                     </div>
                     <!-- end /.content -->
 
                     <div class="form-footer block-form-footer">
-                        <input type="submit" class="btn btn-xs primary-btn multi-submit-btn" name="add" value="Preview Work Order">
+                        <!--<input type="submit" class="btn btn-xs primary-btn multi-submit-btn" name="add" value="Preview Work Order">-->
                         <button type="button" class="btn btn-warning btn-xs multi-submit-btn" id="printe">print</button>
                          <?php echo $this->Form->button('Simpan', array('type' => 'submit', 'class' => 'btn btn-primary multi-submit-btn')); ?>
                         <button type="button" class="btn btn-primary primary-btn multi-next-btn">Selanjutnya</button>
@@ -441,10 +463,11 @@ $(document).ready(function() {
         url: "<?php echo $this->webroot; ?>Penjualans/cart/",
         data: { idp : $("#PenjualanIdProduct").val(),jml :$("#PenjualanQty").val(),harga :$("#PenjualanHarga").val() },
         success: function(html) {
-        $('#PenjualanIdProduct').html("");
-        $('#PenjualanQty').html("");
-        $('#PenjualanHarga').html("");
+        $('#PenjualanIdProduct').val("");
+        $('#PenjualanQty').val("");
+        $('#PenjualanHarga').val("");
         jq("#isi_cart").html(html);
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
         });}
         });
@@ -460,10 +483,11 @@ $(document).ready(function() {
         url: "<?php echo $this->webroot; ?>Penjualans/samping/",
         data: { idp : $("#samping").val(),jml :$("#qtysamping").val(),harga :$("#hargasamping").val() },
         success: function(html) {
-        $('#samping').html("");
-        $('#qtysamping').html("");
-        $('#hargasamping').html("");
+        $('#samping').val("");
+        $('#qtysamping').val("");
+        $('#hargasamping').val("");
         jq("#samping_view").html(html);
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
         });}
         });
@@ -479,10 +503,11 @@ $(document).ready(function() {
         url: "<?php echo $this->webroot; ?>Penjualans/belakang/",
         data: { idp : $("#belakang").val(),jml :$("#qtybelakang").val(),harga :$("#hargabelakang").val() },
         success: function(html) {
-        $('#belakang').html("");
-        $('#qtybelakang').html("");
-        $('#hargabelakang').html("");
+        $('#belakang').val("");
+        $('#qtybelakang').val("");
+        $('#hargabelakang').val("");
         jq("#belakang_view").html(html);
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
         });}
         });
@@ -498,10 +523,11 @@ $(document).ready(function() {
         url: "<?php echo $this->webroot; ?>Penjualans/aksesoris/",
         data: { idp : $("#aksesoris").val(),jml :$("#qtyaksesoris").val(),harga :$("#hargaaksesoris").val() },
         success: function(html) {
-        $('#aksesoris').html("");
-        $('#qtyaksesoris').html("");
-        $('#hargaaksesoris').html("");
+        $('#aksesoris').val("");
+        $('#qtyaksesoris').val("");
+        $('#hargaaksesoris').val("");
         jq("#aksesoris_view").html(html);
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
         });}
         });
@@ -517,25 +543,51 @@ $(document).ready(function() {
         url: "<?php echo $this->webroot; ?>Penjualans/service/",
         data: { idp : $("#service").val(),jml :$("#qtyservice").val(),harga :$("#hargaservice").val() },
         success: function(html) {
-        $('#service').html("");
-        $('#qtyservice').html("");
-        $('#hargaservice').html("");
+        $('#service').val("");
+        $('#qtyservice').val("");
+        $('#hargaservice').val("");
         jq("#service_view").html(html);
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
+        
         });}
         });
         
         });
 </script>
-<script>
+<!--<script>
 $(document).ready(function(){
 $("#hit").click(function(){
-$("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
+$("#PenjualanTotal").load('<?php // echo $this->webroot; ?>Penjualans/jumlahtot');
 });
+});
+</script>-->
+<script type="text/javascript">
+       $(document).ready(function() {
+         $("#printe").click(function() {
+             $("#diprin").print({
+            globalStyles: true,
+            mediaPrint: false,
+            stylesheet: null,
+            noPrintSelector: ".no-print",
+            iframe: true,
+            append: null,
+            prepend: null,
+            manuallyCopyFormValues: true,
+            deferred: $.Deferred(),
+            timeout: 250,
+                title: null,
+                doctype: '<!doctype html>'
+    });
+         });
 
-$("#printe").click(function(){
-window.print();
-});
-});
+     });
 </script>
-
+ <style>
+@media print 
+{
+  @page { margin: 0; }
+  body  { margin: 1.6cm;font-size:6px; }
+}
+ </style>
+ 

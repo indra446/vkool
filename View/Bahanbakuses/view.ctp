@@ -122,12 +122,61 @@ var $$e=jQuery.noConflict();
                 var id = clicked.id;
          bootbox.dialog({
         title: "Input Pembayaran",
-        message: "<embed width='100%' height='450' src='<?php echo $this->webroot; ?>bahanbakuses/bayar/"+id+"'>",
+        message: '<table class="table">' +
+            '<tr><td>Total</td><td>:</td><td><?php echo $totals[0][0]['total'];?></td></tr>' +
+            '<tr><td>Discount</td><td>:</td><td><?php echo $disc[0]['detail_penjualans']['disc'];?></td></tr>'+
+            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $disc[0]['detail_penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td></td></tr><tr><td>Pembayaran</td><td>:</td><td></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td></td></tr><tr></table>'+
+            '<form class="form-horizontal"> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Metode Pembayaran</label> ' +
+            '<div class="col-md-8"> ' +
+             '<select name="data[Bayar][tipe_bayar]" id="tipebayar" class="form-control">'+
+             '<option value="Tunai">Tunai</option><option value="Debit">Debit</option><option value="Kartu Kredit">Kartu Kredit</option></select>'+
+            '</div></div> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Keterangan</label> ' +
+            '<div class="col-md-8"> ' +
+            '<input id="ket" name="ket" type="textarea" placeholder="Keterangan" class="form-control"> ' +
+            '</div></div> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Bayar</label> ' +
+            '<div class="col-md-8"> ' +
+            '<input id="bayar" name="bayar" type="text" placeholder="Bayar" class="form-control"> ' +
+            '<input id="total" name="bayar" type="hidden" value="<?php echo $totals[0][0]['total'];?>" placeholder="Bayar" class="form-control"> ' +
+            '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control"> ' +
+            '</div></div> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Kurang Bayar</label> ' +
+            '<div class="col-md-8"> ' +
+            '<input id="kbayar" name="kbayar" type="text" placeholder="Kurang Bayar" class="form-control"> ' +
+            '</div></div> ' +
+            '</form><a href="<?php echo $this->webroot;?>" target="_blank">Preview Nota</a>',
         buttons: {
           cancel: {
             label: "Close",
             className: "btn-danger"
-          }
+          },
+                 success: {
+                label: "Save",
+                className: "btn-success",
+                callback: function () {
+//                    var tipe = $('#name').val();
+//                    var tipebayar = $('#tipebayar').val();
+                  $.ajax({
+                 type: "POST",
+                url: "<?php echo $this->webroot; ?>bahanbakuses/bayar/",
+                data: { tipe : $("#tipebayar").val(),ket :$("#ket").val(),bayar :$("#bayar").val(),kbayar :$("#kbayar").val(),idpenju:$("#idpenju").val(),total:$("#total").val() },
+                success: function(html) {
+                alert('Pembayaran Sukses.');	
+                $('#tipebayar').html("");
+                $('#ket').html("");
+                $('#bayar').html("");
+                $('#kbayar').html("");
+                jq("#service_view").html(html);
+                }
+                  });
+                }
+          }      
         }    });
 }	
 </script>

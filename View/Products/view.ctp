@@ -1,4 +1,4 @@
-<?php //debug($product); ?>
+<?php //debug($sisa); ?>
 <div class="products view">
 <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-angle-double-left')) . " back", array('action' => 'stock'), array('escape' => false, 'class' => 'btn btn-info')); ?> 
 <br><br>
@@ -7,49 +7,54 @@
                     </div>
                     <dl class="dl-horizontal">
                         <dt>ID Produk</dt>
-                        <dd><?php echo h($product['Product']['id']); ?></dd>
+                        <dd><?php echo h($product[0]['products']['id']); ?></dd>
                         <dt>Nama Produk</dt>
-                        <dd><?php echo h($product['Product']['nama_produk']); ?></dd>
+                        <dd><?php echo h($product[0]['products']['nama_produk']); ?></dd>
                         <dt>Jenis Produk</dt>
                         <dd><?php
-							if ($product['Category']['parent_id'] != NULL) {echo h($product['Category']['ParentCategory']['kategori']) . " > ";
-							} echo $product['Category']['kategori'] . " ( " . $product['Product']['satuan'] . " )";
+							if ($product[0]['parent']['parent_id'] != NULL) {echo h($product[0]['parent']['parent']) . " > ";
+							} echo $product[0]['categories']['kategori'] . " ( " . $product[0]['products']['satuan'] . " )";
  ?></dd>
-                        <dd><?php
-						if ($product['Product']['dimensi'] != NULL) { $dimensi = explode(",", $product['Product']['dimensi']);
+                        <!-- <dd><?php
+						if ($product[0]['products']['dimensi'] != NULL) { $dimensi = explode(",", $product[0]['products']['dimensi']);
 							echo $dimensi[0] . " x " . $dimensi[1] . " mm ( Luas = " . number_format($dimensi[0] * $dimensi[1], 0, ',', '.') . " mm2)";
 						}
-						?></dd>
+						?></dd> -->
                         <dt>Deskripsi</dt>
-                        <dd><?php echo h($product['Product']['deskripsi']); ?></dd>
+                        <dd><?php echo h($product[0]['products']['deskripsi']); ?></dd>
                      </dl>
                   <hr>   
- <h4>Stok Potongan</h4>
+ <h4>Stok yang masih tersedia</h4>
 <table class="table data-tbl">
 	<thead>
 	<tr>
-			<th>id</th>
-			<th>dimensi</th>
-			<th>gambar</th>
-			<th>pembelian</th>
-			<th>penjualan</th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
+			<th>Dimensi</th>
+			<th>Luas/Unit</th>
+			<th>Jumlah</th>
 	</tr>
 	</thead>
 	<tbody>
-	<!-- <?php foreach ($products as $product): ?>
+	<?php $a=0;foreach ($sisa as $sisa): ?>
 	<tr>
-		<td><?php echo h($product['Product']['id']); ?>&nbsp;</td>
-		<td><?php echo h($product['Product']['nama_produk']); ?>&nbsp;</td>
-		<td><?php echo h($product['Category']['kategori']); ?>&nbsp;</td>
-		<td><?php echo h($product['Product']['satuan']); ?>&nbsp;</td>
-		<td><?php if($product['Product']['aktif']==1){ echo "<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>";}else{echo "<button class='btn btn-danger  btn-xs'><i class='zmdi zmdi-minus-circle-outline zmdi-hc-fw'></i></button>";} ?>&nbsp;</td>
-
-		<td class="actions">
-			<?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-edit')) . "", array( 'action' => 'edit', $product['Product']['id']), array('title'=>'edit','escape' => false,'class'=>'btn btn-primary btn-xs')); ?> 
-			<?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $product['Product']['id']),  array('title'=>'hapus','escape' => false,'class'=>'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $product['Product']['id'])); ?>
-		</td>
+		<td><?php if ($sisa['products']['dimensi'] != NULL) {
+					 $dimensi = explode(",", $sisa['products']['dimensi']);
+						echo $dimensi[0] . " x " . $dimensi[1] . " mm";
+						}
+						?></td>
+		<td><?php if ($sisa['products']['dimensi'] != NULL) { echo h(number_format($dimensi[0] * $dimensi[1], 0, ',', '.'))." mm2";} ?></td>
+		<td align="right"><?php echo h($sisa[0]['sisa']); ?></td>
 	</tr>
-<?php endforeach; ?> -->
+<?php $a +=$sisa[0]['sisa'];endforeach; ?>
+	<?php $i=1;foreach ($baku as $baku): ?>
+	<tr>
+		<td><?php if ($baku['bahanbakus']['dm1'] != NULL && $baku['bahanbakus']['dm2'] != NULL) {
+						echo $baku['bahanbakus']['dm1'] . " x " . $baku['bahanbakus']['dm2'] . " mm";
+						}
+						?></td>
+		<td><?php if ($baku['bahanbakus']['dm1'] != NULL && $baku['bahanbakus']['dm2'] != NULL)  { echo h(number_format($baku['bahanbakus']['dm1'] * $baku['bahanbakus']['dm2'], 0, ',', '.'))." mm2";} ?></td>
+		<td align="right">1</td>
+	</tr>
+<?php $i++;endforeach; ?>
+<tfoot><td colspan="2"><font style="font-weight: bold">Total</td><td align="right"><font style="font-weight: bold"><?php echo ($a+$i)-1;?></td></tfoot>
 	</tbody>
 	</table></div>

@@ -24,6 +24,15 @@ class ProductsController extends AppController {
 		$this -> Product -> recursive = 0;
 		$this -> set('products', $this -> Paginator -> paginate());
 	}
+        public function produk($id = null) {
+		if (!$this->Product->exists($id)) {
+			throw new NotFoundException(__('Invalid Merk'));
+		}
+		$data=$this->Product->find('all',array('recursive'=>-1,'fields'=>array('Product.id','Product.nama_produk'),'conditions'=>array('Product.category_id'=>$id)));
+		$this->set(compact('data'));
+//                print_r($data);
+	}
+
 	/**
 	 * index method
 	 *
@@ -42,28 +51,53 @@ class ProductsController extends AppController {
 	public function stock() {
 		$products = $this -> Product -> query("SELECT
 					products.id,
-					products.nama_produk,IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))beli,
-					a.jual,
-					IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))-a.jual AS sisa,stoks.jml,
-					products.satuan
-					FROM
+					products.nama_produk,
+					products.dimensi,
+					products.tipe,
+				
+				IF (
+					Sum(pembelians.jml) IS NULL,
+					0,
+					Sum(pembelians.jml)
+				) beli,
+				 a.jual,
+				
+				IF (
+					Sum(pembelians.jml) IS NULL,
+					0,
+					Sum(pembelians.jml)
+				) - IF(a.jual IS NULL,0,a.jual) AS sisa,baku.jmlbaku,
+				 products.satuan
+				FROM
 					products
-					LEFT JOIN pembelians ON pembelians.product_id = products.id
-					LEFT JOIN (SELECT
-							products.id,
-							products.nama_produk,
-							IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty))jual,
-							products.satuan
-							FROM
-							products
-							INNER JOIN detail_penjualans ON detail_penjualans.id_product = products.id
-							GROUP BY
-							products.id
-							ORDER BY
-							products.nama_produk ASC
-							)a ON a.id=products.id
-					LEFT JOIN stoks ON stoks.product_id=products.id
-					GROUP BY
+				LEFT JOIN pembelians ON pembelians.product_id = products.id
+				LEFT JOIN (
+					SELECT
+						products.id,
+						products.nama_produk,
+				
+					IF (
+						Sum(detail_penjualans.qty) IS NULL,
+						0,
+						Sum(detail_penjualans.qty)
+					) jual,
+					products.satuan
+				FROM
+					products
+				LEFT JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+				GROUP BY
+					products.id
+				ORDER BY
+					products.nama_produk ASC
+				) a ON a.id = products.id
+				LEFT JOIN (
+					SELECT
+						COUNT(id)jmlbaku,product_id
+					FROM
+						bahanbakus
+					GROUP BY bahanbakus.product_id
+				) baku ON baku.product_id=products.id
+				GROUP BY
 					products.id");
 		$this -> set(compact('products'));
 	}
@@ -79,8 +113,62 @@ class ProductsController extends AppController {
 		if (!$this -> Product -> exists($id)) {
 			throw new NotFoundException(__('Invalid product'));
 		}
-		$options = array('recursive' => 2, 'conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
-		$this -> set('product', $this -> Product -> find('first', $options));
+		$product = $this -> Product -> query("SELECT
+				products.id,
+				products.nama_produk,
+				products.category_id,
+				products.tipe,
+				products.dimensi,
+				products.satuan,
+				products.deskripsi,
+				categories.kategori,
+				parent.id as parent_id,
+				parent.kategori as parent
+				FROM
+				products
+				INNER JOIN categories ON products.category_id = categories.id
+				LEFT JOIN categories AS parent ON categories.parent_id = parent.id
+				WHERE
+				products.id ='".$id."'");
+		$sisa = $this -> Product -> query("SELECT
+				products.id,
+				products.nama_produk,products.dimensi,products.tipe,IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))beli,
+				a.jual,
+				IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))-IF(a.jual IS NULL,0,a.jual) AS sisa,
+				products.satuan
+				FROM
+				products
+				LEFT JOIN pembelians ON pembelians.product_id = products.id
+				LEFT JOIN (SELECT
+						products.id,
+						products.nama_produk,
+						IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty))jual,
+						products.satuan
+						FROM
+						products
+						INNER JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+						GROUP BY
+						products.id
+						ORDER BY
+						products.nama_produk ASC
+						)a ON a.id=products.id
+				WHERE products.id='".$id."'	GROUP BY products.id");
+		$baku=$this->Product->query("SELECT
+				bahanbakus.id,
+				bahanbakus.product_id,
+				bahanbakus.dm1,
+				bahanbakus.dm2,
+				bahanbakus.id_teknisi,
+				bahanbakus.penjualan_id,
+				bahanbakus.ket,
+				bahanbakus.created,
+				bahanbakus.modified
+				FROM
+				bahanbakus
+				WHERE
+				bahanbakus.product_id ='".$id."'");		
+		// $options = array('recursive' => 2, 'conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
+		$this -> set(compact('product','sisa','baku'));
 	}
 
 	/**
@@ -137,7 +225,7 @@ class ProductsController extends AppController {
 			} else {
 				$a['Stok']['id'] = $d['Stok']['id'];
 			}
-			if ($this -> Stok -> save($a,false)) {
+			if ($this -> Stok -> save($a, false)) {
 				$this -> Session -> setFlash('Data berhasil disimpan', 'success');
 				return $this -> redirect(array('action' => 'stock'));
 			} else {

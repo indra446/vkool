@@ -159,7 +159,7 @@
 								<?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'zmdi zmdi-power')), array('controller' => 'Users', 'action' => 'logout'), array('escape' => false,'title'=>'logout')); ?>					
 							</li>
 							<li>
-								<?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'zmdi zmdi-key')), array('controller' => 'Users', 'action' => 'edit',$infousr['Auth']['User']['id']), array('escape' => false,'title'=>'logout')); ?>					
+								<?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'zmdi zmdi-key')), array('controller' => 'Users', 'action' => 'edit',$infousr['Auth']['User']['id']), array('escape' => false,'title'=>'edit user')); ?>					
 							</li>
 
 						</ul>
@@ -241,7 +241,7 @@
 		<?php
 
 		echo $this -> Html -> script(array('lib/jquery', 'lib/jquery-migrate', 'lib/bootstrap', 'lib/jquery.ui', 'lib/jRespond', 'lib/nav.accordion', 'lib/hover.intent', 'lib/hammerjs', 'lib/jquery.hammer', 'lib/smoothscroll', 'lib/jquery.fitvids', 'lib/scrollup', 'lib/smoothscroll', 'lib/jquery.slimscroll', 'lib/jquery.syntaxhighlighter', 'lib/velocity', 'lib/smart-resize','lib/bootbox', 'lib/jquery.maskedinput','lib/jquery.validate', 'lib/jquery.form','lib/j-forms-validations','lib/additional-methods', 'lib/jquery-cloneya','lib/j-forms', 'lib/login-validation', 'apps'));
-		echo $this -> Html -> script(array('lib/jquery.dataTables','lib/dataTables.responsive','lib/dataTables.tableTools','lib/dataTables.bootstrap','lib/select2.full','lib/jquery.mask','lib/footable.all','lib/jquery.noty'));
+		echo $this -> Html -> script(array('lib/jquery.dataTables','lib/dataTables.responsive','lib/dataTables.tableTools','lib/dataTables.bootstrap','lib/select2.full','lib/jquery.mask','lib/footable.all','lib/jquery.noty','lib/bootstrap-datepicker'));
 		echo $this -> fetch('script');
 		?>
 <script type="text/javascript">
@@ -249,6 +249,7 @@ var jq=jQuery.noConflict();
 
 jq(document).ready(function() {
 	 jq('#harga').mask('000.000.000.000', {reverse: true});// Create two variable with the names of the months and days in an array
+	 // jq('#potitem').mask('000.000.000.000', {reverse: true});// Create two variable with the names of the months and days in an array
 	 jq('#potongan').mask('000.000.000', {reverse: true});// Create two variable with the names of the months and days in an array
 	 jq('#kirim').mask('000.000.000', {reverse: true});// Create two variable with the names of the months and days in an array
 var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]; 

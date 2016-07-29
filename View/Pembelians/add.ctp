@@ -47,22 +47,38 @@
         <label class="col-md-2 control-label">Produk</label>
 
         <div class=" col-md-4 unit">
-            <?php echo $this->Form->input('produk', array('id'=>'produk','class' => 'form-control', 'label' => false, 'required' => true)); ?>
+            <?php echo $this->Form->input('produk', array('id'=>'produk','class' => 'form-control', 'label' => false)); ?>
         </div>
         <div class="col-xs-2 unit " style="margin-right: -75px">
-            <?php echo $this->Form->input('pot_item', array('style'=>'width:50%;margin-right:-10px;','div'=>false,'id'=>'potitem','class' => 'form-control', 'label' => false, 'required' => true,'placeholder'=>'diskon')); ?>
+            <?php echo $this->Form->input('pot_item', array('style'=>'width:60%;margin-right:-10px;','div'=>false,'id'=>'potitem','class' => 'form-control', 'label' => false, 'placeholder'=>'diskon%')); ?>
         </div>
         <div class="col-xs-2 unit" style="margin-right: -58px">
-            <?php echo $this->Form->input('jml', array('style'=>'width:50%;margin-right:-10px;','div'=>false,'id'=>'jml','class' => 'col-xs-2 form-control', 'label' => false, 'required' => true,'placeholder'=>'qty')); ?>
+            <?php echo $this->Form->input('jml', array('style'=>'width:50%;margin-right:-10px;','div'=>false,'id'=>'jml','class' => 'col-xs-2 form-control', 'label' => false, 'placeholder'=>'qty')); ?>
         </div>
         <div class=" col-md-2 unit input-group">
-            <?php echo $this->Form->input('harga', array('id'=>'harga','class' => 'form-control', 'label' => false, 'required' => true,'placeholder'=>'harga satuan')); ?>
+            <?php echo $this->Form->input('harga', array('id'=>'harga','class' => 'form-control', 'label' => false, 'placeholder'=>'harga satuan')); ?>
         <span class="input-group-btn">
 			<button type="button" class="btn btn-success" id="add_produk">+</button>
 		</span>
         </div>
     </div>	
- 	<div id="isi_cart"></div>
+ 	<div id="isi_cart">
+ 		<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>ID Produk</th>
+			<th>Nama</th>
+			<th>Jumlah</th>
+			<th>Dimensi</th>
+			<th>Harga Satuan</th>
+			<th>Disc</th>
+			<th>Subtotal</th>
+			<th>Hapus</th>
+		</tr>
+	</thead>
+	</table>	
+ 		
+ 	</div>
 	<!-- <div class="form-group">
 		<label class="col-md-2 control-label">Potongan Harga</label>
 		<div class="input col-md-8">
@@ -117,6 +133,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
+ // $( "#isi_cart" ).load( "<?php echo $this -> webroot; ?>Pembelians/cart/" );
  $('#add_produk').on('click', function(){
  	 var prod=$("#produk").val();
  	 if(prod==""){
@@ -128,10 +145,10 @@ $(document).ready(function() {
 	url: "<?php echo $this -> webroot; ?>Pembelians/cart/",
 	data: { idp : $("#produk").val(),jml :$("#jml").val(),potitem :$("#potitem").val(), harga :$("#harga").val() },
 	success: function(html) {
-	$('#produk').html("");
-	$('#pot_item').html("");
-	$('#jml').html("");
-	$('#harga').html("");
+	$('#produk').val("");
+	$('#potitem').val("");
+	$('#jml').val("");
+	$('#harga').val("");
 	jq("#isi_cart").html(html);
 	}
 	});}
