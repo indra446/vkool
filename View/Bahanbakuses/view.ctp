@@ -2,7 +2,7 @@
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>
 <script>
   function sum() {
-            var txttotal = document.getElementById('total').value;
+            var txttotal = document.getElementById('totaldepan').value;
             var txtdiscount = document.getElementById('discount').value;
             var txthiddendiscount = document.getElementById('hiddendiscount').value;
             var result = parseInt(txttotal) - parseInt(txtdiscount)-parseInt(txthiddendiscount);
@@ -79,7 +79,7 @@ location.reload();
         <label class="col-md-8 control-label">Total</label>
         <div class=" col-md-4">
             <?php // echo $this->Form->input('total', array('class' => 'form-control', 'label' => false,'value'=>$totals)); ?>
-            <input type="text" name='total' id='total' value="<?php echo $totals[0][0]['total'];?>" >
+            <input type="text" name='total' id='totaldepan' value="<?php echo $totals[0][0]['total'];?>" >
             <!--<div id="PenjualanTotal"></div>-->
         </div>
 <!--        <span class="input-group-btn">
@@ -123,9 +123,9 @@ var $$e=jQuery.noConflict();
          bootbox.dialog({
         title: "Input Pembayaran",
         message: '<table class="table">' +
-            '<tr><td>Total</td><td>:</td><td><?php echo $totals[0][0]['total'];?></td></tr>' +
-            '<tr><td>Discount</td><td>:</td><td><?php echo $disc[0]['detail_penjualans']['disc'];?></td></tr>'+
-            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $disc[0]['detail_penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td></td></tr><tr><td>Pembayaran</td><td>:</td><td></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td></td></tr><tr></table>'+
+            '<tr><td>Total</td><td>:</td><td><?php echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
+            '<tr><td>Discount</td><td>:</td><td><?php echo $dis1=$disc[0]['detail_penjualans']['disc'];?></td></tr>'+
+            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['detail_penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalnya-$dis1-$dis2;?></td></tr><tr><td>Pembayaran</td><td>:</td><td></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td><?php echo $totalnya-$dis1-$dis2;?></td></tr><tr></table>'+
             '<form class="form-horizontal"> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Metode Pembayaran</label> ' +
@@ -142,7 +142,7 @@ var $$e=jQuery.noConflict();
             '<label class="col-md-4 control-label" for="name">Bayar</label> ' +
             '<div class="col-md-8"> ' +
             '<input id="bayar" name="bayar" type="text" placeholder="Bayar" class="form-control"> ' +
-            '<input id="total" name="bayar" type="hidden" value="<?php echo $totals[0][0]['total'];?>" placeholder="Bayar" class="form-control"> ' +
+            '<input id="total" name="bayar" type="hidden" value="<?php echo $t;?>" placeholder="Bayar" class="form-control"> ' +
             '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control"> ' +
             '</div></div> ' +
             '<div class="form-group"> ' +

@@ -165,6 +165,8 @@ limit 1 ");
                     @$data['Bahanbakus']['penjualan_id'] = $id;
                     @$data['Bahanbakus']['product_id'] =$zn['Penjualan']['ket'][$i];
                     @$data['Bahanbakus']['jum_sisa'] =$zn['Penjualan']['sisa'][$i]; 
+                    @$data['Bahanbakus']['dm1'] =$zn['Penjualan']['pjg'][$i]; 
+                    @$data['Bahanbakus']['dm2'] =$zn['Penjualan']['lbr'][$i]; 
                     @$data['Bahanbakus']['id_teknisi'] =explode("-",$zn['Bahanbakuses']['id_teknisi'])['1']; 
                     @$data['Bahanbakus']['ket'] =$zn['Penjualan']['ket'][$i];
                     $this->Bahanbakus->create();

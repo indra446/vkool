@@ -64,7 +64,9 @@ $x++;}
     <tr>
         <td>Masukkan Sisa</td>
         <td>:</td>
+        <?php $dim=$sisa['0']['products']['dimensi']; if(!empty($dim)) {?><td><input name="data[Penjualan][pjg][]" class="form-control" required="required" placeholder="panjang" type="number" ></td><?php } ?>
         <td>
+            <?php if(!empty($dim)) {?><input name="data[Penjualan][lbr][]" class="form-control" required="required" placeholder="lebar" type="number" > <?php }?>
             <input name="data[Penjualan][sisa][]" class="form-control" required="required" placeholder="Sisa" type="number" >
             <input name="data[Penjualan][ket][]" class="form-control" value="<?php echo $sisa['0']['products']['id'];?>" type="hidden" >
         </td>
