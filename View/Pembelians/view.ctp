@@ -35,12 +35,12 @@
 	<div class="w-section-header">
 		<h2>Detail Pembelian</h2>
 	</div>
-	<table class="table table-bordered foo-data-table">
+	<table class="table table-bordered">
 		<thead>
 			<tr>
 				<th>ID</th>
 				<th>Nama Produk</th>
-				<th>Jumlah</th>
+				<th>Qty</th>
 				<th>Dimensi</th>
 				<th>Harga Satuan</th>
 				<th>Diskon</th>
@@ -65,15 +65,19 @@
 			?>
 		<tfoot>
 			<tr>
-				<td colspan="6" align="right">Potongan =</td><td align="right"><?php if(!empty($data['Pembelian']['potongan'])){echo number_format($data['Pembelian']['potongan'],2,',','.');}?>
+				<td colspan="6" align="right">Discount =</td><td align="right"><?php if(!empty($data['Pembelian']['potongan'])){echo number_format($data['Pembelian']['potongan'],2,',','.');}else{echo '0';}?>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="6" align="right">Biaya Kirim =</td><td align="right"><?php if(!empty($data['Pembelian']['biaya_kirim'])){ echo number_format($data['Pembelian']['biaya_kirim'],2,',','.');}?>
+				<td colspan="6" align="right">Total setelah discount =</td><td align="right"><?php if(!empty($gtotal)){echo number_format($gtotal-$data['Pembelian']['potongan'],2,',','.');}?>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="6" align="right">PPN =</td><td align="right"><?php if(!empty($data['Pembelian']['ppn'])){echo number_format($data['Pembelian']['ppn'],2,',','.');}?>
+				<td colspan="6" align="right">Biaya Kirim =</td><td align="right"><?php if(!empty($data['Pembelian']['biaya_kirim'])){ echo number_format($data['Pembelian']['biaya_kirim'],2,',','.');}else{echo '0';}?>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="6" align="right">PPN =</td><td align="right"><?php if(!empty($data['Pembelian']['ppn'])){echo number_format($data['Pembelian']['ppn'],2,',','.');}else{echo '0';}?>
 				</td>
 			</tr>
 			<tr class="success">

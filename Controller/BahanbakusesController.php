@@ -43,10 +43,10 @@ class BahanbakusesController extends AppController {
               INNER JOIN customers ON penjualans.customer_id = customers.id
               LEFT JOIN bahanbakus ON penjualans.id = bahanbakus.penjualan_id
                WHERE
-              penjualans.nomor LIKE '%$nota%' AND
+              penjualans.nomor LIKE '%$nota%' OR
               customers.nama LIKE '%$nama%' 
                AND mid(penjualans.created,1,10) BETWEEN '$awal' AND '$akhir'
-              group by penjualans.id");
+              group by penjualans.id ORDER BY customers.nama ASC ");
                           $this->set(compact('bahanbakuses'));
         } else {
         $bahanbakuses = $this->Bahanbakus->query("SELECT
@@ -135,14 +135,17 @@ limit 1 ");
     }
 
     public function bayar() {
+        $tanggal=date("Y-m-d");
         @$tipe=$_POST['tipe'];
         @$ket=$_POST['ket'];
         @$bayar=$_POST['bayar'];
         @$kbayar=$_POST['kbayar'];
         @$idpenju=$_POST['idpenju'];
         @$total=$_POST['total'];
+        @$lunas=$_POST['lunas'];
+        
 //        print_r($idpenju);exit;
-        $this->Bahanbakus->query("insert into `bayars` (bayar,id_penjualan,total,jatuh_tempo,tipe_bayar,ket) VALUE('$bayar','$idpenju','$total','','$tipe','$ket');");
+        $this->Bahanbakus->query("insert into `bayars` (bayar,id_penjualan,total,jatuh_tempo,tipe_bayar,ket,lunas,created,modified) VALUE('$bayar','$idpenju','$total','','$tipe','$ket','$lunas','$tanggal','$tanggal');");
 
     }
 

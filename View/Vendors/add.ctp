@@ -1,3 +1,14 @@
+<style>
+	.j-forms .j-row{
+		margin-left:6px!important;
+	}
+</style>
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Tambah Vendor</h3>
+    </div>
+</div>
+<h3>Tambah Vendor</h3>
 <div class="vendors form">
     <?php echo $this->Form->create('Vendor', array('id' => 'j-forms-validation', 'class' => 'form-horizontal j-forms')); ?>
     <div class="form-group unit">

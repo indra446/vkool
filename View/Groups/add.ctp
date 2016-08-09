@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Tambah Role</h3>
+    </div>
+</div>
+<br>
 <div class="box box-success">
 <?php echo $this -> Form -> create('Group'); ?>
 		<div class="box-body">

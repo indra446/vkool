@@ -68,13 +68,15 @@ class BayarsController extends AppController {
 			INNER JOIN categories ON products.category_id = categories.id
 			WHERE
 			bayars.id = $id");
+                  $a=$cek[0]['penjualans']['id'];
+                  
 		$sudahbayar=$this->Bayar->query("SELECT
 			sum(bayar)bayar
 			FROM
 			bayars
 			INNER JOIN penjualans ON bayars.id_penjualan = penjualans.id
 			WHERE
-			bayars.id_penjualan = ".$cek[0]['penjualans']['id']." AND bayars.id < $id
+			bayars.id_penjualan = ".$cek[0]['penjualans']['id']." AND bayars.id <= $id
 			GROUP BY
 			bayars.id_penjualan");
 		if(!empty($sudahbayar)){

@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Karyawan</h3>
+    </div>
+</div>
+<br>
 <div class="widget-header block-header clearfix">
     <?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'fa fa-plus')) . "&nbsp;<span>Tambah Karyawan</span>", array('action' => 'add'), array('escape' => false, 'class' => 'btn btn-success')); ?> 
 </div>
@@ -32,7 +38,7 @@
                     <td><?php echo h($karyawan['Karyawan']['date_join']); ?>&nbsp;</td>
                     <td class="actions">
                 <?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'fa fa-edit')) . "", array('action' => 'edit', $karyawan['Karyawan']['id']), array('title'=>'edit','escape' => false, 'class' => 'btn btn-primary btn-xs')); ?> 
-    			<?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $karyawan['Karyawan']['id']), array('title'=>'hapus','escape' => false, 'class' => 'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $karyawan['Karyawan']['id'])); ?>
+    			<?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $karyawan['Karyawan']['id']), array('title'=>'hapus','escape' => false, 'class' => 'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?',$karyawan['Karyawan']['nama'])); ?>
                     </td>
                 </tr>
 <?php endforeach; ?>

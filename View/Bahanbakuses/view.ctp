@@ -12,6 +12,16 @@
         }
 </script>
 <script>
+  function sumi() {
+            var bayare = document.getElementById('bayar').value;
+            var sisatag = document.getElementById('sisatagihan').value;
+            var result = parseInt(sisatag)- parseInt(bayare);
+            if (!isNaN(result)) {
+                document.getElementById('kbayar').value = result;
+            }
+        }
+</script>
+<script>
 $(document).ready(function(){
 $("#tambah").click(function(){
 $("#showtambah").load('<?php echo $this->webroot; ?>bahanbakuses/tambah/<?php echo $id;?>');
@@ -48,7 +58,7 @@ location.reload();
 <br>
  <?php // echo $this->Form->create('Bahanbakuses',array('class' => 'form-horizontal j-forms')); ?>   
 <div class="row">
-    <table class="table data-tbl">
+    <table class="table">
         <thead>
             <tr>
                 <th>Kategori</th>
@@ -69,8 +79,8 @@ location.reload();
                     <td><?php echo h($baku['0']['subtotal']); ?>&nbsp;</td>
 
                     <td class="actions">
-                        <?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'fa fa-edit')) . "", array('action' => 'edit', $baku['detail_penjualans']['id']), array('title' => 'edit', 'escape' => false, 'class' => 'btn btn-primary btn-xs')); ?> 
-                        <?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $baku['detail_penjualans']['id']), array('title' => 'hapus', 'escape' => false, 'class' => 'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $baku['detail_penjualans']['id'])); ?>
+                        <?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'fa fa-edit')) . "", array('controller'=>'detailpenjualans','action' => 'edit', $baku['detail_penjualans']['id'],$id,'ok'), array('title' => 'edit', 'escape' => false, 'class' => 'btn btn-primary btn-xs')); ?> 
+                        <?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('controller'=>'detailpenjualans','action' => 'delete', $baku['detail_penjualans']['id'],$id,'ok'), array('title' => 'hapus', 'escape' => false, 'class' => 'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $baku['detail_penjualans']['id'])); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -79,7 +89,7 @@ location.reload();
         <label class="col-md-8 control-label">Total</label>
         <div class=" col-md-4">
             <?php // echo $this->Form->input('total', array('class' => 'form-control', 'label' => false,'value'=>$totals)); ?>
-            <input type="text" name='total' id='totaldepan' value="<?php echo $totals[0][0]['total'];?>" >
+            <input type="text" name='total' id='totaldepan' value="<?php echo $t0=$totals[0][0]['total'];?>" >
             <!--<div id="PenjualanTotal"></div>-->
         </div>
 <!--        <span class="input-group-btn">
@@ -89,19 +99,19 @@ location.reload();
     <div class="form-group">
         <label class="col-md-8 control-label">Discount</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="discount" name="discount" value="<?php echo $disc[0]['detail_penjualans']['disc'];?>" onkeyup="sum();">
+            <input type="text" class="form-control" id="discount" name="discount" value="<?php echo $d1=$disc[0]['detail_penjualans']['disc'];?>" onkeyup="sum();">
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-8 control-label">Hidden Discount</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="hiddendiscount" name="hiddendiscount" value="<?php echo $disc[0]['detail_penjualans']['hidden_disc'];?>" onkeyup="sum();">
+            <input type="text" class="form-control" id="hiddendiscount" name="hiddendiscount" value="<?php echo $d2=$disc[0]['detail_penjualans']['hidden_disc'];?>" onkeyup="sum();">
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-8 control-label">Total All</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="totalall" name="totalall">
+            <input type="text" class="form-control" id="totalall" name="totalall" value="<?php echo $t0-$d1-$d2;?>">
         </div>
     </div>
     <br>
@@ -125,7 +135,7 @@ var $$e=jQuery.noConflict();
         message: '<table class="table">' +
             '<tr><td>Total</td><td>:</td><td><?php echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
             '<tr><td>Discount</td><td>:</td><td><?php echo $dis1=$disc[0]['detail_penjualans']['disc'];?></td></tr>'+
-            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['detail_penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalnya-$dis1-$dis2;?></td></tr><tr><td>Pembayaran</td><td>:</td><td></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td><?php echo $totalnya-$dis1-$dis2;?></td></tr><tr></table>'+
+            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['detail_penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalnya-$dis1-$dis2;?></td></tr><tr><td>Pembayaran</td><td>:</td><td></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="<?php echo $totalnya-$dis1-$dis2;?>" onkeyup="sumi();"></td></tr><tr></table>'+
             '<form class="form-horizontal"> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Metode Pembayaran</label> ' +
@@ -141,16 +151,23 @@ var $$e=jQuery.noConflict();
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Bayar</label> ' +
             '<div class="col-md-8"> ' +
-            '<input id="bayar" name="bayar" type="text" placeholder="Bayar" class="form-control"> ' +
+            '<input id="bayar" name="bayar" type="text" placeholder="Bayar"  class="form-control" onkeyup="sumi();"> ' +
             '<input id="total" name="bayar" type="hidden" value="<?php echo $t;?>" placeholder="Bayar" class="form-control"> ' +
             '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control"> ' +
             '</div></div> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Kurang Bayar</label> ' +
             '<div class="col-md-8"> ' +
-            '<input id="kbayar" name="kbayar" type="text" placeholder="Kurang Bayar" class="form-control"> ' +
+            '<input id="kbayar" name="kbayar" type="text" placeholder="Kurang Bayar"  class="form-control"> ' +
             '</div></div> ' +
-            '</form><a href="<?php echo $this->webroot;?>" target="_blank">Preview Nota</a>',
+             '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Lunas</label> ' +
+            '<div class="col-md-8"> ' +
+            '<select  id="lunas" class="form-control">'+
+            '<option value="0"></option><option value="1">Lunas</option></select>'+
+            '</div></div> ' +
+            '</form>',
+//            '<a href="<?php // echo $this->webroot;?>" target="_blank">Preview Nota</a>',
         buttons: {
           cancel: {
             label: "Close",
@@ -165,7 +182,7 @@ var $$e=jQuery.noConflict();
                   $.ajax({
                  type: "POST",
                 url: "<?php echo $this->webroot; ?>bahanbakuses/bayar/",
-                data: { tipe : $("#tipebayar").val(),ket :$("#ket").val(),bayar :$("#bayar").val(),kbayar :$("#kbayar").val(),idpenju:$("#idpenju").val(),total:$("#total").val() },
+                data: { tipe : $("#tipebayar").val(),ket :$("#ket").val(),bayar :$("#bayar").val(),kbayar :$("#kbayar").val(),idpenju:$("#idpenju").val(),total:$("#total").val(),lunas:$("#lunas").val() },
                 success: function(html) {
                 alert('Pembayaran Sukses.');	
                 $('#tipebayar').html("");

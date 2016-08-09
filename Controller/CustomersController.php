@@ -49,7 +49,7 @@ class CustomersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Customer->create();
 			if ($this->Customer->save($this->request->data)) {
-				$this->Session->setFlash(__('The customer has been saved.'));
+				$this->Session->setFlash('Data berhasil disimpan', 'success');
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The customer could not be saved. Please, try again.'));
@@ -70,7 +70,7 @@ class CustomersController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Customer->save($this->request->data)) {
-				$this->Session->setFlash(__('The customer has been saved.'));
+				$this->Session->setFlash('Data berhasil disimpan', 'success');
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The customer could not be saved. Please, try again.'));
@@ -93,9 +93,9 @@ class CustomersController extends AppController {
 		if (!$this->Customer->exists()) {
 			throw new NotFoundException(__('Invalid customer'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->onlyAllow('post', 'delete');
 		if ($this->Customer->delete()) {
-			$this->Session->setFlash(__('The customer has been deleted.'));
+			$this->Session->setFlash('Data berhasil dihapus', 'success');
 		} else {
 			$this->Session->setFlash(__('The customer could not be deleted. Please, try again.'));
 		}

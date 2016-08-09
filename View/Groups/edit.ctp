@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Edit Role</h3>
+    </div>
+</div>
+<br>
 <div class="box box-danger">
 	<?php echo $this -> Form -> create('Group'); ?>
 		<div class="box-body">

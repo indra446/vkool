@@ -3,12 +3,12 @@ $this -> layout = false;
 // debug($_SESSION["cart_item"])
 
 ?>
-<table class="table table-striped">
+<table class="table">
 	<thead>
 		<tr>
 			<th>ID Produk</th>
 			<th>Nama</th>
-			<th>Jumlah</th>
+			<th>Qty</th>
 			<th>Dimensi</th>
 			<th>Harga Satuan</th>
 			<th>Disc</th>
@@ -27,6 +27,9 @@ foreach($_SESSION["cart_item"] as $k => $item){
 
 // foreach ($_SESSION["cart_item"] as $item){
 	if($item['id']!=NULL){
+	$disc= $item['potitem'] / 100;
+	$pot= (str_replace(".", "", $item['harga'])*$item['jml'])*$disc;
+		
 	if($item['dimensi']!=NULL){
 		$dimensi=explode(",",$item['dimensi']);
 		$d=$dimensi[0]." x ".$dimensi[1];
@@ -34,11 +37,11 @@ foreach($_SESSION["cart_item"] as $k => $item){
 		$d="";
 	}	
 	echo "<tr><td>".$item['id']."</td><td>".$item['nama']."</td>
-	<td>".$item['jml']."</td><td>".$d."</td><td align='right'>".$item['harga']."</td><td align='right'>".number_format(str_replace(".", "", $item['potitem']),0,',','.')."</td><td align='right'>".number_format(str_replace(".", "", $item['harga'])*$item['jml']-str_replace(".", "", $item['potitem']),0,',','.')."</td>
-	<td><button type='button' class='btn btn-xs btn-danger' id='".$item['id']."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
+	<td>".$item['jml']."</td><td>".$d."</td><td align='right'>".number_format($item['harga'],0,',','.')."</td><td align='right'>".$item['potitem']." %</td><td align='right'>".number_format(((str_replace(".", "", $item['harga'])*$item['jml'])-$pot),0,',','.')."</td>
+	<td><button type='button' class='btn btn-xs btn-danger' id='".$k."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
 	}
 	$x++;
-$total +=str_replace(".", "", $item['harga'])*$item['jml']-str_replace(".", "", $item['potitem']);
+$total +=str_replace(".", "", $item['harga'])*$item['jml']-str_replace(".", "", $pot);
 	}
 }
 ?>
@@ -46,7 +49,7 @@ $total +=str_replace(".", "", $item['harga'])*$item['jml']-str_replace(".", "", 
 <tfoot>
 	<tr>
 		<td colspan="6"><div align="right">Total</div></td>
-		<td><div class=" col-xs-6" align='right'><?php echo  number_format($total,0,',','.')?>
+		<td><div class=" col-xs-6" align='right'><?php if(!empty($total)){echo  number_format($total,0,',','.');}?>
 		</td><td></td>
 	</tr>
 	<tr>
@@ -56,17 +59,22 @@ $total +=str_replace(".", "", $item['harga'])*$item['jml']-str_replace(".", "", 
 	</tr>
 	<tr>
 		<td colspan="6"><div align="right">Total setelah discount</div></td>
-		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('total', array('id'=>'total','class' => 'form-control money-mask', 'label' => false)); ?>
+		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('total', array('readonly'=>true,'id'=>'total','class' => 'form-control money-mask', 'label' => false)); ?>
 		</td><td></td>
 	</tr>	
 	<tr>
 		<td colspan="6"><div align="right">Biaya Kirim</div></td>
-		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('kirim', array('id'=>'kirim','class' => 'form-control money-mask', 'label' => false)); ?>
+		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('kirim', array('onFocus'=>'startCalc();','onBlur'=>'stopCalc();','id'=>'kirim','class' => 'form-control money-mask', 'label' => false)); ?>
 		</td><td></td>
 	</tr>
 	<tr>
 		<td colspan="6"><div align="right">PPN</div></td>
-		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('ppn', array('id'=>'ppn','class' => 'form-control money-mask', 'label' => false,'value'=>0)); ?>
+		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('ppn', array('onFocus'=>'startCalc();','onBlur'=>'stopCalc();','id'=>'ppn','class' => 'form-control money-mask', 'label' => false,'value'=>0)); ?>
+		</td><td></td>
+	</tr>
+	<tr>
+		<td colspan="6"><div align="right">Grandtotal</div></td>
+		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('grandtotal', array('readonly'=>true,'id'=>'grandtotal','class' => 'form-control money-mask', 'label' => false)); ?>
 		</td><td></td>
 	</tr>
 </tfoot>
@@ -100,12 +108,14 @@ function configurator(clicked) {
     function calc() {
         var a = document.getElementById('potongan').value;
         d = a.replace(/,/g, '');
-        // b = document.getElementById('prov').value;
-        // e = b.replace(/,/g, '');
-        // c = document.getElementById('apbn').value;
-        // f = c.replace(/,/g, '');
+        b = document.getElementById('kirim').value;
+        e = b.replace(/,/g, '');
+        c = document.getElementById('ppn').value;
+        f = c.replace(/,/g, '');
         var k = <?php echo $total;?>-d;
+        var gt = (<?php echo $total;?>-d)+(e*1)+(f*1);
         document.getElementById('total').value = numberWithCommas(k);
+        document.getElementById('grandtotal').value = numberWithCommas(gt);
     }
 
     function stopCalc() {

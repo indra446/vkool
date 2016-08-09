@@ -1,21 +1,27 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Tambah Karyawan</h3>
+    </div>
+</div>
+<br>
 <div class="karyawans form">
-    <?php echo $this->Form->create('Karyawan', array('class' => 'form-horizontal j-forms')); ?>
+    <?php echo $this->Form->create('Karyawan', array('id'=>'j-forms-validation','class' => 'form-horizontal j-forms')); ?>
     <div class="form-group">
         <label class="col-md-2 control-label">No KTP</label>
         <div class=" col-md-8">
-            <?php echo $this->Form->input('no_ktp', array('class' => 'form-control', 'label' => false)); ?>
+            <?php echo $this->Form->input('no_ktp', array('type'=>'number','class' => 'form-control', 'label' => false,'required'=>true)); ?>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Nama</label>
         <div class=" col-md-8">
-            <?php echo $this->Form->input('nama', array('class' => 'form-control', 'label' => false)); ?>
+            <?php echo $this->Form->input('nama', array('class' => 'form-control', 'label' => false,'required'=>true)); ?>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Alamat</label>
         <div class=" col-md-8">
-            <?php echo $this->Form->input('alamat', array('class' => 'form-control', 'label' => false)); ?>
+            <?php echo $this->Form->input('alamat', array('class' => 'form-control', 'label' => false,'required'=>true)); ?>
         </div>
     </div>
     <div class="form-group">
@@ -27,7 +33,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">Tanggal Join</label>
         <div class=" col-md-8">
-            <?php echo $this->Form->input('date_join', array('class' => 'form-contro', 'label' => false)); ?>
+            <?php echo $this->Form->input('date_join', array('class' => 'form-contro', 'label' => false,'required'=>true)); ?>
         </div>
     </div>
     <div class="form-group">

@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Penjualan</h3>
+    </div>
+</div>
+<br>
 <div class="widget-header block-header clearfix">
 	<div class="btn-group btn-group-justified">
     <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-cart-plus')) . "&nbsp;<span>Tambah Penjualan</span>", array('controller' => 'Penjualans','action' => 'add'), array('escape' => false, 'class' => 'btn btn-default')); ?> 
@@ -28,10 +34,10 @@
                 <tr>
                     <td><?php echo h($penjualan['Penjualan']['id']); ?>&nbsp;</td>
                     <td>
-                        <?php echo $this -> Html -> link($penjualan['Customer']['nama'], array('controller' => 'customers', 'action' => 'view', $penjualan['Customer']['id'])); ?>
+                        <?php echo $penjualan['Customer']['nama']; ?>
                     </td>
                     <td>
-                        <?php echo $this -> Html -> link($penjualan['Merk']['nama'], array('controller' => 'merks', 'action' => 'view', $penjualan['Merk']['id'])); ?>
+                        <?php echo $penjualan['Merk']['nama']; ?>
                     </td>
                     <td><?php echo h($penjualan['Penjualan']['thn']); ?>&nbsp;</td>
                     <td><?php echo h($penjualan['Penjualan']['nopol']); ?>&nbsp;</td>
@@ -44,7 +50,7 @@
                     <td><?php echo h($penjualan['Penjualan']['modified']); ?>&nbsp;</td>
                     <td class="actions">
                         <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-edit')) . "", array('action' => 'edit', $penjualan['Penjualan']['id']), array('escape' => false, 'class' => 'btn btn-primary btn-xs')); ?> 
-                        <?php echo $this -> Form -> postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $penjualan['Penjualan']['id']), array('escape' => false, 'class' => 'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $penjualan['Penjualan']['id'])); ?>
+                        <?php echo $this -> Form -> postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $penjualan['Penjualan']['id']), array('escape' => false, 'class' => 'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $penjualan['Customer']['nama'])); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

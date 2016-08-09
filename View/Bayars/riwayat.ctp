@@ -1,4 +1,4 @@
-<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js" > </script> 
+<!--<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js" > </script>--> 
 
 <h4>Nomor Nota: <?php echo $data[0]['penjualans']['nomor']?></h4>
 
@@ -49,7 +49,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <button type="button" class="close" data-dismiss="modal"><a href="<?php echo $_SERVER["REQUEST_URI"]; ?>"><span aria-hidden="true">&times;</span></a><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel">Preview Nota</h4>
       </div>
       <div class="modal-body">
@@ -70,7 +70,8 @@
       </div>
       <div class="modal-footer">
        <button class="btn btn-info" onclick="printDiv('liat')" aria-hidden="true">Print</button>
-       <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</button>
+       <!--<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</button>-->
+       <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><a href="<?php echo $_SERVER["REQUEST_URI"]; ?>">Close</a></button>
 
       </div>
     </div>

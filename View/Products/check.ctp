@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Edit Stok Produk</h3>
+    </div>
+</div>
+<br>
 <?php //debug($cek);?>
 <script>
     function startCalc() {

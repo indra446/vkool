@@ -49,7 +49,7 @@ class PenjualansController extends AppController {
 				penjualans.created,
 				customers.nama,
 				Sum(bayars.bayar)bayar,
-				bayars.total
+				bayars.total,bayars.lunas
 				FROM
 				penjualans
 				INNER JOIN customers ON penjualans.customer_id = customers.id
@@ -59,7 +59,7 @@ class PenjualansController extends AppController {
 				penjualans.nomor,
 				penjualans.created,
 				customers.nama
-				)a WHERE a.bayar=a.total");
+				)a WHERE a.bayar=a.total or a.lunas='1'");
 		$this->set(compact('data'));	
 
 	}

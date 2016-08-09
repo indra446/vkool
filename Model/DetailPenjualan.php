@@ -64,14 +64,14 @@ class DetailPenjualan extends AppModel {
 		),
 		'Product' => array(
 			'className' => 'Product',
-			'foreignKey' => 'product_id',
+			'foreignKey' => 'id_product',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
 		'Karyawan' => array(
 			'className' => 'Karyawan',
-			'foreignKey' => 'karyawan_id',
+			'foreignKey' => 'id_karyawan',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

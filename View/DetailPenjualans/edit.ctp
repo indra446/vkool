@@ -1,31 +1,32 @@
-<div class="detailPenjualans form">
-<?php echo $this->Form->create('DetailPenjualan'); ?>
-	<fieldset>
-		<legend><?php echo __('Edit Detail Penjualan'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('penjualan_id');
-		echo $this->Form->input('product_id');
-		echo $this->Form->input('qty');
-		echo $this->Form->input('disc');
-		echo $this->Form->input('hidden_disc');
-		echo $this->Form->input('karyawan_id');
-		echo $this->Form->input('ket');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Edit Bahan Baku</h3>
+    </div>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('DetailPenjualan.id')), array(), __('Are you sure you want to delete # %s?', $this->Form->value('DetailPenjualan.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Detail Penjualans'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Penjualans'), array('controller' => 'penjualans', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Penjualan'), array('controller' => 'penjualans', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Products'), array('controller' => 'products', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Product'), array('controller' => 'products', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Karyawans'), array('controller' => 'karyawans', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Karyawan'), array('controller' => 'karyawans', 'action' => 'add')); ?> </li>
-	</ul>
+<br>
+<div class="categories form">
+    <?php echo $this->Form->create('DetailPenjualan', array('class' => 'form-horizontal j-forms')); ?>
+    <?php echo $this->Form->input('id'); ?>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Nama</label>
+        <div class=" col-md-8">
+            <?php echo $this->Form->input('product_id', array('class' => 'form-control', 'label' => false)); ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Qty</label>
+        <div class=" col-md-8">
+            <?php echo $this->Form->input('qty', array('class' => 'form-control', 'label' => false)); ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Harga</label>
+        <div class=" col-md-8">
+            <?php echo $this->Form->input('harga', array('class' => 'form-control', 'label' => false,'type'=>'number')); ?>
+        </div>
+    </div>
+     <div class="form-footer">
+        <?php echo $this->Form->button('Simpan', array('type' => 'submit', 'class' => 'btn btn-primary')); ?>
+    </div>
+    <?php echo $this->Form->end(); ?>
 </div>

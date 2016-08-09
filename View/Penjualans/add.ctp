@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Tambah Penjualan</h3>
+    </div>
+</div>
+<br>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>
 <script src="<?php echo $this->webroot; ?>js/jQuery.print.js"></script>
@@ -385,7 +391,7 @@ var $$e=jQuery.noConflict();
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Total All</label>
                                     <div class=" col-md-4">
-                                        <input type="text" class="form-control" id="totalall" name="totalall">
+                                        <input type="text" class="form-control" id="totalall" name="totalall" readonly="">
                                     </div>
                                 </div>
                                 <hr align="right">

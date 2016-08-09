@@ -1,3 +1,4 @@
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js" > </script>
 <?php
 $this->layout=false;
 // debug($sudahbayar);

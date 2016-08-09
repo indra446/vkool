@@ -170,11 +170,14 @@
 					case 1 :
 						echo $this -> element('menu/menu_super');
 						break;
-					case 2 :
+					case 4 :
 						echo $this -> element('menu/menu_kasir');
 						break;
 					case 3 :
 						echo $this -> element('menu/menu_teknisi');
+						break;
+					case 7 :
+						echo $this -> element('menu/menu_recep');
 						break;
 					default :
 						echo $this -> element('menu/menu_kosong');
@@ -189,9 +192,9 @@
 		<div class="page-header filled full-block light">
 			<div class="row">
 				<div class="col-md-6 col-sm-6">
-					<h2><?php echo ucwords(strtolower(str_replace("_", " ", $params['controller']))); ?></h2>
+					<h2><?php //echo ucwords(strtolower(str_replace("_", " ", $params['controller']))); ?></h2>
 					<p>
-						<?php echo strtolower($params['action']); ?>
+						<?php //echo strtolower($params['action']); ?>
 					</p>
 				</div>
 				<div class="col-md-6 col-sm-6">
@@ -211,7 +214,8 @@
 		</div>
 	<div class="row">
 		<div class="widget-wrap">
-		<?php echo $this -> Session -> flash(); echo $content_for_layout; ?>
+		<?php echo $this -> Session -> flash(); 
+		echo $content_for_layout; ?>
 		</div>
 	</div>	
 	
@@ -244,6 +248,46 @@
 		echo $this -> Html -> script(array('lib/jquery.dataTables','lib/dataTables.responsive','lib/dataTables.tableTools','lib/dataTables.bootstrap','lib/select2.full','lib/jquery.mask','lib/footable.all','lib/jquery.noty','lib/bootstrap-datepicker'));
 		echo $this -> fetch('script');
 		?>
+<script type="text/javascript">
+	// var oTable;
+	var $tb = jQuery.noConflict();
+	$tb(function() {
+		$tb("#tb_product").dataTable({
+		// oTable=$tb('#example').dataTable({
+		"sPaginationType" : "full_numbers",
+        "iDisplayLength": 10,
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "<?php echo $this->webroot;?>products/index",
+        "sDom": 'frtip',
+        "aoColumns": [
+            {mData:"Product.id"},
+            {mData:"Product.nama_produk"},
+            {mData:"Kategori.kategori"},
+            {mData:"Product.satuan"},
+            {mData:"Product.aktif"},
+            {mData:"Product.id"}
+         
+        ],
+        "aoColumnDefs" : [{
+
+				"sWidth" : "5%",
+				"aTargets" : [3,4]
+			},],
+        
+        
+        "fnCreatedRow": function(nRow, aData, iDataIndex){
+        	var aktif=aData.Product.aktif;
+        	if(aktif==1){
+            $tb('td:eq(4)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
+           }else{
+            $tb('td:eq(4)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
+           }
+            $tb('td:eq(5)',nRow).html('<a class="btn btn-info btn-xs" href="<?php echo $this->webroot;?>products/edit/'+aData.Product.id+'">Edit</a>');
+        }
+    });
+ });
+</script>		
 <script type="text/javascript">
 var jq=jQuery.noConflict();
 
@@ -285,5 +329,6 @@ setInterval( function() {
     
 });
 </script>
+
 	</body>
 </html>

@@ -1,3 +1,10 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Tambah Kategori</h3>
+    </div>
+
+</div>
+<br>
 <div class="categories form">
     <?php echo $this->Form->create('Category', array('id'=>'j-forms-validation','class' => 'form-horizontal j-forms')); ?>
     <div class="form-group">

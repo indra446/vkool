@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Edit Pembelian</h3>
+    </div>
+</div>
+<br>
 <div class="pembelians form">
 <?php echo $this->Form->create('Pembelian'); ?>
 	<fieldset>

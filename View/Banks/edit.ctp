@@ -1,4 +1,9 @@
-<div class="banks form">
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Edit Bank</h3>
+    </div>
+</div>
+<br><div class="banks form">
     <?php echo $this->Form->create('Bank', array('class' => 'form-horizontal j-forms')); ?>
     <div class="form-group">
         <label class="col-md-2 control-label">Nama</label>

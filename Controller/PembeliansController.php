@@ -53,7 +53,7 @@ class PembeliansController extends AppController {
 	public function auto_produk($t = null) {
 		// $this->layout = 'ajax';
 		$t = $_GET['term'];
-		$data = $this -> Pembelian -> query(" SELECT * FROM `products` WHERE nama_produk LIKE '%$t%' ");
+		$data = $this -> Pembelian -> query(" SELECT * FROM `products` WHERE aktif=1 AND nama_produk LIKE '%$t%' ");
 		$this -> set(compact('data'));
 	}
 
@@ -115,6 +115,7 @@ class PembeliansController extends AppController {
 	 * @return void
 	 */
 	public function view($id = null) {
+		debug(base64_decode($id));
 		$data = $this -> Pembelian -> find('all', array('recursive' => 1, 'conditions' => array('Pembelian.nomor' => base64_decode($id))));
 		$tgl = $this -> konversi_tanggal("d M Y", $data[0]['Pembelian']['tgl_transaksi']);
 		// debug($tgl);
@@ -172,7 +173,7 @@ class PembeliansController extends AppController {
 			// $this -> Session -> setFlash(__('The pembelian could not be saved. Please, try again.'));
 			// }
 		}
-		$vendors = $this -> Pembelian -> Vendor -> find('all', array('recursive' => 0));
+		$vendors = $this -> Pembelian -> Vendor -> find('all', array('recursive' => 0,'conditions'=>array('Vendor.aktif'=>1)));
 		// debug($vendors);
 		$products = $this -> Pembelian -> Product -> find('list');
 		$users = $this -> Pembelian -> User -> find('list');

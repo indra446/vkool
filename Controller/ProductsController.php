@@ -7,13 +7,14 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class ProductsController extends AppController {
+    public $helpers = array('Js');
 
 	/**
 	 * Components
 	 *
 	 * @var array
 	 */
-	public $components = array('Paginator');
+    public $components = array('Paginator', 'DataTable');
 
 	/**
 	 * index method
@@ -21,8 +22,19 @@ class ProductsController extends AppController {
 	 * @return void
 	 */
 	public function index() {
-		$this -> Product -> recursive = 0;
-		$this -> set('products', $this -> Paginator -> paginate());
+        $this->paginate = array('fields' => array('Product.id', 'nama_produk', 'Kategori.kategori','satuan', 'Product.aktif'), 'joins' => array(array('table' => 'categories', 'alias' => 'Kategori', 'type' => 'INNER', 'conditions' => array('Kategori.id = Product.category_id'))),);
+
+        $this->DataTable->mDataProp = true;
+        // debug(json_encode($this -> DataTable -> getResponse()));
+        // exit ;
+        if ($this->request->is('ajax')) {
+            $this->autoRender = false;
+       		$this->paginate = array('fields' => array('Product.id', 'nama_produk', 'Kategori.kategori','satuan', 'Product.aktif'), 'joins' => array(array('table' => 'categories', 'alias' => 'Kategori', 'type' => 'INNER', 'conditions' => array('Kategori.id = Product.category_id'))),);
+
+            $this->DataTable->mDataProp = true;
+            echo json_encode($this->DataTable->getResponse());
+            // exit ;
+        }
 	}
         public function produk($id = null) {
 		if (!$this->Product->exists($id)) {
@@ -85,6 +97,7 @@ class ProductsController extends AppController {
 				FROM
 					products
 				LEFT JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+				WHERE flag=1
 				GROUP BY
 					products.id
 				ORDER BY
@@ -242,8 +255,12 @@ class ProductsController extends AppController {
 	 */
 	public function add() {
 		if ($this -> request -> is('post')) {
+			// debug($this -> request -> data['Product']['category_id']);
 			// debug($this->request->data);die();
 			$this -> Product -> create();
+			if($this -> request -> data['Product']['category']==""){
+				$this -> request -> data['Product']['category_id']=$this -> request -> data['Product']['parent_id'];
+			}
 			if ($this -> request -> data['Product']['tipe'] == "Luas") {
 				$this -> request -> data['Product']['dimensi'] = $this -> request -> data['Product']['panjang'] . "," . $this -> request -> data['Product']['lebar'];
 			}
@@ -296,7 +313,26 @@ class ProductsController extends AppController {
 		$categories = $this -> Product -> Category -> find('list', array('fields' => array('Category.id', 'Category.kategori'), 'conditions' => array('AND' => array('Category.parent_id' => $edit['Category']['parent_id'], 'Category.aktif' => 1))));
 		$this -> set(compact('categories', 'parentCat', 'edit'));
 	}
+    /**
+     * index method
+     *
+     * @return void
+     */
+    public function all() {
+       $this->paginate = array('fields' => array('Product.id', 'Product.nama_produk', 'Kategori.kategori','Product.satuan', 'Product.aktif'), 'joins' => array(array('table' => 'categories', 'alias' => 'Kategori', 'type' => 'INNER', 'conditions' => array('Kategori.id = Product.category_id'))),);
 
+        $this->DataTable->mDataProp = true;
+        // debug(json_encode($this -> DataTable -> getResponse()));
+        // exit ;
+        if ($this->request->is('ajax')) {
+            $this->autoRender = false;
+       		$this->paginate = array('fields' => array('Product.id', 'Product.nama_produk', 'Kategori.kategori','Product.satuan', 'Product.aktif'), 'joins' => array(array('table' => 'categories', 'alias' => 'Kategori', 'type' => 'INNER', 'conditions' => array('Kategori.id = Product.category_id'))),);
+
+            $this->DataTable->mDataProp = true;
+            echo json_encode($this->DataTable->getResponse());
+            // exit ;
+        }
+    }
 	/**
 	 * delete method
 	 *
@@ -309,11 +345,24 @@ class ProductsController extends AppController {
 		if (!$this -> Product -> exists()) {
 			throw new NotFoundException(__('Invalid product'));
 		}
+		$cek=$this->Product->query("SELECT
+			products.id
+			FROM
+			products
+			LEFT JOIN pembelians ON pembelians.product_id = products.id
+			LEFT JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+			WHERE
+			detail_penjualans.id_product = '".$id."' OR
+			pembelians.product_id = '".$id."'");
+		if (empty($cek)) {	
 		$this -> request -> onlyAllow('post', 'delete');
 		if ($this -> Product -> delete()) {
 			$this -> Session -> setFlash('Data berhasil dihapus', 'success');
 		} else {
 			$this -> Session -> setFlash(__('The product could not be deleted. Please, try again.'));
+		}
+		} else {
+				$this -> Session -> setFlash('Produk tidak dapat dihapus, karena sedang digunakan.', 'error');
 		}
 		return $this -> redirect(array('action' => 'index'));
 	}

@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Edit Vendor</h3>
+    </div>
+</div>
+<br>
 <div class="vendors form">
     <?php echo $this->Form->create('Vendor', array('class' => 'form-horizontal j-forms')); ?>
     <div class="form-group">

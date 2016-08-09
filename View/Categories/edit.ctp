@@ -1,4 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Edit Kategori</h3>
+    </div>
 
+</div>
 <div class="categories form">
 	<?php echo $this -> Form -> create('Category', array('class' => 'form-horizontal j-forms')); ?>
 	<div class="form-group">

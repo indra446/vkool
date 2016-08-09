@@ -1,58 +1,88 @@
-<div class="returs view">
-<h2><?php echo __('Retur'); ?></h2>
-	<dl>
-		<dt><?php echo __('Id'); ?></dt>
-		<dd>
-			<?php echo h($retur['Retur']['id']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Product'); ?></dt>
-		<dd>
-			<?php echo $this->Html->link($retur['Product']['id'], array('controller' => 'products', 'action' => 'view', $retur['Product']['id'])); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Luas'); ?></dt>
-		<dd>
-			<?php echo h($retur['Retur']['luas']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Tgl Transaksi'); ?></dt>
-		<dd>
-			<?php echo h($retur['Retur']['tgl_transaksi']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Vendor'); ?></dt>
-		<dd>
-			<?php echo $this->Html->link($retur['Vendor']['id'], array('controller' => 'vendors', 'action' => 'view', $retur['Vendor']['id'])); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Ket'); ?></dt>
-		<dd>
-			<?php echo h($retur['Retur']['ket']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Created'); ?></dt>
-		<dd>
-			<?php echo h($retur['Retur']['created']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Modified'); ?></dt>
-		<dd>
-			<?php echo h($retur['Retur']['modified']); ?>
-			&nbsp;
-		</dd>
-	</dl>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit Retur'), array('action' => 'edit', $retur['Retur']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Retur'), array('action' => 'delete', $retur['Retur']['id']), array(), __('Are you sure you want to delete # %s?', $retur['Retur']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Returs'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Retur'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Products'), array('controller' => 'products', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Product'), array('controller' => 'products', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Vendors'), array('controller' => 'vendors', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Vendor'), array('controller' => 'vendors', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<?php //echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-cart-plus')) . "&nbsp;<span>Cetak</span>", array('action' => ''), array('escape' => false, 'class' => 'btn btn-xs btn-success','id'=>'btnPrint')); 
+		echo $this -> Html -> script(array('lib/min/jquery-min'));
+
+?> 
+
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> -->
+<div class="Returs view" id="print">
+	<div class="widget-header block-header margin-bottom-0 clearfix">
+                <div class="pull-left">
+                    <h3>Detail Retur</h3>
+                    <p>No. : <?php echo $data[0]['Retur']['noretur']; ?></p>
+                </div>
+                <div class="pull-right w-action">
+					Tanggal : <?php echo $tgl; ?>
+                </div>
+        </div><br>
+	<table cellspacing="5">
+		<tr>
+			<td><font style="font-weight: bold">Vendor dari</td>
+			<td>:</td>
+			<td><?php echo $data[0]['Vendor']['nama_vendor']; ?></td>	
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td><?php echo $data[0]['Vendor']['alamat']; ?></td>	
+		</tr>
+		<tr>
+			<td><font style="font-weight: bold">Ket</td>
+			<td>:</td>
+			<td><?php echo $data[0]['Retur']['ket']; ?></td>	
+		</tr>
+	</table>
+	<br>
+	<div class="w-section-header">
+		<h2>Produk Retur</h2>
+	</div>
+	<table class="table table-bordered foo-data-table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Nama Produk</th>
+				<th>Luas Retur</th>
+				<th>Serial Number</th>
+				<th>Dimensi</th>
+				<th>Luas Dimensi</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($data as $data){
+			?>
+		<tr>
+			<td><?php echo $data['Product']['id']?></td>
+			<td><?php echo $data['Product']['nama_produk']?></td>
+			<td><?php echo $data['Retur']['luas']?></td>
+			<td><?php echo $data['Retur']['sn']?></td>
+			<td><?php if($data['Product']['dimensi']!=NULL){ $dimensi=explode(",", $data['Product']['dimensi']); echo $dimensi[0]." x ".$dimensi[1];}?></td>
+			<td><?php if($data['Product']['dimensi']!=NULL){echo $dimensi[0]*$dimensi[1]." mm2";}?></td>
+		</tr>
+			<?php }
+			?>
+		</tbody>
+	</table>
+
+</div>	
+<button id="btnPrint" class="btn btn-xs btn-success"><i class="fa fa-print"></i>&nbsp;Cetak</button>
+	<?php
+		echo $this -> Html -> script(array('lib/jquery.printElement.min'));
+	?>
+<script type="text/javascript">
+       $(document).ready(function() {
+         $("#btnPrint").click(function() {
+             printElem({});
+         });
+
+     });
+ function printElem(options){
+     $('#print').printElement(options);
+ }
+
+    </script>
+ <style>
+@media print 
+{
+  @page { margin: 0; }
+  body  { margin: 1.6cm;font-size:6px; }
+}
+ </style>   

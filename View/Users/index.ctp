@@ -1,3 +1,10 @@
+
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>User</h3>
+    </div>
+</div>
+<br>
 <div class="widget-header block-header clearfix">
 <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-user-plus')) . "&nbsp;<span>Tambah User</span>", array('action' => 'add'), array('escape' => false, 'class' => 'btn btn-success')); ?> 
 

@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Bahan Baku</h3>
+    </div>
+</div>
+<br>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>   
 				<div class="widget-header block-header clearfix">
@@ -12,7 +18,7 @@
     <h3>Penjualan</h3>
     <label class="col-md-2 control-label">Nomer Nota</label>
     <div class=" col-md-4 unit">
-        <div class="input text"><input name="data[bahanbakuses][nota]" id="produk" class="form-control ui-autocomplete-input"  type="text" autocomplete="off" >
+        <div class="input text"><input name="data[bahanbakuses][nota]" id="produk" class="form-control"  type="text">
         </div>     
     </div>
     <label class="col-md-2 control-label">Pelanggan</label>

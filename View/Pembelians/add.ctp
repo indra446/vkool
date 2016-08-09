@@ -1,4 +1,9 @@
-
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Tambah Pembelian</h3>
+    </div>
+</div>
+<br>
 <div class="pembelians form">
 <?php echo $this->Form->create('Pembelian', array('id'=>'j-forms-validation','class' => 'form-horizontal j-forms')); ?>
     <div class="form-group unit">
@@ -24,9 +29,12 @@
         <label class="col-md-2 control-label">Vendor</label>
         <div class=" col-md-6">
         	 <div class="widget right-50">
-            <?php echo $this->Form->input('vendorid', array('id'=>'vendor','class' => 'form-control', 'label' => false, 'required' => true)); ?>
+            <?php echo $this->Form->input('vendorid', array('readonly'=>true,'id'=>'vendor','class' => 'form-control', 'label' => false, 'required' => true)); ?>
                 <label class="addon adn-50 adn-right" for="vendor">
-                <i class="fa fa-search" id="btn-show"></i>
+				<button class="addon-btn adn-50 adn-right" type="button" id="btn-show">
+                     <i class="fa fa-search"></i>
+                 </button>                
+                                                    <!-- <i class="fa fa-search" id="btn-show"></i> -->
                </label>
                </div>
         </div>
@@ -50,7 +58,7 @@
             <?php echo $this->Form->input('produk', array('id'=>'produk','class' => 'form-control', 'label' => false)); ?>
         </div>
         <div class="col-xs-2 unit " style="margin-right: -75px">
-            <?php echo $this->Form->input('pot_item', array('style'=>'width:60%;margin-right:-10px;','div'=>false,'id'=>'potitem','class' => 'form-control', 'label' => false, 'placeholder'=>'diskon%')); ?>
+            <?php echo $this->Form->input('pot_item', array('style'=>'width:60%;margin-right:-10px;','div'=>false,'id'=>'potitem','class' => 'form-control', 'label' => false, 'placeholder'=>'disc%')); ?>
         </div>
         <div class="col-xs-2 unit" style="margin-right: -58px">
             <?php echo $this->Form->input('jml', array('style'=>'width:50%;margin-right:-10px;','div'=>false,'id'=>'jml','class' => 'col-xs-2 form-control', 'label' => false, 'placeholder'=>'qty')); ?>
@@ -68,7 +76,7 @@
 		<tr>
 			<th>ID Produk</th>
 			<th>Nama</th>
-			<th>Jumlah</th>
+			<th>Qty</th>
 			<th>Dimensi</th>
 			<th>Harga Satuan</th>
 			<th>Disc</th>

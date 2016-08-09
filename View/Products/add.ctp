@@ -1,3 +1,10 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Tambah Produk</h3>
+    </div>
+
+</div>
+<br>
 <div class="products form">
 	<?php echo $this -> Form -> create('Product', array('id'=>'j-forms-validation','class' => 'form-horizontal j-forms')); ?>
 	<div class="form-group unit">
@@ -9,13 +16,13 @@
 	<div class="form-group unit">
 		<label class="col-md-2 control-label">Parent Kategori</label>
 		<div class=" col-md-8">
-			<?php echo $this -> Form -> input('parent_id', array('class' => 'form-control', 'options' => $parentCat, 'empty' => 'kosong', 'label' => false,'required'=>true)); ?>
+			<?php echo $this -> Form -> input('parent_id', array('class' => 'form-control', 'options' => $parentCat, 'empty' => '', 'label' => false,'required'=>true)); ?>
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="col-md-2 control-label">Kategori</label>
 		<div class=" col-md-8">
-			<?php echo $this -> Form -> input('category_id', array('class' => 'form-control', 'options' => array(), 'label' => false)); ?>
+			<?php echo $this -> Form -> input('category_id', array('empty'=>'','class' => 'form-control', 'options' => array(), 'label' => false)); ?>
 		</div>
 		<div class="col-md-2" style="width: 10%" id="loading"></div>
 	</div>
@@ -37,7 +44,7 @@
 		<div class="col-md-2">
 			<div class="widget right-10">
 				<div class="input">
-					<input type="text" placeholder="panjang" id="@" class="form-control" name="data[Product][panjang]">
+					<input type="number" placeholder="panjang" id="dimensi_panjang" class="form-control" name="data[Product][panjang]">
 				</div>
 				<label for="@" class="addon adn-50 adn-right"> mm</label>
 			</div>
@@ -45,7 +52,7 @@
 		<div class="col-md-2">
 			<div class="widget right-10">
 				<div class="input">
-					<input type="text" placeholder="lebar" id="$" class="form-control" name="data[Product][lebar]">
+					<input type="number" placeholder="lebar" id="dimensi_lebar" class="form-control" name="data[Product][lebar]">
 				</div>
 				<label for="$" class="addon adn-50 adn-right">mm</label>
 			</div>
@@ -98,7 +105,11 @@ jq( "#loading" ).hide();
 });
 });
 jq('#luas').click(function() {
+ jq("#dimensi_panjang").attr("required","false");	
+ jq("#dimensi_lebar").attr("required","false");	
 if( jq(this).is(':checked')) {
+ jq("#dimensi_panjang").attr("required","true");	
+ jq("#dimensi_lebar").attr("required","true");	
 jq("#dimensi").show();
 } 
 });
