@@ -37,8 +37,8 @@ if(!empty($sisa)) {?>
 	</thead><tbody>
 <?php foreach ($sisa as $item){
 //    print_r($item);
-	echo  "<tr><td>".$item['products']['id']."</td>
-	<td>".$item['products']['nama_produk']."</td><td>".$item['pembelians']['jml']." </td>
+	echo  "<tr><td>".$item['0']['id']."</td>
+	<td>".$item['products']['nama_produk']."</td><td>".$item['0']['sisa']." </td>
 	<td><button type='button' class='btn btn-xs btn-danger' id='".$x."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
 $x++;}
 }
@@ -59,7 +59,7 @@ $x++;}
     </tr> 
 </table>
 <?php }?>
-<?php if(!empty($sisa)) {    ?>
+<?php if(!empty($sisa)) {       ?>
 <table class="table">
     <tr>
         <td>Masukkan Sisa</td>
@@ -67,8 +67,8 @@ $x++;}
         <?php $dim=$sisa['0']['products']['dimensi']; if(!empty($dim)) {?><td><input name="data[Penjualan][pjg][]" class="form-control" required="required" placeholder="panjang" type="number" ></td><?php } ?>
         <td>
             <?php if(!empty($dim)) {?><input name="data[Penjualan][lbr][]" class="form-control" required="required" placeholder="lebar" type="number" > <?php }?>
-            <input name="data[Penjualan][sisa][]" class="form-control" required="required" placeholder="Sisa" type="number" >
-            <input name="data[Penjualan][ket][]" class="form-control" value="<?php echo $sisa['0']['products']['id'];?>" type="hidden" >
+            <!--<input name="data[Penjualan][sisa][]" class="form-control" required="required" placeholder="Sisa" type="number" >-->
+            <input name="data[Penjualan][ket][]" class="form-control" value="<?php echo $sisa['0']['0']['id'];?>" type="hidden" >
         </td>
     </tr> 
 </table>

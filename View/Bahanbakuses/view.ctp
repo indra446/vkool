@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Pembayaran</h3>
+    </div>
+</div>
+<br>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>
 <script>
@@ -70,7 +76,8 @@ location.reload();
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($bakus as $baku): ?>
+            <?php foreach ($bakus as $baku): 
+//                print_r($baku);?>
                 <tr>
                     <td><?php echo h($baku['categories']['kategori']); ?>&nbsp;</td>
                     <td><?php echo h($baku['products']['nama_produk']); ?>&nbsp;</td>
@@ -99,13 +106,13 @@ location.reload();
     <div class="form-group">
         <label class="col-md-8 control-label">Discount</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="discount" name="discount" value="<?php echo $d1=$disc[0]['detail_penjualans']['disc'];?>" onkeyup="sum();">
+            <input type="text" class="form-control" id="discount" name="discount" value="<?php echo $d1=$disc[0]['penjualans']['disc'];?>" onkeyup="sum();">
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-8 control-label">Hidden Discount</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="hiddendiscount" name="hiddendiscount" value="<?php echo $d2=$disc[0]['detail_penjualans']['hidden_disc'];?>" onkeyup="sum();">
+            <input type="text" class="form-control" id="hiddendiscount" name="hiddendiscount" value="<?php echo $d2=$disc[0]['penjualans']['hidden_disc'];?>" onkeyup="sum();">
         </div>
     </div>
     <div class="form-group">
@@ -134,8 +141,8 @@ var $$e=jQuery.noConflict();
         title: "Input Pembayaran",
         message: '<table class="table">' +
             '<tr><td>Total</td><td>:</td><td><?php echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
-            '<tr><td>Discount</td><td>:</td><td><?php echo $dis1=$disc[0]['detail_penjualans']['disc'];?></td></tr>'+
-            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['detail_penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalnya-$dis1-$dis2;?></td></tr><tr><td>Pembayaran</td><td>:</td><td></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="<?php echo $totalnya-$dis1-$dis2;?>" onkeyup="sumi();"></td></tr><tr></table>'+
+            '<tr><td>Discount</td><td>:</td><td><?php echo $dis1=$disc[0]['penjualans']['disc'];?></td></tr>'+
+            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalnya-$dis1-$dis2;?></td></tr><tr><td>Pembayaran</td><td>:</td><td></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="<?php echo $totalnya-$dis1-$dis2;?>" onkeyup="sumi();"></td></tr><tr></table>'+
             '<form class="form-horizontal"> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Metode Pembayaran</label> ' +

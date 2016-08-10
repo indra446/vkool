@@ -277,11 +277,14 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false)); ?>
                                     </div>
-                                    <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','type'=>'number')); ?>
+                                    <div class="col-xs-1 unit ">
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'placeholder' => 'harga','type'=>'number')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'placeholder' => 'harga','type'=>'number','min'=>'0')); ?>
+                                    </div>
+                                    <div class="col-xs-2 unit" >
+                                        <?php echo $this->Form->input('disc', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'placeholder' => 'diskon','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_produk">+</button>
@@ -296,11 +299,14 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'samping')); ?>
                                     </div>
-                                    <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtysamping','type'=>'number')); ?>
+                                    <div class="col-xs-1 unit ">
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtysamping','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargasamping','type'=>'number')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargasamping','type'=>'number','min'=>'0')); ?>
+                                    </div>
+                                    <div class="col-xs-2 unit" >
+                                        <?php echo $this->Form->input('disc', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'placeholder' => 'diskon','id'=>'discsamping','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_samping">+</button>
@@ -315,11 +321,14 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'belakang')); ?>
                                     </div>
-                                    <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtybelakang','type'=>'number')); ?>
+                                    <div class="col-xs-1 unit ">
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtybelakang','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargabelakang','type'=>'number')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargabelakang','type'=>'number','min'=>'0')); ?>
+                                    </div>
+                                    <div class="col-xs-2 unit" >
+                                        <?php echo $this->Form->input('disc', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'placeholder' => 'diskon','id'=>'discbelakang','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_belakang">+</button>
@@ -334,11 +343,14 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'aksesoris')); ?>
                                     </div>
-                                    <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtyaksesoris','type'=>'number')); ?>
+                                    <div class="col-xs-1 unit ">
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtyaksesoris','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargaaksesoris','type'=>'number')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargaaksesoris','type'=>'number','min'=>'0')); ?>
+                                    </div>
+                                    <div class="col-xs-2 unit" >
+                                        <?php echo $this->Form->input('disc', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'placeholder' => 'diskon','id'=>'discaksesoris','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_aksesoris">+</button>
@@ -353,11 +365,14 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'service')); ?>
                                     </div>
-                                    <div class="col-xs-2 unit ">
-                                        <?php echo $this->Form->input('qty', array('style' => 'width:70%;margin-right:-10px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtyservice','type'=>'number')); ?>
+                                    <div class="col-xs-1 unit ">
+                                        <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtyservice','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <div class="col-xs-2 unit" >
-                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargaservice','type'=>'number')); ?>
+                                        <?php echo $this->Form->input('harga', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false,  'placeholder' => 'harga','id'=>'hargaservice','type'=>'number','min'=>'0')); ?>
+                                    </div>
+                                    <div class="col-xs-2 unit" >
+                                        <?php echo $this->Form->input('disc', array('style' => 'width:100%;margin-right:-10px;', 'div' => false, 'class' => 'col-xs-2 form-control', 'label' => false, 'placeholder' => 'diskon','id'=>'discservice','type'=>'number','min'=>'0')); ?>
                                     </div>
                                     <span class="input-group-btn">
                                             <button type="button" class="btn btn-success" id="add_service">+</button>
@@ -379,19 +394,19 @@ var $$e=jQuery.noConflict();
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Discount</label>
                                     <div class=" col-md-4">
-                                        <input type="text" class="form-control" id="discount" name="data[Penjualan][discount]" onkeyup="sum();">
+                                        <input type="text" class="form-control" id="discount" name="data[Penjualan][disc]"  onkeyup="sum();">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Hidden Discount</label>
                                     <div class=" col-md-4">
-                                        <input type="text" class="form-control" id="hiddendiscount" name="data[Penjualan][hiddendiscount]" onkeyup="sum();">
+                                        <input type="text" class="form-control" id="hiddendiscount" name="data[Penjualan][hidden_disc]"  onkeyup="sum();">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Total All</label>
                                     <div class=" col-md-4">
-                                        <input type="text" class="form-control" id="totalall" name="totalall" readonly="">
+                                        <input type="text" class="form-control" id="totalall" name="totalall" readonly="" >
                                     </div>
                                 </div>
                                 <hr align="right">
@@ -467,11 +482,12 @@ $(document).ready(function() {
         $.ajax({
         type: "POST",
         url: "<?php echo $this->webroot; ?>Penjualans/cart/",
-        data: { idp : $("#PenjualanIdProduct").val(),jml :$("#PenjualanQty").val(),harga :$("#PenjualanHarga").val() },
+        data: { idp : $("#PenjualanIdProduct").val(),jml :$("#PenjualanQty").val(),harga :$("#PenjualanHarga").val(),diskon :$("#PenjualanDisc").val() },
         success: function(html) {
         $('#PenjualanIdProduct').val("");
         $('#PenjualanQty').val("");
         $('#PenjualanHarga').val("");
+        $('#PenjualanDisc').val("");
         jq("#isi_cart").html(html);
         $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
@@ -487,11 +503,12 @@ $(document).ready(function() {
         $.ajax({
         type: "POST",
         url: "<?php echo $this->webroot; ?>Penjualans/samping/",
-        data: { idp : $("#samping").val(),jml :$("#qtysamping").val(),harga :$("#hargasamping").val() },
+        data: { idp : $("#samping").val(),jml :$("#qtysamping").val(),harga :$("#hargasamping").val(),diskon :$("#discsamping").val() },
         success: function(html) {
         $('#samping').val("");
         $('#qtysamping').val("");
         $('#hargasamping').val("");
+        $('#discsamping').val("");
         jq("#samping_view").html(html);
         $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
@@ -507,11 +524,12 @@ $(document).ready(function() {
         $.ajax({
         type: "POST",
         url: "<?php echo $this->webroot; ?>Penjualans/belakang/",
-        data: { idp : $("#belakang").val(),jml :$("#qtybelakang").val(),harga :$("#hargabelakang").val() },
+        data: { idp : $("#belakang").val(),jml :$("#qtybelakang").val(),harga :$("#hargabelakang").val(),diskon :$("#discbelakang").val() },
         success: function(html) {
         $('#belakang').val("");
         $('#qtybelakang').val("");
         $('#hargabelakang').val("");
+        $('#discbelakang').val("");
         jq("#belakang_view").html(html);
         $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
@@ -527,11 +545,12 @@ $(document).ready(function() {
         $.ajax({
         type: "POST",
         url: "<?php echo $this->webroot; ?>Penjualans/aksesoris/",
-        data: { idp : $("#aksesoris").val(),jml :$("#qtyaksesoris").val(),harga :$("#hargaaksesoris").val() },
+        data: { idp : $("#aksesoris").val(),jml :$("#qtyaksesoris").val(),harga :$("#hargaaksesoris").val(),diskon :$("#discaksesoris").val() },
         success: function(html) {
         $('#aksesoris').val("");
         $('#qtyaksesoris').val("");
         $('#hargaaksesoris').val("");
+        $('#discaksesoris').val("");
         jq("#aksesoris_view").html(html);
         $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }
@@ -547,11 +566,12 @@ $(document).ready(function() {
         $.ajax({
         type: "POST",
         url: "<?php echo $this->webroot; ?>Penjualans/service/",
-        data: { idp : $("#service").val(),jml :$("#qtyservice").val(),harga :$("#hargaservice").val() },
+        data: { idp : $("#service").val(),jml :$("#qtyservice").val(),harga :$("#hargaservice").val(),diskon :$("#discservice").val() },
         success: function(html) {
         $('#service').val("");
         $('#qtyservice').val("");
         $('#hargaservice').val("");
+        $('#discservice').val("");
         jq("#service_view").html(html);
         $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
         }

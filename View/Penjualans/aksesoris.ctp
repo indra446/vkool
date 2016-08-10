@@ -8,6 +8,7 @@ $this -> layout = false;
 			<th>Jumlah</th>
 			<th>Harga</th>
 			<th>Subtotal</th>
+			<th>Diskon</th>
 			<th>Hapus</th>
 		</tr>
 	</thead>
@@ -17,7 +18,7 @@ $x=0;
 if(!empty($_SESSION["cart_aksesoris"])) {
 foreach ($_SESSION["cart_aksesoris"] as $item){
 	echo  "<tr><td>".$item['nama']."</td>
-	<td>".$item['jml']."</td><td>".$item['harga']."</td><td id='st'>".$item['subtotal']."</td>
+	<td>".$item['jml']."</td><td>".$item['harga']."</td><td id='st'>".$item['subtotal']."</td><td>".$item['diskon']."</td>
 	<td><button type='button' class='btn btn-xs btn-danger' id='".$x."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
 $x++;}
 }

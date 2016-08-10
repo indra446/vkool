@@ -137,12 +137,22 @@ class DataTableComponent extends Component{
         $this->setTimes('Find','stop');
         $this->setTimes('Response','start','Formatting of response');
         // dataTables compatible array
+        
+        // if($total==sizeof($data)){
         $response = array(
             'sEcho' => isset($this->controller->request->query['sEcho']) ? intval($this->controller->request->query['sEcho']) : 1,
             'iTotalRecords' => $total,
             'iTotalDisplayRecords' => $isFiltered === true ? $filteredTotal : $total,
             'aaData' => array()
         );
+		// }else{
+        	// $response = array(
+            // 'sEcho' => isset($this->controller->request->query['sEcho']) ? intval($this->controller->request->query['sEcho']) : 1,
+            // 'iTotalRecords' => sizeof($data),
+            // 'iTotalDisplayRecords' => $isFiltered === true ? $filteredTotal : sizeof($data),
+            // 'aaData' => array()
+        // );
+        // }
         
         // return data
         if(!$data){

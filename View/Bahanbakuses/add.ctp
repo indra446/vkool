@@ -1,3 +1,9 @@
+<div class="widget-header block-header margin-bottom-0 clearfix">
+    <div class="pull-left">
+        <h3>Pilih Bahan Baku</h3>
+    </div>
+</div>
+<br>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>
 <script type="text/javascript">
@@ -25,7 +31,7 @@
                 <div class="input text"><input name="data[Penjualan][id_product]" class="form-control ui-autocomplete-input" type="text" id="PenjualanIdProduct<?php echo $detail['detail_penjualans']['id_product'];?>" autocomplete="off" value="<?php echo $detail['0']['produkid'];?>"></div>  
             </div>
             <span class="input-group-btn">
-                <button type="button" class="btn btn-success" id="show<?php echo $detail['detail_penjualans']['id'];?>">Pilih</button>
+              <?php $dimesi=$detail['products']['dimensi']; if(!empty($dimesi)){?>  <button type="button" class="btn btn-success" id="show<?php echo $detail['detail_penjualans']['id'];?>">Pilih</button><?php }?>
             </span>
         </div>
     <div id="tampil<?php echo $detail['categories']['kategori'];?><?php echo $detail['detail_penjualans']['id'];?>"></div>
@@ -59,7 +65,8 @@
             <?php
             foreach ($sisa as $prod): 
 				$idp=str_replace(",p","", $prod[0]['id']);
-                if($prod['0']['sisa']>0 && $idp==$cate){                  
+                if($prod['0']['sisa']>0 && $idp==$cate){    
+//                    print_r($prod);
                 ?>
                 <tr>
                     <td><?php echo $prod['products']['nama_produk']; ?>&nbsp;</td>
@@ -67,7 +74,7 @@
 					 $dimensi = explode(",", $prod['products']['dimensi']);
 						echo $dimensi[0] . " x " . $dimensi[1] . " mm";
                                                 } ?>&nbsp;</td>
-					<td><?php if ($prod['products']['dimensi'] != NULL) { echo h(number_format($dimensi[0] * $dimensi[1], 0, ',', '.'))." mm2";}else { echo $prod['0']['sisa']; } ?></td>
+					<td><?php  echo $prod['0']['sisa'];  ?></td>
                     <td class="actions">
                         <input value="pilih" class="btn btn-info  btn-xs" type="button" onClick="configurator<?php echo $id?>(this)" id="<?php echo $prod[0]['id'] . "," . $prod['products']['nama_produk']; ?>"/>
                         

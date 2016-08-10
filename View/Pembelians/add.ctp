@@ -58,13 +58,13 @@
             <?php echo $this->Form->input('produk', array('id'=>'produk','class' => 'form-control', 'label' => false)); ?>
         </div>
         <div class="col-xs-2 unit " style="margin-right: -75px">
-            <?php echo $this->Form->input('pot_item', array('style'=>'width:60%;margin-right:-10px;','div'=>false,'id'=>'potitem','class' => 'form-control', 'label' => false, 'placeholder'=>'disc%')); ?>
+            <?php echo $this->Form->input('pot_item', array('type'=>'number','min'=>0,'style'=>'width:60%;margin-right:-10px;','div'=>false,'id'=>'potitem','class' => 'form-control', 'label' => false, 'placeholder'=>'disc%')); ?>
         </div>
         <div class="col-xs-2 unit" style="margin-right: -58px">
-            <?php echo $this->Form->input('jml', array('style'=>'width:50%;margin-right:-10px;','div'=>false,'id'=>'jml','class' => 'col-xs-2 form-control', 'label' => false, 'placeholder'=>'qty')); ?>
+            <?php echo $this->Form->input('jml', array('type'=>'number','min'=>0,'style'=>'width:50%;margin-right:-10px;','div'=>false,'id'=>'jml','class' => 'col-xs-2 form-control', 'label' => false, 'placeholder'=>'qty')); ?>
         </div>
         <div class=" col-md-2 unit input-group">
-            <?php echo $this->Form->input('harga', array('id'=>'harga','class' => 'form-control', 'label' => false, 'placeholder'=>'harga satuan')); ?>
+            <?php echo $this->Form->input('harga', array('type'=>'number','min'=>0,'id'=>'harga','class' => 'form-control', 'label' => false, 'placeholder'=>'harga satuan')); ?>
         <span class="input-group-btn">
 			<button type="button" class="btn btn-success" id="add_produk">+</button>
 		</span>

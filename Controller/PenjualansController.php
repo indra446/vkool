@@ -104,8 +104,9 @@ class PenjualansController extends AppController {
 				categories.kategori,
 				detail_penjualans.qty,
 				detail_penjualans.harga,
-				detail_penjualans.disc,
-				detail_penjualans.hidden_disc,
+				detail_penjualans.disc as disc_item,
+				penjualans.disc,
+				penjualans.hidden_disc,
 				penjualans.id
 				FROM
 				penjualans
@@ -121,7 +122,7 @@ class PenjualansController extends AppController {
 		$produk = explode(",", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"],));
 
 		if (!empty($_SESSION["cart_depan"])) {
 			$arr = array();
@@ -138,6 +139,7 @@ class PenjualansController extends AppController {
 						$_SESSION["cart_depan"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_depan"][$k]["harga"] = $_POST["harga"];
 						$_SESSION["cart_depan"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
+						$_SESSION["cart_depan"][$k]["diskon"] = $_POST["diskon"];
 
 					}
 				}
@@ -153,7 +155,7 @@ class PenjualansController extends AppController {
 		$produk = explode(",", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_samping"])) {
 			$arr = array();
@@ -170,6 +172,7 @@ class PenjualansController extends AppController {
 						$_SESSION["cart_samping"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_samping"][$k]["harga"] = $_POST["harga"];
 						$_SESSION["cart_samping"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
+						$_SESSION["cart_samping"][$k]["diskon"] = $_POST["diskon"];
 
 					}
 				}
@@ -185,7 +188,7 @@ class PenjualansController extends AppController {
 		$produk = explode(",", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_belakang"])) {
 			$arr = array();
@@ -202,6 +205,7 @@ class PenjualansController extends AppController {
 						$_SESSION["cart_belakang"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_belakang"][$k]["harga"] = $_POST["harga"];
 						$_SESSION["cart_belakang"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
+						$_SESSION["cart_belakang"][$k]["diskon"] = $_POST['diskon'];
 
 					}
 				}
@@ -217,7 +221,7 @@ class PenjualansController extends AppController {
 		$produk = explode(",", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_aksesoris"])) {
 			$arr = array();
@@ -234,6 +238,7 @@ class PenjualansController extends AppController {
 						$_SESSION["cart_aksesoris"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_aksesoris"][$k]["harga"] = $_POST["harga"];
 						$_SESSION["cart_aksesoris"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
+						$_SESSION["cart_aksesoris"][$k]["diskon"] = $_POST["diskon"];
 
 					}
 				}
@@ -249,7 +254,7 @@ class PenjualansController extends AppController {
 		$produk = explode(",", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_service"])) {
 			$arr = array();
@@ -266,6 +271,7 @@ class PenjualansController extends AppController {
 						$_SESSION["cart_service"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_service"][$k]["harga"] = $_POST["harga"];
 						$_SESSION["cart_service"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
+						$_SESSION["cart_service"][$k]["diskon"] = $_POST["diskon"];
 
 					}
 				}
@@ -417,8 +423,7 @@ class PenjualansController extends AppController {
 						@$data['DetailPenjualan']['qty'] = $d['jml'];
 						@$data['DetailPenjualan']['harga'] = $d['harga'];
 						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
-						@$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
+						@$data['DetailPenjualan']['disc'] = $d['diskon'];
 						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
 						//                print_r($data);exit;
 						$this -> DetailPenjualan -> create();
@@ -434,8 +439,7 @@ class PenjualansController extends AppController {
 						@$data['DetailPenjualan']['qty'] = $s['jml'];
 						@$data['DetailPenjualan']['harga'] = $s['harga'];
 						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
-						@$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
+						@$data['DetailPenjualan']['disc'] = $d['diskon'];
 						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
 						//                print_r($data);exit;
 						$this -> DetailPenjualan -> create();
@@ -451,8 +455,7 @@ class PenjualansController extends AppController {
 						@$data['DetailPenjualan']['qty'] = $b['jml'];
 						@$data['DetailPenjualan']['harga'] = $b['harga'];
 						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
-						@$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
+						@$data['DetailPenjualan']['disc'] =$d['diskon'];
 						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
 						//                  print_r($data);exit;
 						$this -> DetailPenjualan -> create();
@@ -468,8 +471,7 @@ class PenjualansController extends AppController {
 						@$data['DetailPenjualan']['qty'] = $a['jml'];
 						@$data['DetailPenjualan']['harga'] = $a['harga'];
 						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
-						@$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
+						@$data['DetailPenjualan']['disc'] = $d['diskon'];
 						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
 						//                  print_r($data);exit;
 						$this -> DetailPenjualan -> create();
@@ -485,8 +487,7 @@ class PenjualansController extends AppController {
 						@$data['DetailPenjualan']['qty'] = $sc['jml'];
 						@$data['DetailPenjualan']['harga'] = $sc['harga'];
 						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $reqdata['Penjualan']['discount'];
-						@$data['DetailPenjualan']['hidden_disc'] = $reqdata['Penjualan']['hiddendiscount'];
+						@$data['DetailPenjualan']['disc'] = $d['diskon'];
 						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
 						//                  print_r($data);exit;
 						$this -> DetailPenjualan -> create();
@@ -524,7 +525,7 @@ class PenjualansController extends AppController {
 		$tgl = "F/" . date("m/Y") . "/SMG/";
 		$cek = $this -> Penjualan -> find('first', array('fields' => array('MAX(Penjualan.nomor)nomor'), 'conditions' => array('Penjualan.nomor LIKE' => $tgl . '%')));
 		$no = explode("/", $cek[0]['nomor']);
-		$newno = $no[4] + 1;
+		@$newno = $no[4] + 1;
 		$newno = $tgl . "" . sprintf("%04s", $newno);
 		return $newno;
 

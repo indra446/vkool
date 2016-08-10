@@ -18,12 +18,12 @@
     <h3>Penjualan</h3>
     <label class="col-md-2 control-label">Nomer Nota</label>
     <div class=" col-md-4 unit">
-        <div class="input text"><input name="data[bahanbakuses][nota]" id="produk" class="form-control"  type="text">
+        <div class="input text"><input name="data[bahanbakuses][nota]" id="produk" class="form-control"  value="<?php if(!empty($nota)) { echo $nota;} ?>" type="text">
         </div>     
     </div>
     <label class="col-md-2 control-label">Pelanggan</label>
     <div class="col-xs-4 unit " >
-        <input name="data[bahanbakuses][pelanggan]"  id="potitem" class="form-control"   maxlength="100" type="text" > 
+        <input name="data[bahanbakuses][pelanggan]"  id="potitem" class="form-control" value="<?php if(!empty($nama)){ echo $nama;} ?>"  maxlength="100" type="text" > 
     </div>
 </div>
 <div class="form-group">

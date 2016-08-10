@@ -49,12 +49,12 @@ class BayarsController extends AppController {
 			penjualans.nomesin,
 			penjualans.norangka,
 			penjualans.nopol,
-			bayars.jatuh_tempo,
+			bayars.jatuh_tempo,IF(bayars.kembalian IS NULL,0,bayars.kembalian)kembalian,
 			detail_penjualans.id_product,
 			products.nama_produk,
 			categories.kategori,
-			detail_penjualans.harga,detail_penjualans.hidden_disc,
-			detail_penjualans.disc,
+			detail_penjualans.harga,penjualans.hidden_disc,penjualans.disc,
+			detail_penjualans.disc as disc_item,
 			bayars.bayar,
 			bayars.total,detail_penjualans.qty
 			FROM
@@ -113,7 +113,7 @@ class BayarsController extends AppController {
 				bayars.id,
 				bayars.bayar,
 				bayars.id_penjualan,
-				bayars.total,
+				bayars.total,bayars.kembalian,
 				bayars.created,
 				bayars.modified,
 				penjualans.nomor,
@@ -125,7 +125,7 @@ class BayarsController extends AppController {
 				INNER JOIN penjualans ON bayars.id_penjualan = penjualans.id
 				INNER JOIN detail_penjualans ON detail_penjualans.penjualan_id = penjualans.id
 				WHERE
-				bayars.id_penjualan=$id
+				bayars.id_penjualan=".$id."
 				GROUP BY bayars.id");
 		$this->set(compact('data'));		
 	}

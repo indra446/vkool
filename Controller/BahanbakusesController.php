@@ -47,7 +47,7 @@ class BahanbakusesController extends AppController {
               customers.nama LIKE '%$nama%' 
                AND mid(penjualans.created,1,10) BETWEEN '$awal' AND '$akhir'
               group by penjualans.id ORDER BY customers.nama ASC ");
-                          $this->set(compact('bahanbakuses'));
+                          $this->set(compact('bahanbakuses','nota','nama'));
         } else {
         $bahanbakuses = $this->Bahanbakus->query("SELECT
             customers.nama,
@@ -129,8 +129,7 @@ detail_penjualans.qty,
 detail_penjualans.harga
 FROM `detail_penjualans`
 where penjualan_id='$id')as s");
-        $disc=$this->Bahanbakus->query("SELECT detail_penjualans.disc, detail_penjualans.hidden_disc, detail_penjualans.id_karyawan, detail_penjualans.ket FROM `detail_penjualans` where penjualan_id='$id'
-limit 1 ");
+        $disc=$this->Bahanbakus->query("SELECT penjualans.disc, penjualans.hidden_disc FROM penjualans WHERE id='$id' limit 1 ");
         $this->set(compact('bakus', 'totals', 'id','disc'));
     }
 
@@ -189,7 +188,7 @@ limit 1 ");
         detail_penjualans.id_product,
         categories.kategori,
         products.nama_produk,CONCAT(categories.id,'-',products.nama_produk) AS produk,
-        CONCAT(detail_penjualans.id_product,'-',products.nama_produk) AS produkid
+        CONCAT(detail_penjualans.id_product,'-',products.nama_produk) AS produkid,products.dimensi
         FROM
         detail_penjualans
         INNER JOIN products ON detail_penjualans.id_product = products.id
@@ -297,18 +296,33 @@ limit 1 ");
                 $this -> set(compact('data'));
                 
                 }else { 
-                 $sisa = $this -> Bahanbakus -> query("SELECT
-                    products.dimensi,
-                    pembelians.nomor,
-                    pembelians.jml,
-                    products.nama_produk,
-                    products.id
+                 $sisa = $this -> Bahanbakus -> query("
+                    SELECT
+                    CONCAT(products.id,',p')id,
+                    products.nama_produk,products.dimensi,products.tipe,IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))beli,
+                    a.jual,
+                    IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))-IF(a.jual IS NULL,0,a.jual) AS sisa,
+                    products.satuan
                     FROM
-                    pembelians
-                    INNER JOIN products ON pembelians.product_id = products.id
-                    where products.id='$produk[0]'"); 
-//                 print_r($data);
-                 $this -> set(compact('sisa'));
+                    products
+                    LEFT JOIN pembelians ON pembelians.product_id = products.id
+                    LEFT JOIN (SELECT
+                    products.id,
+                    products.nama_produk,
+                    IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty))jual,
+                    products.satuan
+                    FROM
+                    products
+                    INNER JOIN detail_penjualans ON detail_penjualans.id_product = products.id where flag='1'
+                    GROUP BY
+                    products.id
+                    ORDER BY
+                    products.nama_produk ASC
+                    )a ON a.id=products.id
+                    WHERE
+                    products.id = '$produk[0]'
+                    GROUP BY products.id ");
+                    $this -> set(compact('sisa'));
                 }
 		
 	}
