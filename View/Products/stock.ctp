@@ -9,7 +9,7 @@
 	<table class="table data-tbl">
 	<thead>
 	<tr>
-			<th>ID</th>
+			<!--<th>Id Produk</th>-->
 			<th>Nama Produk</th>
 			<!-- <th rowspan="2">Jml Pembelian</th>
 			<th rowspan="2">Jml Penjualan</th> -->
@@ -25,11 +25,11 @@
 	<tbody>
 	<?php foreach ($products as $product): ?>
 	<tr>
-		<td><?php echo h($product['products']['id']); ?>&nbsp;</td>
+		<!--<td><?php // echo h($product['products']['id']); ?>&nbsp;</td>-->
 		<td><?php echo h($product['products']['nama_produk']); ?>&nbsp;</td>
 		<!-- <td><?php echo h($product[0]['beli']); ?>&nbsp;</td>
 		<td><?php echo h($product['a']['jual']); ?>&nbsp;</td> -->
-		<td><?php echo $product[0]['sisa']+$product['baku']['jmlbaku']; ?>&nbsp;</td>
+		<td align="right"><?php echo number_format($product[0]['sisa']+$product['baku']['jmlbaku'],0,',','.'); ?>&nbsp;</td>
 		<!-- <td><?php echo h($product['stoks']['jml']); ?>&nbsp;</td> -->
 		<td><?php echo h($product['products']['satuan']); ?>&nbsp;</td>
 		<td class="actions">

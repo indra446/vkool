@@ -1,3 +1,6 @@
+<style>
+    .message {color: red;}
+</style>
 <div class="widget-header block-header margin-bottom-0 clearfix">
     <div class="pull-left">
         <h3>Pilih Bahan Baku</h3>
@@ -36,6 +39,7 @@
         </div>
     <div id="tampil<?php echo $detail['categories']['kategori'];?><?php echo $detail['detail_penjualans']['id'];?>"></div>
     <?php endforeach; ?>
+     <div id="tampilsemua"></div>
     <hr>
     <div class="form-group">
         <label class="col-md-2 control-label">Teknisi</label>
@@ -152,7 +156,7 @@ echo $this->Html->script(array('lib/jquery.dataTables'));
                         $('#PenjualanIdProduct').html("");
                         $('#PenjualanQty').html("");
                         $('#PenjualanHarga').html("");
-                        jq("#tampil<?php echo $detail['categories']['kategori'];?><?php echo $detail['detail_penjualans']['id'];?>").html(html);
+                        jq("#tampilsemua").html(html);
                     }
                 });
     }

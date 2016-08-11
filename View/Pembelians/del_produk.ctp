@@ -41,7 +41,7 @@ foreach($_SESSION["cart_item"] as $k => $item){
 	<td><button type='button' class='btn btn-xs btn-danger' id='".$k."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
 	}
 	$x++;
-$total +=str_replace(".", "", $item['harga'])*$item['jml']-str_replace(".", "", $pot);
+$total +=(str_replace(".", "", $item['harga'])*$item['jml'])-$pot;
 	}
 }
 ?>
@@ -54,17 +54,17 @@ $total +=str_replace(".", "", $item['harga'])*$item['jml']-str_replace(".", "", 
 	</tr>
 	<tr>
 		<td colspan="6"><div align="right">Discount</div></td>
-		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('potongan', array('onFocus'=>'startCalc();','onBlur'=>'stopCalc();','id'=>'potongan','class' => 'form-control money-mask', 'label' => false)); ?>
+		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('potongan', array('placeholder'=>'0','onFocus'=>'startCalc();','onBlur'=>'stopCalc();','id'=>'potongan','class' => 'form-control', 'label' => false)); ?>
 		</td><td></td>
 	</tr>
 	<tr>
 		<td colspan="6"><div align="right">Total setelah discount</div></td>
-		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('total', array('readonly'=>true,'id'=>'total','class' => 'form-control money-mask', 'label' => false)); ?>
+		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('total', array('readonly'=>true,'id'=>'total','class' => 'form-control', 'label' => false)); ?>
 		</td><td></td>
 	</tr>	
 	<tr>
 		<td colspan="6"><div align="right">Biaya Kirim</div></td>
-		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('kirim', array('onFocus'=>'startCalc();','onBlur'=>'stopCalc();','id'=>'kirim','class' => 'form-control money-mask', 'label' => false)); ?>
+		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('kirim', array('placeholder'=>'0','onFocus'=>'startCalc();','onBlur'=>'stopCalc();','id'=>'kirim','class' => 'form-control money-mask', 'label' => false)); ?>
 		</td><td></td>
 	</tr>
 	<tr>
@@ -74,7 +74,7 @@ $total +=str_replace(".", "", $item['harga'])*$item['jml']-str_replace(".", "", 
 	</tr>
 	<tr>
 		<td colspan="6"><div align="right">Grandtotal</div></td>
-		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('grandtotal', array('readonly'=>true,'id'=>'grandtotal','class' => 'form-control money-mask', 'label' => false)); ?>
+		<td><div class=" col-xs-6" align='right'><?php echo $this -> Form -> input('grandtotal', array('placeholder'=>'0','readonly'=>true,'id'=>'grandtotal','class' => 'form-control money-mask', 'label' => false)); ?>
 		</td><td></td>
 	</tr>
 </tfoot>
@@ -107,15 +107,15 @@ function configurator(clicked) {
 
     function calc() {
         var a = document.getElementById('potongan').value;
-        d = a.replace(/,/g, '');
-        b = document.getElementById('kirim').value;
-        e = b.replace(/,/g, '');
-        c = document.getElementById('ppn').value;
-        f = c.replace(/,/g, '');
-        var k = <?php echo $total;?>-d;
+        var d = a.replace(/,/g, '');
+        var b = document.getElementById('kirim').value;
+        var e = b.replace(/,/g, '');
+        var c = document.getElementById('ppn').value;
+        var f = c.replace(/,/g, '');
+        var k = (<?php echo $total;?>)-(d*1);
         var gt = (<?php echo $total;?>-d)+(e*1)+(f*1);
-        document.getElementById('total').value = numberWithCommas(k);
-        document.getElementById('grandtotal').value = numberWithCommas(gt);
+        document.getElementById('total').value =  numberWithCommas(Math.round(k));
+        document.getElementById('grandtotal').value = numberWithCommas(Math.round(gt));
     }
 
     function stopCalc() {

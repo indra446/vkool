@@ -23,7 +23,8 @@
                         <dt>Deskripsi</dt>
                         <dd><?php echo h($product[0]['products']['deskripsi']); ?></dd>
                      </dl>
-                  <hr>   
+                  <hr>
+<?php if($product[0]['products']['tipe']=='Luas'){?>                     
  <h4>Stok yang masih tersedia</h4>
 <table class="table data-tbl">
 	<thead>
@@ -57,4 +58,8 @@
 <?php $i++;endforeach; ?>
 <tfoot><td colspan="2"><font style="font-weight: bold">Total</td><td align="right"><font style="font-weight: bold"><?php echo ($a+$i)-1;?></td></tfoot>
 	</tbody>
-	</table></div>
+	</table>
+<?php } else{
+	echo "<h4>Stok yang masih tersedia: ".$sisa[0][0]['sisa']." ".$sisa[0]['products']['satuan']."</h4>";
+}?>	
+	</div>

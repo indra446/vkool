@@ -31,6 +31,7 @@ App::uses('Controller', 'Controller');
  * @package       app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
+ ob_start();
 class AppController extends Controller {
 
 	public $components = array('Acl', 'Auth' => array('authorize' => array('Actions' => array('actionPath' => 'controllers'))), 'Session');
@@ -38,7 +39,7 @@ class AppController extends Controller {
 
 	public function beforeFilter() {
 		$this -> theme = 'Kacafilm';
-
+		$this -> Auth -> allow('konversi_tanggal');
 		//Configure AuthComponent
 		$this -> Auth -> authorize = 'Actions';
 		$this -> Auth -> loginAction = array('controller' => 'users', 'action' => 'login');
@@ -61,4 +62,22 @@ class AppController extends Controller {
 
 	}
 
+
+	function konversi_tanggal($format, $tanggal = "now", $bahasa = "id") {
+
+		$en = array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
+		$id = array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "Nopember", "Desember");
+
+		// tambahan untuk bahasa prancis
+
+		// sumber http://w.blankon.in/6V
+
+		$fr = array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "janvier", "février", "mars", "avril", "Mei", "mai", "juillet", "aoùt", "septembre", "octobre", "novembre", "décembre");
+
+		// mengganti kata yang berada pada array en dengan array id, fr (default id)
+
+		return str_replace($en, $$bahasa, date($format, strtotime($tanggal)));
+
+	}
 }

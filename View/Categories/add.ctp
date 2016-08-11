@@ -10,7 +10,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">Parent Kategori</label>
         <div class=" col-md-8">
-            <?php echo $this->Form->input('parent_id', array('class' => 'form-control', 'label' => false, 'options' => $parentCategories, 'empty' => 'kosong')); ?>
+            <?php echo $this->Form->input('parent_id', array('class' => 'form-control', 'label' => false, 'options' => $parentCategories, 'empty' => '')); ?>
         </div>
     </div>
     <div class="form-group unit">

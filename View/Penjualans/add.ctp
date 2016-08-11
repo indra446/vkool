@@ -1,3 +1,6 @@
+<style>
+    .message {color: blue;}
+</style>
 <div class="widget-header block-header margin-bottom-0 clearfix">
     <div class="pull-left">
         <h3>Tambah Penjualan</h3>
@@ -28,19 +31,19 @@
         minLength: 1,
         });
         $("#samping").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoproduks",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         $("#belakang").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoprodukb",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         $("#aksesoris").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoaksesoris",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         $("#service").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoservice",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         var jq = jQuery.noConflict();

@@ -3,7 +3,7 @@
         <h3>Edit Kategori</h3>
     </div>
 
-</div>
+</div><br>
 <div class="categories form">
 	<?php echo $this -> Form -> create('Category', array('class' => 'form-horizontal j-forms')); ?>
 	<div class="form-group">

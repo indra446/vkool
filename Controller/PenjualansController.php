@@ -49,7 +49,7 @@ class PenjualansController extends AppController {
 				penjualans.created,
 				customers.nama,
 				Sum(bayars.bayar)bayar,
-				bayars.total,bayars.lunas
+				bayars.total
 				FROM
 				penjualans
 				INNER JOIN customers ON penjualans.customer_id = customers.id
@@ -59,7 +59,7 @@ class PenjualansController extends AppController {
 				penjualans.nomor,
 				penjualans.created,
 				customers.nama
-				)a WHERE a.bayar=a.total or a.lunas='1'");
+				)a WHERE a.bayar>=a.total");
 		$this->set(compact('data'));	
 
 	}
@@ -86,7 +86,7 @@ class PenjualansController extends AppController {
 					penjualans.nomor,
 					penjualans.created,
 					customers.nama
-					)a WHERE a.bayar=a.total AND a.nomor LIKE '%".$d[3]."%' AND a.nama LIKE '%".$d[4]."%' OR SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '".$tgla."' AND '".$tglb."'");
+					)a WHERE a.bayar>=a.total AND a.nomor LIKE '%".$d[3]."%' AND a.nama LIKE '%".$d[4]."%' OR SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '".$tgla."' AND '".$tglb."'");
 			$this->set(compact('data'));	
 		}
 	}
@@ -119,7 +119,7 @@ class PenjualansController extends AppController {
 	}
 
 	public function cart() {
-		$produk = explode(",", $_POST['idp']);
+		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
 		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"],));
@@ -147,12 +147,12 @@ class PenjualansController extends AppController {
 				$_SESSION["cart_depan"] = array_merge($_SESSION["cart_depan"], $itemArray);
 		} else
 			$_SESSION["cart_depan"] = $itemArray;
-
+                    
 		$this -> set(compact('data', 'post'));
 	}
 
 	public function samping() {
-		$produk = explode(",", $_POST['idp']);
+		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
 		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
@@ -185,7 +185,7 @@ class PenjualansController extends AppController {
 	}
 
 	public function belakang() {
-		$produk = explode(",", $_POST['idp']);
+		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
 		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
@@ -218,7 +218,7 @@ class PenjualansController extends AppController {
 	}
 
 	public function aksesoris() {
-		$produk = explode(",", $_POST['idp']);
+		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
 		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
@@ -251,7 +251,7 @@ class PenjualansController extends AppController {
 	}
 
 	public function service() {
-		$produk = explode(",", $_POST['idp']);
+		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
 		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
@@ -285,10 +285,12 @@ class PenjualansController extends AppController {
 
 	public function del_produk() {
 		if (!empty($_SESSION["cart_depan"])) {
+
 			unset($_SESSION["cart_depan"][$_POST["idp"]]);
-			if (empty($_POST["idp"]))
-				unset($_SESSION["cart_depan"]);
+		} elseif (empty($_POST["idp"])) {
+			unset($_SESSION["cart_depan"]);
 		}
+
 	}
 
 	public function del_produksamping() {
@@ -612,33 +614,33 @@ class PenjualansController extends AppController {
 	public function autoprodukd($t = null) {
 		$this -> layout = 'ajax';
 		@$term = $_GET['term'];
-		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE (category_id='4' and parent_id='1') and nama_produk LIKE '%$term%' ");
+		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE products.aktif='1'  and nama_produk LIKE '%$term%' ");
 		$this -> set(compact('data'));
 	}
         public function autoproduks($t = null) {
 		$this -> layout = 'ajax';
 		@$term = $_GET['term'];
-		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE (category_id='6' and parent_id='1') and nama_produk LIKE '%$term%' ");
+		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE products.aktif='1' and (category_id='6' and parent_id='1') and nama_produk LIKE '%$term%' ");
 		$this -> set(compact('data'));
 	}
          public function autoprodukb($t = null) {
 		$this -> layout = 'ajax';
 		@$term = $_GET['term'];
-		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE (category_id='7' and parent_id='1') and nama_produk LIKE '%$term%' ");
+		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE products.aktif='1' and (category_id='7' and parent_id='1') and nama_produk LIKE '%$term%' ");
 		$this -> set(compact('data'));
 	}
 
 	public function autoaksesoris($t = null) {
 		$this -> layout = 'ajax';
 		@$term = $_GET['term'];
-		$data = $this -> Penjualan -> query("SELECT * FROM `products` WHERE category_id='2' and nama_produk LIKE '%$term%' ");
+		$data = $this -> Penjualan -> query("SELECT * FROM `products` WHERE products.aktif='1' and category_id='2' and nama_produk LIKE '%$term%' ");
 		$this -> set(compact('data'));
 	}
 
 	public function autoservice($t = null) {
 		$this -> layout = 'ajax';
 		@$term = $_GET['term'];
-		$data = $this -> Penjualan -> query("SELECT * FROM `products` WHERE category_id='3' and nama_produk LIKE '%$term%' ");
+		$data = $this -> Penjualan -> query("SELECT * FROM `products` WHERE products.aktif='1'and category_id='3' and nama_produk LIKE '%$term%' ");
 		$this -> set(compact('data'));
 	}
 

@@ -41,7 +41,7 @@
 
 .clock {width:400px; margin:0 auto; padding:4px; color:#000; }
 
-#Date { font-family:'BebasNeueRegular', Arial, Helvetica, sans-serif; font-size:14px; text-align:right;  }
+#Date { font-family:'BebasNeueRegular', Arial, Helvetica, sans-serif; font-size:16px;   }
 
 .clock ul {margin:0 auto; padding:0px; list-style:none; text-align:right; }
 .clock li { display:inline; font-size:14px; text-align:right; font-family:'BebasNeueRegular', Arial, Helvetica, sans-serif; }
@@ -89,7 +89,7 @@
 						</li>
 						<li>
 							<div class="logo">
-								<a href="index.html" title="Admin Template"><?php echo $this -> Html -> image("logo.png", array('fullBase' => true)); ?></a>
+								<a href="<?php echo $this->webroot;?>pages/home" title="Admin Template"><?php echo $this -> Html -> image("logo.png", array('fullBase' => true)); ?></a>
 							</div>
 						</li>
 					</ul>
@@ -108,7 +108,6 @@
 			<!--Topbar Left Branding With Logo End-->
 			<!--Topbar Right Start-->
 					<div class="topbar-right pull-right clock">
-					   <div id="Date"></div>
 					      <ul>
 					          <li id="hours"></li>
 					          <li id="point">:</li>
@@ -192,7 +191,8 @@
 		<div class="page-header filled full-block light">
 			<div class="row">
 				<div class="col-md-6 col-sm-6">
-					<h2><?php //echo ucwords(strtolower(str_replace("_", " ", $params['controller']))); ?></h2>
+					<h2><div id="Date"></div>
+<?php //echo ucwords(strtolower(str_replace("_", " ", $params['controller']))); ?></h2>
 					<p>
 						<?php //echo strtolower($params['action']); ?>
 					</p>
@@ -272,7 +272,11 @@
         "aoColumnDefs" : [{
 
 				"sWidth" : "5%",
-				"aTargets" : [3,4]
+				"aTargets" : [3,4,5]
+			},{
+
+				"sWidth" : "3%",
+				"aTargets" : [0]
 			},],
         
         
@@ -283,9 +287,41 @@
            }else{
             $tb('td:eq(4)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
            }
-            $tb('td:eq(5)',nRow).html('<a class="btn btn-info btn-xs" href="<?php echo $this->webroot;?>products/edit/'+aData.Product.id+'">Edit</a>');
+            $tb('td:eq(5)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>products/edit/'+aData.Product.id+'"><i class="fa fa-edit"></i></a>');
         }
     });
+    
+		// $tb("#tb_beli").dataTable({
+		// // oTable=$tb('#example').dataTable({
+		// "sPaginationType" : "full_numbers",
+        // "iDisplayLength": 10,
+        // "bProcessing": true,
+        // "bServerSide": true,
+        // "sAjaxSource": "<?php echo $this->webroot;?>Pembelians/index",
+        // "sDom": 'frtip',
+        // "aoColumns": [
+            // {mData:"Pembelian.nomor"},
+            // {mData:"Pembelian.tgl_transaksi"},
+            // {mData:"Vendor.nama_vendor"},
+            // {mData:"Pembelian.nomor"}
+//          
+        // ],
+        // "aoColumnDefs" : [{
+// 
+				// "sWidth" : "10%",
+				// "aTargets" : [3]
+			// },{
+// 
+				// "sWidth" : "15%",
+				// "aTargets" : [0,1]
+			// },],
+//         
+//         
+        // "fnCreatedRow": function(nRow, aData, iDataIndex){
+            // // $tb('td:eq(3)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
+            // $tb('td:eq(3)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Pembelians/view/'+aData.Pembelian.nomor+'"><i class="fa fa-folder-open"></i></a><a id="'+aData.Pembelian.nomor+'" onClick="config_del(this)" href="#myModal" role="button" class="btn btn-xs btn-danger" data-toggle="modal"><i class="fa fa-trash-o"></i></a>');
+        // }
+    // });
  });
 </script>		
 <script type="text/javascript">

@@ -59,7 +59,7 @@ $this->layout=false;
 	<tr>
 		<td>Total</td><td align="right"><?php echo number_format($total,0,',','.')?></td>
 		<td colspan="3">Diskon</td>
-		<td align="right"><?php echo number_format($cek[0]['penjualans']['disc'],0,',','.')?></td>
+		<td align="right"><?php echo number_format($cek[0]['penjualans']['disc']+$cek[0]['penjualans']['hidden_disc'],0,',','.')?></td>
 
 	</tr>
 
@@ -67,7 +67,7 @@ $this->layout=false;
 <table class="table table-bordered" style="font-size:11px">
 	<tr>
 		<td style="background-color: #ccc">Grand Total</td>
-		<td align="right"><?php echo number_format($total-($cek[0]['penjualans']['disc']),0,',','.')?></td>
+		<td align="right"><?php echo number_format($total-($cek[0]['penjualans']['disc']+$cek[0]['penjualans']['hidden_disc']),0,',','.')?></td>
 		<td style="background-color: #ccc">Sudah Bayar</td>
 		<td align="right"><?php echo number_format($sudahbayar,0,',','.');?></td>
 	</tr>
@@ -75,6 +75,6 @@ $this->layout=false;
 		<td style="background-color: #ccc">Bayar</td>
 		<td align="right"><?php echo number_format($d['bayars']['bayar'],0,',','.')?></td>
 		<td style="background-color: #ccc">Kurang Bayar</td>
-		<td align="right"><?php if($sudahbayar < ($total-$cek[0]['penjualans']['disc'])) {echo number_format(($total-($cek[0]['penjualans']['disc']))-$d['bayars']['bayar'],0,',','.');}else{echo "0";}?></td>
+		<td align="right"><?php if($sudahbayar < ($total-$cek[0]['penjualans']['disc'])) {echo number_format(($total-($cek[0]['penjualans']['disc']+$cek[0]['penjualans']['hidden_disc']))-$d['bayars']['bayar'],0,',','.');}else{echo "0";}?></td>
 	</tr>
 </table>

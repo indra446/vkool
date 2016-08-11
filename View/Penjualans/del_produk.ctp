@@ -4,22 +4,22 @@ $this -> layout = false;
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>ID Produk</th>
 			<th>Nama</th>
 			<th>Jumlah</th>
 			<th>Harga</th>
 			<th>Subtotal</th>
+			<th>Diskon</th>
 			<th>Hapus</th>
 		</tr>
 	</thead>
 	<tbody>
 <?php
 $x=0;
-if(!empty($_SESSION["cart_samping"])) {
-foreach ($_SESSION["cart_samping"] as $item){
-	echo  "<tr><td>".$item['id']."</td><td>".$item['nama']."</td>
-	<td>".$item['jml']."</td><td>".$item['harga']."</td><td>".$item['subtotal']."</td>
-	<td><button type='button' class='btn btn-xs btn-danger' id='".$x."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
+if(!empty($_SESSION["cart_depan"])) {
+foreach($_SESSION["cart_depan"] as $k => $item){
+	echo  "<tr><td>".$item['nama']."</td>
+	<td>".$item['jml']."</td><td>".$item['harga']."</td><td id='st'>".$item['subtotal']."</td><td>".$item['diskon']."</td>
+	<td><button type='button' class='btn btn-xs btn-danger' id='".$k."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
 $x++;}
 }
 ?>
@@ -31,10 +31,10 @@ function configurator(clicked) {
 	var id = clicked.id;
  	$.ajax({
 	type: "POST",
-	url: "<?php echo $this -> webroot; ?>Penjualans/del_produksamping/",
+	url: "<?php echo $this -> webroot; ?>Penjualans/del_produk/",
 	data: { idp : id },
 	success: function(html) {
-	jq("#samping_view").html(html);
+	jq("#isi_cart").html(html);
 	}
 	});																		 
 }

@@ -8,33 +8,41 @@
 	<tr>
 		<th >Tanggal</th>
 		<th width="15%">Jumlah Bayar</th>
-		<th width="5%">Nota</th>
+		<th width="10%">Nota A</th>
+		<th width="10%">Nota B</th>
 
 	</tr>
 </thead>
 <tbody>
-	<?php $total="";foreach ($data as $d){?>
+	<?php $total="";$totsisa="";foreach ($data as $d){?>
 		<tr>
 			<td><?php echo date("d/m/Y", strtotime($d['bayars']['created'])); ?></td>
-			<td align="right"><?php echo number_format($d['bayars']['bayar'],0,',','.')?></td>
+			<td align="right"><?php if(!empty($d['bayars']['bayar'])){echo number_format($d['bayars']['bayar'],0,',','.');}else{echo "0";}?></td>
 			<td>	
 			<a id="<?php echo $d['bayars']['id']; ?>" onClick="configurator(this)" href="#myModal" role="button" class="btn btn-xs btn-danger" data-toggle="modal" title="cetak nota"><li class="fa fa-folder-open-o"></li></a>
 				<?php //echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-print')) . "", array( 'action' => 'cetaknota', $d['bayars']['id']), array('title'=>'cetak nota','escape' => false,'class'=>'btn btn-danger btn-xs')); ?> 
 			</td>
+			<td>	
+			<a id="<?php echo $d['bayars']['id']; ?>" onClick="confighidden(this)" href="#myModal" role="button" class="btn btn-xs btn-danger" data-toggle="modal" title="cetak nota"><li class="fa fa-folder-open-o"></li></a>
+				<?php //echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-print')) . "", array( 'action' => 'cetaknota', $d['bayars']['id']), array('title'=>'cetak nota','escape' => false,'class'=>'btn btn-danger btn-xs')); ?> 
+			</td>
 		</tr>
 	<?php
-			$total +=$d['bayars']['bayar'];}
+			$total +=$d['bayars']['bayar'];
+			$totsisa +=$d['bayars']['kembalian'];
+}
  ?>
 </tbody>
 <tfoot>
 	<tr>
-		<th>TOTAL</th>
+		<th>Total Bayar</th>
 		<td align="right"><?php echo number_format($total,0,',','.')?></td>
 		<th></th>
 	</tr>
 	<tr>
-		<th>Kurang Bayar</th>
-		<td align="right">0</td>
+		<th>Total Uang Kembali</th>
+		<!-- <td align="right">0</td> -->
+		<td align="right"><?php echo number_format($totsisa,0,',','.')?></td>
 		<th></th>
 	</tr>
 </tfoot>	
@@ -64,19 +72,29 @@
 																
 																 
 															}
+															function confighidden(clicked) {
+																// alert(clicked.id);
+																var id = clicked.id;
+																  $$e("#liat").html("<div align=center> loading...<br><img src='<?php echo $this->webroot;?>img/loading.gif' /></div>");  
+																 $$e("#liat").load("<?php echo $this->webroot;?>Bayars/notahidden/"+id);
+																
+																 
+															}
 											
 														</script>
 														<div id="liat"></div>
       </div>
       <div class="modal-footer">
+       <!-- <button class="btn btn-info" onclick="printDiv('liat')" aria-hidden="true">Print</button> -->
        <button class="btn btn-info" onclick="printDiv('liat')" aria-hidden="true">Print</button>
-       <!--<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</button>-->
-       <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><a href="<?php echo $_SERVER["REQUEST_URI"]; ?>">Close</a></button>
+       <!-- <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</button> -->
+       <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><a href="<?php echo $_SERVER["REQUEST_URI"]; ?>"><font color="#fff">Close</font></a></button>
 
       </div>
     </div>
   </div>
 </div>	
+
 	<?php
 		echo $this -> Html -> script(array('lib/jquery.printElement.min'));
 	?>
@@ -85,17 +103,16 @@ function printDiv(divName) {
      var printContents = document.getElementById(divName).innerHTML;
      var originalContents = document.body.innerHTML;
 
-     document.body.innerHTML = printContents;
-
+     document.body.innerHTML = "<html><head><title></title></head><body>" +printContents+ "</body>";
      window.print();
-
      document.body.innerHTML = originalContents;
 }
     </script>
- <style>
-@media print 
+<style media="print" type="text/css">
+@media print
 {
-  @page { margin: 0; }
-  body  { margin: 1.6cm;font-size:6px; }
+body * { visibility: hidden; }
+#PrintDiv * { visibility: visible; }
+#PrintDiv { position: absolute; top: 40px; left: 30px; }
 }
- </style>			
+</style>		

@@ -22,9 +22,11 @@
             var bayare = document.getElementById('bayar').value;
             var sisatag = document.getElementById('sisatagihan').value;
             var result = parseInt(sisatag)- parseInt(bayare);
+            if(bayare<0){ alert('Tidak Boleh min');}
+            else {
             if (!isNaN(result)) {
                 document.getElementById('kbayar').value = result;
-            }
+            }}
         }
 </script>
 <script>
@@ -55,10 +57,12 @@ location.reload();
     </tr>
 </table>
 <br>
+<?php $b=($bayar[0][0]['bayare']);if(empty($b)){?>
 <div class="widget-header block-header clearfix">
     <button class="btn btn-success" id="tambah">Tambah Item</button> 
     <!--<button class="btn btn-success" id="reload">Reload</button>--> 
 </div>
+<?php }?>
 <div id="showtambah"></div>
 <br>
 <br>
@@ -106,19 +110,19 @@ location.reload();
     <div class="form-group">
         <label class="col-md-8 control-label">Discount</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="discount" name="discount" value="<?php echo $d1=$disc[0]['penjualans']['disc'];?>" onkeyup="sum();">
+            <input type="text" class="form-control" id="discount" name="discount" <?php if(!empty($b)){echo "readonly='readonly'";} ?> value="<?php echo $d1=$disc[0]['penjualans']['disc'];?>" onkeyup="sum();">
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-8 control-label">Hidden Discount</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="hiddendiscount" name="hiddendiscount" value="<?php echo $d2=$disc[0]['penjualans']['hidden_disc'];?>" onkeyup="sum();">
+            <input type="text" class="form-control" id="hiddendiscount" name="hiddendiscount" <?php if(!empty($b)){echo "readonly='readonly'";} ?> value="<?php echo $d2=$disc[0]['penjualans']['hidden_disc'];?>" onkeyup="sum();">
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-8 control-label">Total All</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="totalall" name="totalall" value="<?php echo $t0-$d1-$d2;?>">
+            <input type="text" class="form-control" id="totalall" name="totalall" value="<?php  echo $t0-$d1-$d2-$b;?>">
         </div>
     </div>
     <br>
@@ -139,11 +143,16 @@ var $$e=jQuery.noConflict();
                 var id = clicked.id;
          bootbox.dialog({
         title: "Input Pembayaran",
-        message: '<table class="table">' +
+        message:'<table class="table"><tr><td><p>Riwayat Pembayaran <a class="btn btn-success btn-sm" href="<?php echo $this->webroot;?>bayars/riwayat/<?php echo$id; ?>">Detail</a></p><br>'+
+            '<table class="table table-striped"><tr><th style="width: 95px;">Tanggal</th><th>Jumlah Bayar</th></tr>'+
+         <?php foreach ($nyicil as $ny):?> '<tr><td><?php echo substr($ny['bayars']['created'],0,10); ?></td><td><?php echo $ny['bayars']['bayar'];?></td></tr>'+ <?php endforeach;?>
+            '</table>'+    
+            '</td><td>'+ 
+            '<table class="table">' +
             '<tr><td>Total</td><td>:</td><td><?php echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
             '<tr><td>Discount</td><td>:</td><td><?php echo $dis1=$disc[0]['penjualans']['disc'];?></td></tr>'+
-            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalnya-$dis1-$dis2;?></td></tr><tr><td>Pembayaran</td><td>:</td><td></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="<?php echo $totalnya-$dis1-$dis2;?>" onkeyup="sumi();"></td></tr><tr></table>'+
-            '<form class="form-horizontal"> ' +
+            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalnya-$dis1-$dis2;?></td></tr><tr><td>Pembayaran</td><td>:</td><td><?php echo $b;?></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="<?php echo $totalnya-$dis1-$dis2-$b;?>" onkeyup="sumi();"></td></tr><tr></table>'+
+            '<form class="form-horizontal j-forms" action="#" id="j-forms-validation" method="post" accept-charset="utf-8"> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Metode Pembayaran</label> ' +
             '<div class="col-md-8"> ' +
@@ -158,22 +167,17 @@ var $$e=jQuery.noConflict();
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Bayar</label> ' +
             '<div class="col-md-8"> ' +
-            '<input id="bayar" name="bayar" type="text" placeholder="Bayar"  class="form-control" onkeyup="sumi();"> ' +
+            '<input id="bayar" name="bayar" type="number" placeholder="Bayar"  min="0" class="form-control" onkeyup="sumi();"> ' +
             '<input id="total" name="bayar" type="hidden" value="<?php echo $t;?>" placeholder="Bayar" class="form-control"> ' +
             '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control"> ' +
             '</div></div> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Kurang Bayar</label> ' +
             '<div class="col-md-8"> ' +
-            '<input id="kbayar" name="kbayar" type="text" placeholder="Kurang Bayar"  class="form-control"> ' +
+            '<input id="kbayar" name="kbayar" type="number" placeholder="Kurang Bayar"  class="form-control"> ' +
             '</div></div> ' +
-             '<div class="form-group"> ' +
-            '<label class="col-md-4 control-label" for="name">Lunas</label> ' +
-            '<div class="col-md-8"> ' +
-            '<select  id="lunas" class="form-control">'+
-            '<option value="0"></option><option value="1">Lunas</option></select>'+
-            '</div></div> ' +
-            '</form>',
+            '</div> ' +
+            '</form></td></tr></table>',
 //            '<a href="<?php // echo $this->webroot;?>" target="_blank">Preview Nota</a>',
         buttons: {
           cancel: {

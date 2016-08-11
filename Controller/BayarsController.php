@@ -87,6 +87,59 @@ class BayarsController extends AppController {
 		$this->set(compact('cek','sudahbayar'));
 
 	}
+    public function notahidden($id=null) {
+    	$cek=$this->Bayar->query("SELECT
+			penjualans.nomor,penjualans.id,
+			penjualans.noorder,
+			penjualans.created,
+			merks.nama AS merk,
+			customers.nama AS nmplg,
+			customers.alamat,
+			customers.telp,
+			customers.hp,
+			bayars.tipe_bayar,
+			model.nama AS model,
+			penjualans.nomesin,
+			penjualans.norangka,
+			penjualans.nopol,
+			bayars.jatuh_tempo,IF(bayars.kembalian IS NULL,0,bayars.kembalian)kembalian,
+			detail_penjualans.id_product,
+			products.nama_produk,
+			categories.kategori,
+			detail_penjualans.harga,penjualans.hidden_disc,penjualans.disc,
+			detail_penjualans.disc as disc_item,
+			bayars.bayar,
+			bayars.total,detail_penjualans.qty
+			FROM
+			bayars
+			INNER JOIN penjualans ON bayars.id_penjualan = penjualans.id
+			INNER JOIN customers ON penjualans.customer_id = customers.id
+			INNER JOIN merks ON penjualans.merk_id = merks.id
+			INNER JOIN merks AS model ON penjualans.model_id = model.id
+			INNER JOIN detail_penjualans ON detail_penjualans.penjualan_id = penjualans.id
+			INNER JOIN products ON detail_penjualans.id_product = products.id
+			INNER JOIN categories ON products.category_id = categories.id
+			WHERE
+			bayars.id = $id");
+                  $a=$cek[0]['penjualans']['id'];
+                  
+		$sudahbayar=$this->Bayar->query("SELECT
+			sum(bayar)bayar
+			FROM
+			bayars
+			INNER JOIN penjualans ON bayars.id_penjualan = penjualans.id
+			WHERE
+			bayars.id_penjualan = ".$cek[0]['penjualans']['id']." AND bayars.id <= $id
+			GROUP BY
+			bayars.id_penjualan");
+		if(!empty($sudahbayar)){
+			$sudahbayar=$sudahbayar[0][0]['bayar'];
+		}else{
+			$sudahbayar=0;
+		}	
+		$this->set(compact('cek','sudahbayar'));
+
+	}
 /**
  * view method
  *

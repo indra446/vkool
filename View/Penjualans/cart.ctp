@@ -16,10 +16,10 @@ $this -> layout = false;
 <?php
 $x=0;
 if(!empty($_SESSION["cart_depan"])) {
-foreach ($_SESSION["cart_depan"] as $item){
+foreach($_SESSION["cart_depan"] as $k => $item){
 	echo  "<tr><td>".$item['nama']."</td>
 	<td>".$item['jml']."</td><td>".$item['harga']."</td><td id='st'>".$item['subtotal']."</td><td>".$item['diskon']."</td>
-	<td><button type='button' class='btn btn-xs btn-danger' id='".$x."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
+	<td><button type='button' class='btn btn-xs btn-danger' id='".$k."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
 $x++;}
 }
 ?>

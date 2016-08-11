@@ -28,7 +28,7 @@
 			<td><?php echo $d['products']['nama_produk']?></td>
 			<td><?php echo $d['detail_penjualans']['qty']?></td>
 			<td align="right"><?php echo number_format($d['detail_penjualans']['harga'],0,',','.')?></td>
-			<td align="right"><?php echo number_format($d['detail_penjualans']['disc_item'],0,',','.')?></td>
+			<td align="right"><?php if(!empty($d['detail_penjualans']['disc_item'])){echo number_format($d['detail_penjualans']['disc_item'],0,',','.');}?></td>
 			<td align="right"><?php echo number_format(($d['detail_penjualans']['qty']*$d['detail_penjualans']['harga'])-$d['detail_penjualans']['disc_item'],0,',','.')?></td>
 		</tr>
 	<?php $total += ($d['detail_penjualans']['qty'] * $d['detail_penjualans']['harga'])-$d['detail_penjualans']['disc_item'];

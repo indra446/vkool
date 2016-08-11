@@ -1,7 +1,3 @@
-<?php
-	// echo $this -> Html -> script(array('datatable/jquery.dataTables.min'));
-?>
-
 <div class="widget-header block-header margin-bottom-0 clearfix">
     <div class="pull-left">
         <h3>Produk</h3>
@@ -15,7 +11,7 @@
 </div>
 <div class="widget-container">
 
-	<table id="tb_product" class="table">
+	<table id="tb_product" class="table foo-data-table">
 	<thead>
 	<tr>
 			<th>ID</th>

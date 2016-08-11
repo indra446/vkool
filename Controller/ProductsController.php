@@ -22,7 +22,7 @@ class ProductsController extends AppController {
 	 * @return void
 	 */
 	public function index() {
-        $this->paginate = array('fields' => array('Product.id', 'nama_produk', 'Kategori.kategori','satuan', 'Product.aktif'), 'joins' => array(array('table' => 'categories', 'alias' => 'Kategori', 'type' => 'INNER', 'conditions' => array('Kategori.id = Product.category_id'))),);
+        // $this->paginate = array('fields' => array('Product.id', 'nama_produk', 'Kategori.kategori','satuan', 'Product.aktif'), 'joins' => array(array('table' => 'categories', 'alias' => 'Kategori', 'type' => 'INNER', 'conditions' => array('Kategori.id = Product.category_id'))),);
 
         $this->DataTable->mDataProp = true;
         // debug(json_encode($this -> DataTable -> getResponse()));
@@ -62,55 +62,40 @@ class ProductsController extends AppController {
 	 */
 	public function stock() {
 		$products = $this -> Product -> query("SELECT
-					products.id,
-					products.nama_produk,
-					products.dimensi,
-					products.tipe,
-				
-				IF (
-					Sum(pembelians.jml) IS NULL,
-					0,
-					Sum(pembelians.jml)
-				) beli,
-				 a.jual,
-				
-				IF (
-					Sum(pembelians.jml) IS NULL,
-					0,
-					Sum(pembelians.jml)
-				) - IF(a.jual IS NULL,0,a.jual) AS sisa,baku.jmlbaku,
-				 products.satuan
-				FROM
-					products
-				LEFT JOIN pembelians ON pembelians.product_id = products.id
-				LEFT JOIN (
-					SELECT
 						products.id,
 						products.nama_produk,
-				
-					IF (
-						Sum(detail_penjualans.qty) IS NULL,
-						0,
-						Sum(detail_penjualans.qty)
-					) jual,
-					products.satuan
-				FROM
-					products
-				LEFT JOIN detail_penjualans ON detail_penjualans.id_product = products.id
-				WHERE flag=1
-				GROUP BY
-					products.id
-				ORDER BY
-					products.nama_produk ASC
-				) a ON a.id = products.id
-				LEFT JOIN (
-					SELECT
-						COUNT(id)jmlbaku,product_id
+						products.dimensi,
+						products.tipe,
+						IF (Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml)) beli,
+						a.jual,
+						IF (Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml)) - IF(a.jual IS NULL,0,a.jual) AS sisa,
+						baku.jmlbaku,
+						products.satuan
 					FROM
-						bahanbakus
-					GROUP BY bahanbakus.product_id
-				) baku ON baku.product_id=products.id
-				GROUP BY
+						products
+					LEFT JOIN pembelians ON pembelians.product_id = products.id
+					LEFT JOIN (	SELECT
+										products.id,
+										products.nama_produk,
+										products.tipe,
+										IF(products.tipe != 'Luas',IF (Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty)),COUNT(bahanbakus.id)) jual,
+										products.satuan
+										FROM
+										products
+										LEFT JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+										LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=detail_penjualans.penjualan_id AND bahanbakus.product_id=products.id AND bahanbakus.tipe=1
+										WHERE flag=1
+										GROUP BY
+										products.id
+										ORDER BY
+										products.nama_produk ASC) a ON a.id = products.id
+					LEFT JOIN (SELECT
+										COUNT(id)jmlbaku,product_id
+										FROM
+										bahanbakus
+										WHERE tipe=2
+										GROUP BY bahanbakus.product_id) baku ON baku.product_id=products.id
+					GROUP BY
 					products.id");
 		$this -> set(compact('products'));
 	}
@@ -155,11 +140,13 @@ class ProductsController extends AppController {
 				LEFT JOIN (SELECT
 						products.id,
 						products.nama_produk,
-						IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty))jual,
+						IF(products.tipe != 'Luas',IF (Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty)),COUNT(bahanbakus.id)) jual,
 						products.satuan
 						FROM
 						products
 						INNER JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+						INNER JOIN bahanbakus ON bahanbakus.penjualan_id=detail_penjualans.penjualan_id AND bahanbakus.product_id=products.id AND bahanbakus.tipe=1
+						WHERE detail_penjualans.flag=1
 						GROUP BY
 						products.id
 						ORDER BY
@@ -179,7 +166,7 @@ class ProductsController extends AppController {
 				FROM
 				bahanbakus
 				WHERE
-				bahanbakus.product_id ='".$id."'");		
+				bahanbakus.product_id ='".$id."' AND bahanbakus.tipe=2");		
 		// $options = array('recursive' => 2, 'conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
 		$this -> set(compact('product','sisa','baku'));
 	}

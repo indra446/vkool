@@ -51,15 +51,14 @@ class PembeliansController extends AppController {
 	 * @return void
 	 */
 	public function index() {
-				$this -> Paginator -> settings = array('limit' => 10000000, );
 
 		// $this -> Pembelian -> recursive = 0;
 		// $pembelians = $this -> Pembelian -> find('all', array('recursive' => 1, 'group' => 'Pembelian.nomor', 'order' => array('Pembelian.tgl_transaksi')));
 		// $this -> set(compact('pembelians'));
 		
-        // $this->paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor','Pembelian.id'), 'group' => 'Pembelian.nomor', 'joins' => array(array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER','conditions' => array('Vendor.id = Pembelian.vendor_id'))),);
+        // $this->paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor','Pembelian.id'),'group' => 'Pembelian.nomor', 'joins' => array(array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER','conditions' => array('Vendor.id = Pembelian.vendor_id'))));
 
-        $this->DataTable->mDataProp = true;
+        // $this->DataTable->mDataProp = true;
         // debug($this -> DataTable -> getResponse());
         // exit ;
         if ($this->request->is('ajax')) {
@@ -107,19 +106,19 @@ class PembeliansController extends AppController {
 				$arr[] = $s['id'];
 			}
 			// debug($_SESSION["cart_item"]);
-			if (in_array($data[0]['products']['id'], $arr)) {
-				// echo "match";
-				foreach ($_SESSION["cart_item"] as $k => $v) {
-					// debug($data[0]['products']['id']."-".$v['id']."/".$k);
-					if ($data[0]['products']['id'] == $v['id']) {
-						$_SESSION["cart_item"][$k]["tipe"] = $data[0]['products']['tipe'];
-						$_SESSION["cart_item"][$k]["jml"] = $_POST["jml"];
-						$_SESSION["cart_item"][$k]["potitem"] = $_POST["potitem"];
-						$_SESSION["cart_item"][$k]["pot"] = str_replace("%", "", $_POST["potitem"]) / 100;
-						$_SESSION["cart_item"][$k]["harga"] = $_POST["harga"];
-					}
-				}
-			} else
+			// if (in_array($data[0]['products']['id'], $arr)) {
+				// // echo "match";
+				// foreach ($_SESSION["cart_item"] as $k => $v) {
+					// // debug($data[0]['products']['id']."-".$v['id']."/".$k);
+					// if ($data[0]['products']['id'] == $v['id']) {
+						// $_SESSION["cart_item"][$k]["tipe"] = $data[0]['products']['tipe'];
+						// $_SESSION["cart_item"][$k]["jml"] = $_POST["jml"];
+						// $_SESSION["cart_item"][$k]["potitem"] = $_POST["potitem"];
+						// $_SESSION["cart_item"][$k]["pot"] = str_replace("%", "", $_POST["potitem"]) / 100;
+						// $_SESSION["cart_item"][$k]["harga"] = $_POST["harga"];
+					// }
+				// }
+			// } else
 				$_SESSION["cart_item"] = array_merge($_SESSION["cart_item"], $itemArray);
 		} else
 			$_SESSION["cart_item"] = $itemArray;
@@ -228,10 +227,12 @@ class PembeliansController extends AppController {
 				$this -> Pembelian -> create();
 				$this -> Pembelian -> save($a, false);
 			}
-			unset($_SESSION["cart_item"]);
 			// if ($this -> Pembelian -> save($this -> request -> data)) {
+			unset($_SESSION["cart_item"]);
 			$this -> Session -> setFlash('Data berhasil disimpan', 'success');
-			return $this -> redirect(array('controller'=>'Pembelians','action' => 'index'));
+			// return $this->redirect($this->request->here); 
+			// $this -> redirect(array('action' => 'index'));
+			$this->redirect('http://www.google.com');
 			// } else {
 			// $this -> Session -> setFlash(__('The pembelian could not be saved. Please, try again.'));
 			// }
@@ -288,9 +289,11 @@ class PembeliansController extends AppController {
 		// } else {
 		// $this -> Session -> setFlash(__('The pembelian could not be deleted. Please, try again.'));
 		// }
-		$this -> Pembelian -> query("DELETE FROM pembelians WHERE nomor=" . $id);
+		$this -> Pembelian -> query("DELETE FROM pembelians WHERE nomor='". $id."'");
 		$this -> Session -> setFlash('Data berhasil dihapus', 'success');
-		return $this -> redirect(array('action' => 'index'));
+		// return $this -> redirect(array('action' => 'index'));
+					$this->redirect('http://www.google.com');
+		
 	}
 
 }

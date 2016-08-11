@@ -16,17 +16,17 @@ $this -> layout = false;
 <?php
 $x=0;
 if(!empty($_SESSION["cart_belakang"])) {
-foreach ($_SESSION["cart_belakang"] as $item){
+foreach ($_SESSION["cart_belakang"] as $k => $item){
 	echo  "<tr><td>".$item['id']."</td><td>".$item['nama']."</td>
 	<td>".$item['jml']."</td><td>".$item['harga']."</td><td>".$item['subtotal']."</td>
-	<td><button type='button' class='btn btn-xs btn-danger' id='".$x."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
+	<td><button type='button' class='btn btn-xs btn-danger' id='".$k."' onClick='configblk(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
 $x++;}
 }
 ?>
 	</tbody>
 </table>
 <script type="text/javascript">
-function configurator(clicked) {
+function configblk(clicked) {
 // alert(id)
 	var id = clicked.id;
  	$.ajax({

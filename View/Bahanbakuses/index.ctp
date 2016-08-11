@@ -59,11 +59,49 @@
                     <td><?php echo h($bahanbakus['customers']['nama']); ?>&nbsp;</td>
                     <td><?php $b=($bahanbakus['bahanbakus']['id']); if(!empty($b)){?>
                         <a href="<?php echo $this->webroot;?>bahanbakuses/view/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Bayar</a>
-                        <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-chevron-circle-right')) . " Detail", array( 'action' => 'detail', $id), array('title'=>'edit','escape' => false,'class'=>'btn btn-warning btn-xs')); ?> 
+                        <?php // echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-chevron-circle-right')) . " Detail", array( 'action' => 'detail', $id), array('title'=>'edit','escape' => false,'class'=>'btn btn-warning btn-xs')); ?> 
+                        <?php // echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-chevron-circle-right')) . " Detail", array( 'action' => 'detail', $id), array('title'=>'edit','escape' => false,'class'=>'btn btn-warning btn-xs')); ?> 
+                             <?php
+                        echo $this->Js->link("Detail", "/bahanbakuses/popdetail/" .$id, array('update' => '#view',
+                            'htmlAttributes' => array(
+                                'data-toggle' => 'modal',
+                                'data-target' => '#viewModal' . $id,
+                                'class' => 'btn btn-warning btn-xs'
+                        )));
+                        ?>
+                        <!----modal edit-->
+                        <div class="modal fade" id="viewModal<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                         <?php }else{?>
                         <a href="<?php echo $this->webroot;?>bahanbakuses/add/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Input Bahan Baku</a>
                         <a href="<?php echo $this->webroot;?>bahanbakuses/view/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Bayar</a>
-                        <?php echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-chevron-circle-right')) . " Detail", array( 'action' => 'detail', $id), array('title'=>'edit','escape' => false,'class'=>'btn btn-warning btn-xs')); ?> 
+                        <?php
+                        echo $this->Js->link("Detail", "/bahanbakuses/popdetail/" .$id, array('update' => '#view',
+                            'htmlAttributes' => array(
+                                'data-toggle' => 'modal',
+                                'data-target' => '#viewModal' . $id,
+                                'class' => 'btn btn-warning btn-xs'
+                        )));
+                        ?>
+                        <!----modal edit-->
+                        <div class="modal fade" id="viewModal<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                         <?php } ?>
                     </td>
                 </tr>

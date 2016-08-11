@@ -57,7 +57,21 @@ class BahanbakusesController extends AppController {
             FROM
             penjualans
             INNER JOIN customers ON penjualans.customer_id = customers.id
-            LEFT JOIN bahanbakus ON penjualans.id = bahanbakus.penjualan_id group by penjualans.id");
+            LEFT JOIN bahanbakus ON penjualans.id = bahanbakus.penjualan_id 
+			WHERE penjualans.id NOT IN (SELECT a.id FROM (SELECT
+							penjualans.id,Sum(bayars.bayar)bayar,
+							bayars.total			
+							FROM
+							penjualans
+							INNER JOIN customers ON penjualans.customer_id = customers.id
+							INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
+							GROUP BY
+							penjualans.id,
+							penjualans.nomor,
+							penjualans.created,
+							customers.nama
+							)a WHERE a.bayar>=a.total)
+			group by penjualans.id");
                     $this->set(compact('bahanbakuses'));}
     }
 
@@ -101,28 +115,31 @@ class BahanbakusesController extends AppController {
             throw new NotFoundException(__('Invalid bahanbakus'));
         }
         $bakus = $this->Bahanbakus->query("SELECT
-detail_penjualans.id,
-detail_penjualans.penjualan_id,
-detail_penjualans.id_product,
-detail_penjualans.qty,
-detail_penjualans.harga,
-detail_penjualans.disc,
-detail_penjualans.hidden_disc,
-detail_penjualans.id_karyawan,
-detail_penjualans.ket,
-products.nama_produk,
-karyawans.nama,
-karyawans.alamat,
-karyawans.no_ktp,
-categories.kategori,
-(detail_penjualans.qty*detail_penjualans.harga) as subtotal
-FROM
-detail_penjualans
-left JOIN products ON detail_penjualans.id_product = products.id
-left JOIN karyawans ON detail_penjualans.id_karyawan = karyawans.id
-left JOIN categories ON products.category_id = categories.id
-where penjualan_id='$id'
-");
+        detail_penjualans.id,
+        detail_penjualans.penjualan_id,
+        detail_penjualans.id_product,
+        detail_penjualans.qty,
+        detail_penjualans.harga,
+        detail_penjualans.disc,
+        detail_penjualans.hidden_disc,
+        detail_penjualans.id_karyawan,
+        detail_penjualans.ket,
+        products.nama_produk,
+        karyawans.nama,
+        karyawans.alamat,
+        karyawans.no_ktp,
+        categories.kategori,
+        (detail_penjualans.qty*detail_penjualans.harga) AS subtotal,
+        bayars.bayar
+        FROM
+        detail_penjualans
+        LEFT JOIN products ON detail_penjualans.id_product = products.id
+        LEFT JOIN karyawans ON detail_penjualans.id_karyawan = karyawans.id
+        LEFT JOIN categories ON products.category_id = categories.id
+        LEFT JOIN bayars ON detail_penjualans.penjualan_id = bayars.id_penjualan
+        where penjualan_id='$id'");
+        $bayar=$this->Bahanbakus->query(" SELECT Sum(bayars.bayar) as bayare FROM `bayars` WHERE bayars.id_penjualan='$id' ");
+        $nyicil=$this->Bahanbakus->query(" SELECT bayars.bayar,bayars.created, bayars.id FROM `bayars` WHERE bayars.id_penjualan='$id' ");
         $totals = $this->Bahanbakus->query("select sum(s.subtotal) as total from(SELECT
 qty*harga as subtotal,
 detail_penjualans.qty,
@@ -130,7 +147,7 @@ detail_penjualans.harga
 FROM `detail_penjualans`
 where penjualan_id='$id')as s");
         $disc=$this->Bahanbakus->query("SELECT penjualans.disc, penjualans.hidden_disc FROM penjualans WHERE id='$id' limit 1 ");
-        $this->set(compact('bakus', 'totals', 'id','disc'));
+        $this->set(compact('bakus', 'totals', 'id','disc','bayar','nyicil'));
     }
 
     public function bayar() {
@@ -138,13 +155,13 @@ where penjualan_id='$id')as s");
         @$tipe=$_POST['tipe'];
         @$ket=$_POST['ket'];
         @$bayar=$_POST['bayar'];
-        @$kbayar=$_POST['kbayar'];
+        @$k=$_POST['kbayar'];
+        if($k<0){  $kbayar=explode('-', $k)[1]; }else { $kbyar=$k;}
         @$idpenju=$_POST['idpenju'];
         @$total=$_POST['total'];
-        @$lunas=$_POST['lunas'];
         
 //        print_r($idpenju);exit;
-        $this->Bahanbakus->query("insert into `bayars` (bayar,id_penjualan,total,jatuh_tempo,tipe_bayar,ket,lunas,created,modified) VALUE('$bayar','$idpenju','$total','','$tipe','$ket','$lunas','$tanggal','$tanggal');");
+        $this->Bahanbakus->query("insert into `bayars` (bayar,id_penjualan,kembalian,total,jatuh_tempo,tipe_bayar,ket,created,modified) VALUE('$bayar','$idpenju','$kbayar','$total','','$tipe','$ket','$tanggal','$tanggal');");
 
     }
 
@@ -154,7 +171,6 @@ where penjualan_id='$id')as s");
      * @return void
      */
     public function add($id = null) {
-//        unset($_SESSION['depan']);
         $this->loadModel('Product');
         if (empty($id)) {
             throw new NotFoundException(__('Invalid bahanbakus'));
@@ -162,26 +178,22 @@ where penjualan_id='$id')as s");
         if ($this->request->is(array('post', 'put'))) {
             $zn = $this -> request['data'];
             $count=count($zn['Penjualan']['ket'])-1;
-//            print_r($count);exit;
             for ($i = 0; $i <= $count; $i++) {             
-                    @$data['Bahanbakus']['penjualan_id'] = $id;
-                    @$data['Bahanbakus']['product_id'] =$zn['Penjualan']['ket'][$i];
-                    @$data['Bahanbakus']['jum_sisa'] =$zn['Penjualan']['sisa'][$i]; 
-                    @$data['Bahanbakus']['dm1'] =$zn['Penjualan']['pjg'][$i]; 
-                    @$data['Bahanbakus']['dm2'] =$zn['Penjualan']['lbr'][$i]; 
-                    @$data['Bahanbakus']['id_teknisi'] =explode("-",$zn['Bahanbakuses']['id_teknisi'])['1']; 
-                    @$data['Bahanbakus']['ket'] =$zn['Penjualan']['ket'][$i];
+                    $data['Bahanbakus']['penjualan_id'] = $id;
+                    $data['Bahanbakus']['product_id'] =$zn['Penjualan']['ket'][$i];
+                    $data['Bahanbakus']['dm1'] =$zn['Penjualan']['pjg'][$i]; 
+                    $data['Bahanbakus']['dm2'] =$zn['Penjualan']['lbr'][$i]; 
+                    $data['Bahanbakus']['id_teknisi'] =explode("-",$zn['Bahanbakuses']['id_teknisi'])['1']; 
+                    $data['Bahanbakus']['ket'] =$zn['Penjualan']['ket'][$i];
                     $this->Bahanbakus->create();
                     $this->Bahanbakus->save($data, false);
                     $this->Bahanbakus->query(" update detail_penjualans set flag='1' where penjualan_id='$id' ");
                 }
-            $this->Session->setFlash('Data berhasil disimpan', 'success');
-            return $this->redirect(array('controller' => 'bahanbakuses', 'action' => 'view/' . $id . '/ygsy'));
+            unset($_SESSION["cartbb"]);  
+            $this->Session->setFlash(__('Data berhasil disimpan'));
+//            $this->Session->setFlash('Data berhasil disimpan', 'success');
+            return $this->redirect(array('controller' => 'Penjualans', 'action' => 'add'));
         }
-//                        else {
-//				$this->Session->setFlash(__('The bahanbakus could not be saved. Please, try again.'));
-//			}
-
         $detailpenjualan=$this->Bahanbakus->query(" SELECT
         detail_penjualans.penjualan_id,
         detail_penjualans.id,
@@ -231,13 +243,6 @@ where penjualan_id='$id')as s");
 				bahanbakus.modified,products.nama_produk
 				FROM
 				bahanbakus INNER JOIN products ON bahanbakus.product_id = products.id");	
-		// debug($sisa);debug($baku);	
-        // $produks = $this->Product->find('list', array('fields' => array('id', 'nama_produk'), 'recursive' => -1));
-        // $produkdepan = $this->Bahanbakus->query(" SELECT products.id, products.nama_produk,products.category_id,products.tipe,products.dimensi,products.satuan FROM `products`  WHERE category_id='4' ");
-        // $produksamping = $this->Bahanbakus->query(" SELECT products.id, products.nama_produk,products.category_id,products.tipe,products.dimensi,products.satuan FROM `products`  WHERE category_id='6' ");
-        // $produkbelakang = $this->Bahanbakus->query(" SELECT products.id, products.nama_produk,products.category_id,products.tipe,products.dimensi,products.satuan FROM `products`  WHERE category_id='7' ");
-        // $produkservice = $this->Bahanbakus->query(" SELECT products.id, products.nama_produk,products.category_id,products.tipe,products.dimensi,products.satuan FROM `products`  WHERE category_id='3' ");
-        // $produkaksesoris = $this->Bahanbakus->query(" SELECT products.id, products.nama_produk,products.category_id,products.tipe,products.dimensi,products.satuan FROM `products`  WHERE category_id='2' ");
         $this->set(compact('sisa','bhnbaku','produks','detailpenjualan','produkdepan','produksamping','produkbelakang','produkservice','produkaksesoris'));
     }
 
@@ -289,49 +294,37 @@ where penjualan_id='$id')as s");
         return $this->redirect(array('action' => 'index'));
     }
     public function depan(){
-        	$produk = explode(",", $_POST['idp']);
-                $bk=$produk[1];
-                if($bk=='b'){
-		$data = $this -> Bahanbakus ->query(" SELECT * FROM `bahanbakus` where id='" . $produk[0] . "'");
-                $this -> set(compact('data'));
-                
-                }else { 
-                 $sisa = $this -> Bahanbakus -> query("
-                    SELECT
-                    CONCAT(products.id,',p')id,
-                    products.nama_produk,products.dimensi,products.tipe,IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))beli,
-                    a.jual,
-                    IF(Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml))-IF(a.jual IS NULL,0,a.jual) AS sisa,
-                    products.satuan
-                    FROM
-                    products
-                    LEFT JOIN pembelians ON pembelians.product_id = products.id
-                    LEFT JOIN (SELECT
-                    products.id,
-                    products.nama_produk,
-                    IF(Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty))jual,
-                    products.satuan
-                    FROM
-                    products
-                    INNER JOIN detail_penjualans ON detail_penjualans.id_product = products.id where flag='1'
-                    GROUP BY
-                    products.id
-                    ORDER BY
-                    products.nama_produk ASC
-                    )a ON a.id=products.id
-                    WHERE
-                    products.id = '$produk[0]'
-                    GROUP BY products.id ");
-                    $this -> set(compact('sisa'));
+        $produk = explode(",", $_POST['idp']);
+        $bk = $produk[1];
+        @$itemArray = array($produk['1'].$produk['0'] => array('id' => $produk[0], 'nama' => $produk[2], 'jenis' => $produk[1]));
+        if (!empty($_SESSION["cartbb"])) {
+            $arr = array();
+            foreach ($_SESSION["cartbb"] as $s) {
+                $arr[] = $s['jenis'].$s['id'];
+//                print_r($arr);
+            }
+            if (in_array($produk['1'].$produk['0'], $arr)) {
+//                 echo "match";
+                foreach ($_SESSION["cartbb"] as $k => $v) {
+                    if  ($produk['1'].$produk['0'] == $v['jenis'].$v['id']) {
+                        $_SESSION["cartbb"][$k]["nama"] = $produk[2];
+                        $_SESSION["cartbb"][$k]["jenis"] = $produk[1];
+                    }
                 }
-		
-	}
+            } else
+                $_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
+        } else
+            $_SESSION["cartbb"] = $itemArray;
+//        print_r($itemArray);
+        $this->set(compact('data'));
+    }
         public function del_depan() {
-		if (!empty($_SESSION["depan"])) {
-			unset($_SESSION["depan"][$_POST["idp"]]);
+		if (!empty($_SESSION["cartbb"])) {
+			unset($_SESSION["cartbb"][$_POST["idp"]]);
 			if (empty($_POST["idp"]))
-				unset($_SESSION["depan"]);
+				unset($_SESSION["cartbb"]);
 		}
+                unset($_SESSION["cartbb"]);
 	}
         public function detail($id=null){
             if (!$this -> Bahanbakus -> exists($id)) {
@@ -358,6 +351,23 @@ where penjualan_id='$id')as s");
 				INNER JOIN categories ON products.category_id = categories.id
 				WHERE penjualans.id=$id");
 		$this->set(compact('data'));
+        }
+        public function  popdetail($id=null){
+            $this->layout='ajax';
+            $data=$this->Bahanbakus->query(" SELECT
+            detail_penjualans.penjualan_id,
+            detail_penjualans.qty,
+            detail_penjualans.harga,
+            products.nama_produk,
+            penjualans.nomor
+            FROM
+            detail_penjualans
+            INNER JOIN products ON detail_penjualans.id_product = products.id
+            INNER JOIN penjualans ON detail_penjualans.penjualan_id = penjualans.id
+            where penjualan_id='$id'");
+            $this->set(compact('data'));
+//            print_r($data);
+            
         }
     
 
