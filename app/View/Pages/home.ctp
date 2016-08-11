@@ -1,0 +1,1 @@
+Welcome, <?php echo $infousr['Auth']['User']['nama_admin']?>.

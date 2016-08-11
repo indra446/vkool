@@ -167,7 +167,7 @@
 				</div>
 				<?php
 				switch ($usr) {
-					case 1 :
+					case 1 :  case 2 :
 						echo $this -> element('menu/menu_super');
 						break;
 					case 4 :

@@ -18,6 +18,10 @@
 	</thead>
 	<tbody>
 	<?php foreach ($categories as $key=>$category): ?>
+		<?php 
+			if($category['ParentCategory']['kategori'] == null)
+				$category['ParentCategory']['kategori'] = '-';
+		?>
 	<tr>
 		<td><?php echo h($key+1); ?>&nbsp;</td>
 		<td><?php echo h($category['ParentCategory']['kategori']); ?>&nbsp;</td>
