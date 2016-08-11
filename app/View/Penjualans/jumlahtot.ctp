@@ -1,0 +1,2 @@
+<?php // echo $this->Form->input('total', array('class' => 'form-control', 'label' => false,'value'=>$tot,'')); ?>
+<input type="text" class="form-control" id="total" name="total" value="<?php echo $tot;?>" onkeyup="sum();">

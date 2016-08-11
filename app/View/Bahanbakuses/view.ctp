@@ -1,0 +1,192 @@
+<script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script>
+<script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>
+<script>
+  function sum() {
+            var txttotal = document.getElementById('totaldepan').value;
+            var txtdiscount = document.getElementById('discount').value;
+            var txthiddendiscount = document.getElementById('hiddendiscount').value;
+            var result = parseInt(txttotal) - parseInt(txtdiscount)-parseInt(txthiddendiscount);
+            if (!isNaN(result)) {
+                document.getElementById('totalall').value = result;
+            }
+        }
+</script>
+<script>
+$(document).ready(function(){
+$("#tambah").click(function(){
+$("#showtambah").load('<?php echo $this->webroot; ?>bahanbakuses/tambah/<?php echo $id;?>');
+});
+$("#reload").click(function(){
+location.reload();
+});
+});
+</script>
+<table style="width: 28%;">
+    <tr>
+        <td>Nomer Order</td>
+        <td>:</td>
+        <td><?php echo $id;?></td>
+    </tr>
+    <tr>
+        <td>Waktu</td>
+        <td>:</td>
+        <td><?php date_default_timezone_set('Asia/Jakarta'); echo Date('Y-m-d H:i:s'); ?></td>
+    </tr>
+    <tr>
+        <td>Nama Kasir</td>
+        <td>:</td>
+        <td><?php echo $infousr['Auth']['User']['nama_admin'];?></td>
+    </tr>
+</table>
+<br>
+<div class="widget-header block-header clearfix">
+    <button class="btn btn-success" id="tambah">Tambah Item</button> 
+    <!--<button class="btn btn-success" id="reload">Reload</button>--> 
+</div>
+<div id="showtambah"></div>
+<br>
+<br>
+ <?php // echo $this->Form->create('Bahanbakuses',array('class' => 'form-horizontal j-forms')); ?>   
+<div class="row">
+    <table class="table data-tbl">
+        <thead>
+            <tr>
+                <th>Kategori</th>
+                <th>Nama</th>
+                <th>Qty</th>
+                <th>Harga</th>
+                <th>Subtotal</th>
+                <th class="actions" style="display: none;"><?php echo __('Actions'); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($bakus as $baku): ?>
+                <tr>
+                    <td><?php echo h($baku['categories']['kategori']); ?>&nbsp;</td>
+                    <td><?php echo h($baku['products']['nama_produk']); ?>&nbsp;</td>
+                    <td><?php echo h($baku['detail_penjualans']['qty']); ?>&nbsp;</td>
+                    <td><?php echo h($baku['detail_penjualans']['harga']); ?>&nbsp;</td>
+                    <td><?php echo h($baku['0']['subtotal']); ?>&nbsp;</td>
+
+                    <td class="actions" style="display: none;">
+                        <?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'fa fa-edit')) . "", array('action' => 'edit', $baku['detail_penjualans']['id']), array('title' => 'edit', 'escape' => false, 'class' => 'btn btn-primary btn-xs')); ?> 
+                        <?php echo $this->Form->postLink(__('<i class="fa fa-trash-o"></i>'), array('action' => 'delete', $baku['detail_penjualans']['id']), array('title' => 'hapus', 'escape' => false, 'class' => 'btn btn-danger btn-xs'), __('Are you sure you want to delete # %s?', $baku['detail_penjualans']['id'])); ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+    </table>
+    <div class="form-group">
+        <label class="col-md-8 control-label">Total</label>
+        <div class=" col-md-4">
+            <?php // echo $this->Form->input('total', array('class' => 'form-control', 'label' => false,'value'=>$totals)); ?>
+            <input type="text" name='total' id='totaldepan' value="<?php echo $totals[0][0]['total'];?>" >
+            <!--<div id="PenjualanTotal"></div>-->
+        </div>
+<!--        <span class="input-group-btn">
+            <button type="button" class="btn btn-success" id="hit">Hitung</button>
+        </span>-->
+    </div>
+    <div class="form-group">
+        <label class="col-md-8 control-label">Discount</label>
+        <div class=" col-md-4">
+            <input type="text" class="form-control" id="discount" name="discount" value="<?php echo $disc[0]['detail_penjualans']['disc'];?>" onkeyup="sum();">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-8 control-label">Hidden Discount</label>
+        <div class=" col-md-4">
+            <input type="text" class="form-control" id="hiddendiscount" name="hiddendiscount" value="<?php echo $disc[0]['detail_penjualans']['hidden_disc'];?>" onkeyup="sum();">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-8 control-label">Total All</label>
+        <div class=" col-md-4">
+            <input type="text" class="form-control" id="totalall" name="totalall">
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="form-footer" align="right">
+        <?php 
+            $total = $totals[0][0]['total'];
+            $disco = $disc[0]['detail_penjualans']['disc'];
+            $totalAll = $total - $disco;
+            $paid = $bayars[0]['bayars']['bayar'];
+            $keterangan = $bayars[0]['bayars']['ket'];
+
+            if($paid < $totalAll){
+                echo "<a href='#' onClick='configurator(this)' title='lihat' id='". $id ."'  class='btn btn-info btn-xs'>Bayar</a>";
+            }else{
+                echo "<p class='btn btn-info btn-xs'>Sudah lunas.</p>";
+            }
+        ?>
+    </div>
+    
+    <?php // echo $this->Form->end(); ?>
+</div>
+<br>
+<br>
+<script type="text/javascript">
+function configurator(clicked) {
+var $$e=jQuery.noConflict();
+                var id = clicked.id;
+         bootbox.dialog({
+        title: "Input Pembayaran",
+        message: '<table class="table">' +
+            '<tr><td>Total</td><td>:</td><td><?php echo $total;?></td></tr>' +
+            '<tr><td>Discount</td><td>:</td><td><?php echo $disco;?></td></tr>'+
+            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['detail_penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalAll-$dis2-$paid;?></td></tr><tr><td>Pembayaran</td><td>:</td><td><?php echo $paid;?></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td><?php echo $totalAll - $paid;?></td></tr><tr></table>'+
+            '<form class="form-horizontal"> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Metode Pembayaran</label> ' +
+            '<div class="col-md-8"> ' +
+             '<select name="type" id="tipebayar" class="form-control">'+
+             '<option value="Tunai">Tunai</option><option value="Debit">Debit</option><option value="Kartu Kredit">Kartu Kredit</option></select>'+
+            '</div></div> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Keterangan</label> ' +
+            '<div class="col-md-8"> ' +
+            '<input id="ket" name="ket" type="textarea" placeholder="Keterangan" class="form-control" value="<?php echo $keterangan;?>"> ' +
+            '</div></div> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Bayar</label> ' +
+            '<div class="col-md-8"> ' +
+            '<input id="bayar" name="bayar" type="text" placeholder="Bayar" class="form-control"> ' +
+            '<input id="total" name="total" type="hidden" value="<?php echo $t;?>" placeholder="Bayar" class="form-control"> ' +
+            '<input id="idpenju" name="idpenju" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control"> ' +
+            '</div></div> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-md-4 control-label" for="name">Kurang Bayar</label> ' +
+            '<div class="col-md-8"> ' +
+            '<input id="kbayar" name="kbayar" type="text" placeholder="Kurang Bayar" class="form-control"> ' +
+            '</div></div> ' +
+            '</form><a href="<?php echo $this->webroot;?>" target="_blank">Preview Nota</a>',
+        buttons: {
+          cancel: {
+            label: "Close",
+            className: "btn-danger"
+          },
+                 success: {
+                label: "Save",
+                className: "btn-success",
+                callback: function () {
+//                    var tipe = $('#name').val();
+//                    var tipebayar = $('#tipebayar').val();
+                  $.ajax({
+                 type: "POST",
+                url: "<?php echo $this->webroot; ?>bahanbakuses/bayar/",
+                data: { tipe : $("#tipebayar").val(),ket :$("#ket").val(),bayar :$("#bayar").val(),kbayar :$("#kbayar").val(),idpenju:$("#idpenju").val(),total:$("#total").val() },
+                success: function(html) {
+                alert('Pembayaran Sukses.');	
+                $('#tipebayar').html("");
+                $('#ket').val("");
+                $('#bayar').val("");
+                $('#kbayar').val("");
+                jq("#service_view").html(html);
+                }
+                  });
+                }
+          }      
+        }    });
+}	
+</script>
