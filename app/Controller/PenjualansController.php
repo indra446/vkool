@@ -73,9 +73,45 @@ class PenjualansController extends AppController {
 		$this->params['action'] = 'Rekap Histori';
 		if ($this -> request -> is('post')) {
 			$d=$this->request->data;
-			$tgla=date("Y-m-d",strtotime($d[1]));
-			$tglb=date("Y-m-d",strtotime($d[2]));
-			// debug($tgla);
+			$nota = $d[3];
+			$nama = $d[4];
+
+			if($d[1] == ''){
+				$awal = '';
+				$tgl_awal = '';
+			}else{
+				$tgl_awal = $d[1];
+				$aw=date_create($d[1]);
+				$awal=date_format($aw, 'Y-m-d');
+			}
+
+			if($d[2] == ''){
+				$akhir = '';
+				$tgl_akhir = '';
+			}else{
+				$tgl_akhir = $d[2];
+				$ak=date_create($d[2]);
+				$akhir=date_format($ak, 'Y-m-d');
+			}
+
+			if($nota != '' && $nama != '' && $awal != ''){
+				$where = "AND a.nomor LIKE '%".$nota."%' AND a.nama LIKE '%".$nama."%' AND SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '".$awal."' AND '".$akhir."'";
+			}else if($nota != '' && $nama != '' && $awal == ''){
+				$where = "AND a.nomor LIKE '%".$nota."%' AND a.nama LIKE '%".$nama."%'";
+			}else if($nota != '' && $nama == '' && $awal != ''){
+				$where = "AND a.nomor LIKE '%".$nota."%' AND SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '".$awal."' AND '".$akhir."'";
+			}else if($nota != '' && $nama == '' && $awal == ''){
+				$where = "AND a.nomor LIKE '%".$nota."%'";
+			}else if($nota == '' && $nama != '' && $awal != ''){
+				$where = "AND a.nama LIKE '%".$nama."%' AND SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '".$awal."' AND '".$akhir."'";
+			}else if($nota == '' && $nama != '' && $awal == ''){
+				$where = "AND a.nama LIKE '%".$nama."%'";
+			}else if($nota == '' && $nama == '' && $awal != ''){
+				$where = "AND SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '".$awal."' AND '".$akhir."'";
+			}else if($nota == '' && $nama == '' && $awal == ''){
+				$where = "";
+			}
+			
 			$data = $this -> Penjualan -> query("SELECT * FROM (SELECT
 					penjualans.id,
 					penjualans.nomor,
@@ -92,10 +128,11 @@ class PenjualansController extends AppController {
 					penjualans.nomor,
 					penjualans.created,
 					customers.nama
-					)a WHERE a.bayar=a.total AND a.nomor LIKE '%".$d[3]."%' AND a.nama LIKE '%".$d[4]."%' OR SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '".$tgla."' AND '".$tglb."'");
+					)a WHERE a.bayar=a.total ".$where);
 			$this->set(compact('data'));	
 		}
 	}
+	
 	public function detail($id=null) {
 		$this->params['action'] = 'Detail';
 		if (!$this -> Penjualan -> exists($id)) {

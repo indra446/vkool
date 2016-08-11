@@ -26,9 +26,9 @@
                <label class="col-md-2 control-label">Periode</label>
                <div class="col-md-4">
                   <div class="input-daterange input-group">
-                   <input type="text" class="form-control" name="start" id="start"/>
+                   <input type="text" readonly class="form-control" name="start" id="start"/>
                    <span class="input-group-addon">s/d</span>
-                   <input type="text" class="form-control" name="end" id="end"/>
+                   <input type="text" readonly class="form-control" name="end" id="end"/>
                   </div>
                </div>
        </div>	
