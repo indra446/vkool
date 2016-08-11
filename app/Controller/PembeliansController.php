@@ -156,7 +156,7 @@ class PembeliansController extends AppController {
 				$vendor = explode("-", $this -> request -> data['Pembelian']['vendorid']);
 				$a['Pembelian']['nomor'] = $this -> request -> data['Pembelian']['nomor'];
 				$a['Pembelian']['tgl_transaksi'] = date("Y-m-d", strtotime($this -> request -> data['Pembelian']['tgl']));
-				$a['Pembelian']['vendor_id'] = $vendor[0];
+				$a['Pembelian']['vendor_id'] = $this->request->data['Pembelian']['vendor_id'];
 				$a['Pembelian']['ket'] = $this -> request -> data['Pembelian']['ket'];
 				$a['Pembelian']['product_id'] = $d['id'];
 				$a['Pembelian']['jml'] = $d['jml'];

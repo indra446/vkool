@@ -24,9 +24,12 @@
         <label class="col-md-2 control-label">Vendor</label>
         <div class=" col-md-6">
         	 <div class="widget right-50">
-            <?php echo $this->Form->input('vendorid', array('id'=>'vendor','class' => 'form-control', 'label' => false, 'required' => true)); ?>
+        	 <div id="btn-show">
+            <?php echo $this->Form->input('vendorid', array('id'=>'vendor','class' => 'form-control', 'label' => false, 'required' => true, 'readonly' => true)); ?>
+            </div>
+            <input type="hidden" name="data[Pembelian][vendor_id]" id="vendor_id">
                 <label class="addon adn-50 adn-right" for="vendor">
-                <i class="fa fa-search" id="btn-show"></i>
+                <i class="fa fa-search"></i>
                </label>
                </div>
         </div>
@@ -107,6 +110,8 @@
 	</thead>
 	<tbody>
 	<?php foreach ($vendors as $vendor): ?>
+	<?php if($vendor['Vendor']['aktif'] == 1){
+	?>
 	<tr>
 		<td><?php echo h($vendor['Vendor']['nama_vendor']); ?>&nbsp;</td>
 		<td><?php echo h($vendor['Vendor']['alamat']); ?>&nbsp;</td>
@@ -116,6 +121,9 @@
  		</td>
 
 	</tr>
+	<?php
+	}
+	?>
 <?php endforeach; ?>
 	</tbody>
 	</table>
@@ -137,11 +145,12 @@ $(document).ready(function() {
  $('#add_produk').on('click', function(){
  	 var prod = $("#produk").val();
  	 var jml = parseInt($("#jml").val(), 10);
+ 	 var potitem = parseInt($("#potitem").val(), 10);
  	 var harga = $("#harga").val();
  	 var arr_price = harga.split('.');
  	 harga = parseInt(arr_price.join(''), 10);
  	 console.log(jml);
- 	 if(prod != "" && isNaN(jml) != true && jml > 0 && isNaN(harga) != true && harga > 0){
+ 	 if(prod != "" && isNaN(jml) != true && jml > 0 && isNaN(harga) != true && harga > 0 && isNaN(potitem) != true){
  	 	var request = $.ajax({
 			type: "POST",
 			url: "<?php echo $this->webroot; ?>Pembelians/cart/",
@@ -199,11 +208,13 @@ $(document).ready(function() {
 function config_vendor(clicked) {
 var $$e=jQuery.noConflict();
 		bootbox.hideAll()
-		var id = clicked.id;
-		document.getElementById("vendor").value = id;		
-		// alert(id)
-	
-		// $$e("#liat").html("<div align=center> loading...<br><img src='<?php echo $this->webroot;?>img/ajax-loader.gif' /></div>");  
+		var id = clicked.id;		
+		arr = id.split("-");
+		document.getElementById("vendor_id").value = "";
+		document.getElementById("vendor").value = "";
+		document.getElementById("vendor").value = arr[1];
+		document.getElementById("vendor_id").value = arr[0];
+		console.log(arr);
 																 
 }
 
