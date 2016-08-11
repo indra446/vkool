@@ -117,7 +117,33 @@ class PenjualansController extends AppController {
 				WHERE penjualans.id=$id");
 		$this->set(compact('data'));		
 	}
-
+public function detailpenj($id=null) {
+		if (!$this -> Penjualan -> exists($id)) {
+			// throw new NotFoundException(__('Invalid penjualan'));
+			$this -> Session -> setFlash('Invalid Data', 'error');
+			return $this->redirect(array('action' => 'histori'));
+		}
+		$data=$this->Penjualan->query("SELECT
+				penjualans.nomor,
+				penjualans.created,
+				customers.nama,
+				products.nama_produk,
+				categories.kategori,
+				detail_penjualans.qty,
+				detail_penjualans.harga,
+				detail_penjualans.disc as disc_item,
+				penjualans.disc,
+				penjualans.hidden_disc,
+				penjualans.id
+				FROM
+				penjualans
+				INNER JOIN customers ON penjualans.customer_id = customers.id
+				INNER JOIN detail_penjualans ON penjualans.id = detail_penjualans.penjualan_id
+				INNER JOIN products ON detail_penjualans.id_product = products.id
+				INNER JOIN categories ON products.category_id = categories.id
+				WHERE penjualans.id=$id");
+		$this->set(compact('data'));		
+	}
 	public function cart() {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
@@ -507,8 +533,8 @@ class PenjualansController extends AppController {
 		$customers = $this -> Penjualan -> Customer -> find('list');
 		$merks = $this -> Penjualan -> Merk -> ParentMerk -> find('list', array('fields' => array('id', 'nama'), 'conditions' => array('parent_id' => NULL)));
 		$users = $this -> Penjualan -> User -> find('list');
-		//        $produks = $this->Product->find('list', array('fields' => array('id', 'nama_produk')));
-		//        $produks=$this->Product->find('list', array('fields' => array('rego', 'name'), 'recursive' => -1));
+		$produks = $this->Product->find('list', array('fields' => array('id', 'nama_produk')));
+//                $produks=$this->Product->find('list', array('fields' => array('rego', 'name'), 'recursive' => -1));
 		$this -> set(compact('customers', 'merks', 'users', 'produks', 'user_id', 'ac', 'tot'));
 	}
 
@@ -614,7 +640,7 @@ class PenjualansController extends AppController {
 	public function autoprodukd($t = null) {
 		$this -> layout = 'ajax';
 		@$term = $_GET['term'];
-		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE products.aktif='1'  and nama_produk LIKE '%$term%' ");
+		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE products.aktif='1'  and (category_id='4' and parent_id='1') and nama_produk LIKE '%$term%' ");
 		$this -> set(compact('data'));
 	}
         public function autoproduks($t = null) {
