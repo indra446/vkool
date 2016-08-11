@@ -88,7 +88,7 @@ class RetursController extends AppController {
 				$vendor = explode("-", $this -> request -> data['Retur']['vendorid']);
 				$a['Retur']['noretur'] = $newno;
 				$a['Retur']['tgl_transaksi'] = date("Y-m-d", strtotime($this -> request -> data['Retur']['tgl']));
-				$a['Retur']['vendor_id'] = $vendor[0];
+				$a['Retur']['vendor_id'] = $this->request->data['Retur']['vendor_id'];
 				$a['Retur']['ket'] = $this -> request -> data['Retur']['ket'];
 				$a['Retur']['product_id'] = $d['id'];
 				$a['Retur']['sn'] = $d['sn'];
