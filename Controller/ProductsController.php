@@ -61,6 +61,42 @@ class ProductsController extends AppController {
 	 * @return void
 	 */
 	public function stock() {
+		// $products = $this -> Product -> query("SELECT
+						// products.id,
+						// products.nama_produk,
+						// products.dimensi,
+						// products.tipe,
+						// IF (Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml)) beli,
+						// a.jual,
+						// IF (Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml)) - IF(a.jual IS NULL,0,a.jual) AS sisa,
+						// baku.jmlbaku,
+						// products.satuan
+					// FROM
+						// products
+					// LEFT JOIN pembelians ON pembelians.product_id = products.id
+					// LEFT JOIN (	SELECT
+										// products.id,
+										// products.nama_produk,
+										// products.tipe,
+										// IF(products.tipe != 'Luas',IF (Sum(detail_penjualans.qty) IS NULL,0,Sum(detail_penjualans.qty)),COUNT(bahanbakus.id)) jual,
+										// products.satuan
+										// FROM
+										// products
+										// LEFT JOIN detail_penjualans ON detail_penjualans.id_product = products.id
+										// LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=detail_penjualans.penjualan_id AND bahanbakus.product_id=products.id AND bahanbakus.tipe=1
+										// WHERE flag=1
+										// GROUP BY
+										// products.id
+										// ORDER BY
+										// products.nama_produk ASC) a ON a.id = products.id
+					// LEFT JOIN (SELECT
+										// COUNT(id)jmlbaku,product_id
+										// FROM
+										// bahanbakus
+										// WHERE tipe=2
+										// GROUP BY bahanbakus.product_id) baku ON baku.product_id=products.id
+					// GROUP BY
+					// products.id");
 		$products = $this -> Product -> query("SELECT
 						products.id,
 						products.nama_produk,
@@ -69,7 +105,6 @@ class ProductsController extends AppController {
 						IF (Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml)) beli,
 						a.jual,
 						IF (Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml)) - IF(a.jual IS NULL,0,a.jual) AS sisa,
-						baku.jmlbaku,
 						products.satuan
 					FROM
 						products
@@ -83,18 +118,12 @@ class ProductsController extends AppController {
 										FROM
 										products
 										LEFT JOIN detail_penjualans ON detail_penjualans.id_product = products.id
-										LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=detail_penjualans.penjualan_id AND bahanbakus.product_id=products.id AND bahanbakus.tipe=1
+										LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=detail_penjualans.penjualan_id AND bahanbakus.product_id=products.id
 										WHERE flag=1
 										GROUP BY
 										products.id
 										ORDER BY
 										products.nama_produk ASC) a ON a.id = products.id
-					LEFT JOIN (SELECT
-										COUNT(id)jmlbaku,product_id
-										FROM
-										bahanbakus
-										WHERE tipe=2
-										GROUP BY bahanbakus.product_id) baku ON baku.product_id=products.id
 					GROUP BY
 					products.id");
 		$this -> set(compact('products'));

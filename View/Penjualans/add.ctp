@@ -31,19 +31,19 @@
         minLength: 1,
         });
         $("#samping").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
+        source: "<?php echo $this->webroot; ?>penjualans/autoproduks",
         minLength: 1,
         });
         $("#belakang").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukb",
         minLength: 1,
         });
         $("#aksesoris").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
+        source: "<?php echo $this->webroot; ?>penjualans/autoaksesoris",
         minLength: 1,
         });
         $("#service").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
+        source: "<?php echo $this->webroot; ?>penjualans/autoservice",
         minLength: 1,
         });
         var jq = jQuery.noConflict();
@@ -280,6 +280,11 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false)); ?>
                                     </div>
+<!--                                    <div class="col-md-1 unit">
+                                            <button class="addon-btn adn-50 adn-right" type="button" id="btn-show">
+                                                <i class="fa fa-search"></i>
+                                            </button>                
+                                    </div>-->
                                     <div class="col-xs-1 unit ">
                                         <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','type'=>'number','min'=>'0')); ?>
                                     </div>
@@ -582,7 +587,38 @@ $(document).ready(function() {
         });}
         });
         
-        });
+       
+        
+      $('#btn-show').on('click', function(){
+      var container = $('#modal').clone();
+      container.find('table').attr('id', 'example');
+      container.find('table').attr('class', 'table data-tbl');
+
+      var box = bootbox.dialog({
+        show: false,
+        message: container.html(),
+        title: "Pilih Vendor",
+        buttons: {
+          cancel: {
+            label: "Close",
+            className: "btn-danger"
+          }
+        }
+      });
+      
+      box.on("shown.bs.modal", function() {
+         $('#example').DataTable(); 
+      });
+      
+      box.modal('show'); 
+   });
+});
+function config_vendor(clicked) {
+var $$e=jQuery.noConflict();
+		bootbox.hideAll()
+		var id = clicked.id;
+		document.getElementById("vendor").value = id;																		 
+}
 </script>
 <!--<script>
 $(document).ready(function(){

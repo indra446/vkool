@@ -29,7 +29,7 @@
 		<td><?php echo h($product['products']['nama_produk']); ?>&nbsp;</td>
 		<!-- <td><?php echo h($product[0]['beli']); ?>&nbsp;</td>
 		<td><?php echo h($product['a']['jual']); ?>&nbsp;</td> -->
-		<td align="right"><?php echo number_format($product[0]['sisa']+$product['baku']['jmlbaku'],0,',','.'); ?>&nbsp;</td>
+		<td align="right"><?php echo number_format($product[0]['sisa'],0,',','.'); ?>&nbsp;</td>
 		<!-- <td><?php echo h($product['stoks']['jml']); ?>&nbsp;</td> -->
 		<td><?php echo h($product['products']['satuan']); ?>&nbsp;</td>
 		<td class="actions">

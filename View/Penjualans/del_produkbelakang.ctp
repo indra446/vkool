@@ -35,6 +35,7 @@ function configblk(clicked) {
 	data: { idp : id },
 	success: function(html) {
 	jq("#belakang_view").html(html);
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
 	}
 	});																		 
 }

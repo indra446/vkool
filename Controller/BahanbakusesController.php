@@ -129,7 +129,7 @@ class BahanbakusesController extends AppController {
         karyawans.alamat,
         karyawans.no_ktp,
         categories.kategori,
-        (detail_penjualans.qty*detail_penjualans.harga) AS subtotal,
+        (detail_penjualans.qty*detail_penjualans.harga)-detail_penjualans.disc AS subtotal,
         bayars.bayar
         FROM
         detail_penjualans
@@ -137,21 +137,23 @@ class BahanbakusesController extends AppController {
         LEFT JOIN karyawans ON detail_penjualans.id_karyawan = karyawans.id
         LEFT JOIN categories ON products.category_id = categories.id
         LEFT JOIN bayars ON detail_penjualans.penjualan_id = bayars.id_penjualan
-        where penjualan_id='$id'");
+        where penjualan_id='$id' GROUP BY detail_penjualans.id");
         $bayar=$this->Bahanbakus->query(" SELECT Sum(bayars.bayar) as bayare FROM `bayars` WHERE bayars.id_penjualan='$id' ");
         $nyicil=$this->Bahanbakus->query(" SELECT bayars.bayar,bayars.created, bayars.id FROM `bayars` WHERE bayars.id_penjualan='$id' ");
         $totals = $this->Bahanbakus->query("select sum(s.subtotal) as total from(SELECT
-qty*harga as subtotal,
-detail_penjualans.qty,
-detail_penjualans.harga
-FROM `detail_penjualans`
-where penjualan_id='$id')as s");
+				(qty*harga)-disc as subtotal,
+				detail_penjualans.qty,
+				detail_penjualans.harga
+				FROM `detail_penjualans`
+				where penjualan_id='$id')as s");
         $disc=$this->Bahanbakus->query("SELECT penjualans.disc, penjualans.hidden_disc FROM penjualans WHERE id='$id' limit 1 ");
         $this->set(compact('bakus', 'totals', 'id','disc','bayar','nyicil'));
     }
 
     public function bayar() {
         $tanggal=date("Y-m-d");
+        @$disc=$_POST['disc'];
+        @$hdisc=$_POST['hdisc'];
         @$tipe=$_POST['tipe'];
         @$ket=$_POST['ket'];
         @$bayar=$_POST['bayar'];
@@ -159,7 +161,7 @@ where penjualan_id='$id')as s");
         if($k<0){  $kbayar=explode('-', $k)[1]; }else { $kbyar=$k;}
         @$idpenju=$_POST['idpenju'];
         @$total=$_POST['total'];
-        
+        $this->Bahanbakus->query("update penjualans set disc='".$disc."',hidden_disc='".$hdisc."' where id='".$idpenju."'");
 //        print_r($idpenju);exit;
         $this->Bahanbakus->query("insert into `bayars` (bayar,id_penjualan,kembalian,total,jatuh_tempo,tipe_bayar,ket,created,modified) VALUE('$bayar','$idpenju','$kbayar','$total','','$tipe','$ket','$tanggal','$tanggal');");
 

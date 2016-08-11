@@ -22,8 +22,14 @@
             var bayare = document.getElementById('bayar').value;
             var sisatag = document.getElementById('sisatagihan').value;
             var result = parseInt(sisatag)- parseInt(bayare);
-            if(bayare<0){ alert('Tidak Boleh min');}
+            <?php if(!empty($bayar[0][0]['bayare'])){?>
+            if(bayare<1){ alert('Tidak Boleh Nol'); $(".simpan").hide();}
+            	
+            <?php }else{?>	
+            if(bayare<0){ alert('Tidak Boleh Min');$(".simpan").hide();}
+            <?php }?>
             else {
+            	$(".simpan").show();
             if (!isNaN(result)) {
                 document.getElementById('kbayar').value = result;
             }}
@@ -75,6 +81,7 @@ location.reload();
                 <th>Nama</th>
                 <th>Qty</th>
                 <th>Harga</th>
+                <th>Disc</th>
                 <th>Subtotal</th>
                 <th class="actions"><?php echo __('Actions'); ?></th>
             </tr>
@@ -86,8 +93,9 @@ location.reload();
                     <td><?php echo h($baku['categories']['kategori']); ?>&nbsp;</td>
                     <td><?php echo h($baku['products']['nama_produk']); ?>&nbsp;</td>
                     <td><?php echo h($baku['detail_penjualans']['qty']); ?>&nbsp;</td>
-                    <td><?php echo h($baku['detail_penjualans']['harga']); ?>&nbsp;</td>
-                    <td><?php echo h($baku['0']['subtotal']); ?>&nbsp;</td>
+                    <td align="right"><?php echo number_format($baku['detail_penjualans']['harga'],0,',','.'); ?>&nbsp;</td>
+                    <td align="right"><?php echo number_format($baku['detail_penjualans']['disc'],0,',','.'); ?>&nbsp;</td>
+                    <td align="right"><?php echo number_format($baku['0']['subtotal'],0,',','.'); ?>&nbsp;</td>
 
                     <td class="actions">
                         <?php echo $this->Html->link($this->Html->tag('i', '', array('class' => 'fa fa-edit')) . "", array('controller'=>'detailpenjualans','action' => 'edit', $baku['detail_penjualans']['id'],$id,'ok'), array('title' => 'edit', 'escape' => false, 'class' => 'btn btn-primary btn-xs')); ?> 
@@ -100,7 +108,7 @@ location.reload();
         <label class="col-md-8 control-label">Total</label>
         <div class=" col-md-4">
             <?php // echo $this->Form->input('total', array('class' => 'form-control', 'label' => false,'value'=>$totals)); ?>
-            <input type="text" name='total' id='totaldepan' value="<?php echo $t0=$totals[0][0]['total'];?>" >
+            <input readonly="" type="text" name='total' id='totaldepan' class="form-control" value="<?php $t0=$totals[0][0]['total']; echo $t0;?>" >
             <!--<div id="PenjualanTotal"></div>-->
         </div>
 <!--        <span class="input-group-btn">
@@ -122,7 +130,7 @@ location.reload();
     <div class="form-group">
         <label class="col-md-8 control-label">Total All</label>
         <div class=" col-md-4">
-            <input type="text" class="form-control" id="totalall" name="totalall" value="<?php  echo $t0-$d1-$d2-$b;?>">
+            <input type="text" readonly="" class="form-control" id="totalall" name="totalall" value="<?php  echo $t0-$d1-$d2;?>">
         </div>
     </div>
     <br>
@@ -167,7 +175,7 @@ var $$e=jQuery.noConflict();
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Bayar</label> ' +
             '<div class="col-md-8"> ' +
-            '<input id="bayar" name="bayar" type="number" placeholder="Bayar"  min="0" class="form-control" onkeyup="sumi();"> ' +
+            '<input required="" id="bayar" name="bayar" type="number" placeholder="Bayar"  <?php if(!empty($b)){echo 'min="1"';}else{echo 'min="0"';} ?> class="form-control" onkeyup="sumi();"> ' +
             '<input id="total" name="bayar" type="hidden" value="<?php echo $t;?>" placeholder="Bayar" class="form-control"> ' +
             '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control"> ' +
             '</div></div> ' +
@@ -186,14 +194,18 @@ var $$e=jQuery.noConflict();
           },
                  success: {
                 label: "Save",
-                className: "btn-success",
+                className: "simpan btn-success",
                 callback: function () {
 //                    var tipe = $('#name').val();
 //                    var tipebayar = $('#tipebayar').val();
-                  $.ajax({
-                 type: "POST",
+				if($("#bayar").val()==''){
+					alert("Bayar masih kosong")
+					return false;
+				}else{	
+                $.ajax({
+                type: "POST",
                 url: "<?php echo $this->webroot; ?>bahanbakuses/bayar/",
-                data: { tipe : $("#tipebayar").val(),ket :$("#ket").val(),bayar :$("#bayar").val(),kbayar :$("#kbayar").val(),idpenju:$("#idpenju").val(),total:$("#total").val(),lunas:$("#lunas").val() },
+                data: { disc : $("#discount").val(),hdisc : $("#hiddendiscount").val(),tipe : $("#tipebayar").val(),ket :$("#ket").val(),bayar :$("#bayar").val(),kbayar :$("#kbayar").val(),idpenju:$("#idpenju").val(),total:$("#totalall").val(),lunas:$("#lunas").val() },
                 success: function(html) {
                 alert('Pembayaran Sukses.');	
                 $('#tipebayar').html("");
@@ -203,6 +215,7 @@ var $$e=jQuery.noConflict();
                 jq("#service_view").html(html);
                 }
                   });
+                 }
                 }
           }      
         }    });

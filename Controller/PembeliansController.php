@@ -53,23 +53,24 @@ class PembeliansController extends AppController {
 	public function index() {
 
 		// $this -> Pembelian -> recursive = 0;
-		// $pembelians = $this -> Pembelian -> find('all', array('recursive' => 1, 'group' => 'Pembelian.nomor', 'order' => array('Pembelian.tgl_transaksi')));
-		// $this -> set(compact('pembelians'));
+		$pembelians = $this -> Pembelian -> find('all', array('recursive' => 1, 'group' => 'Pembelian.nomor', 'order' => array('Pembelian.tgl_transaksi')));
+		$this -> set(compact('pembelians'));
 		
         // $this->paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor','Pembelian.id'),'group' => 'Pembelian.nomor', 'joins' => array(array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER','conditions' => array('Vendor.id = Pembelian.vendor_id'))));
 
         // $this->DataTable->mDataProp = true;
         // debug($this -> DataTable -> getResponse());
         // exit ;
-        if ($this->request->is('ajax')) {
-            $this->autoRender = false;
-        $this->paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor','Pembelian.id'),'group' => 'Pembelian.nomor', 'joins' => array(array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER','conditions' => array('Vendor.id = Pembelian.vendor_id'))));
-
-            $this->DataTable->mDataProp = true;
-            echo json_encode($this->DataTable->getResponse());
-            // exit ;
-        }
-	}		// $this -> set('pembelians', $this -> Paginator -> paginate());
+        // if ($this->request->is('ajax')) {
+            // $this->autoRender = false;
+        // $this->paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor','Pembelian.id'),'group' => 'Pembelian.nomor', 'joins' => array(array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER','conditions' => array('Vendor.id = Pembelian.vendor_id'))));
+// 
+            // $this->DataTable->mDataProp = true;
+            // echo json_encode($this->DataTable->getResponse());
+            // // exit ;
+        // }
+        // $this -> set('pembelians', $this -> Paginator -> paginate());
+	}		
 
 
 	public function auto_produk($t = null) {
@@ -231,8 +232,8 @@ class PembeliansController extends AppController {
 			unset($_SESSION["cart_item"]);
 			$this -> Session -> setFlash('Data berhasil disimpan', 'success');
 			// return $this->redirect($this->request->here); 
-			// $this -> redirect(array('action' => 'index'));
-			$this->redirect('http://www.google.com');
+			return $this -> redirect(array('action' => 'index'));
+			// $this->redirect('http://www.google.com');
 			// } else {
 			// $this -> Session -> setFlash(__('The pembelian could not be saved. Please, try again.'));
 			// }
@@ -289,10 +290,11 @@ class PembeliansController extends AppController {
 		// } else {
 		// $this -> Session -> setFlash(__('The pembelian could not be deleted. Please, try again.'));
 		// }
+		// debug($id);die();
 		$this -> Pembelian -> query("DELETE FROM pembelians WHERE nomor='". $id."'");
 		$this -> Session -> setFlash('Data berhasil dihapus', 'success');
-		// return $this -> redirect(array('action' => 'index'));
-					$this->redirect('http://www.google.com');
+		return $this -> redirect(array('action' => 'index'));
+		// $this->redirect('/Pembelians/index');
 		
 	}
 
