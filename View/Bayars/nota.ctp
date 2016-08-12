@@ -54,7 +54,12 @@ $this->layout=false;
 		<td align="right"><?php echo $d['detail_penjualans']['disc_item']?></td>
 		<td align="right"><?php echo number_format(($d['detail_penjualans']['qty']*$d['detail_penjualans']['harga'])-$d['detail_penjualans']['disc_item'],0,',','.')?></td>
 	</tr>
-<?php $total +=($d['detail_penjualans']['qty']*$d['detail_penjualans']['harga'])-$d['detail_penjualans']['disc_item'];}?>	
+<?php 
+$total +=($d['detail_penjualans']['qty']*$d['detail_penjualans']['harga'])-$d['detail_penjualans']['disc_item'];
+}
+$totdiskon=$total-($cek[0]['penjualans']['disc']+$cek[0]['penjualans']['hidden_disc']);
+
+?>	
 
 	<tr>
 		<td>Total</td><td align="right"><?php echo number_format($total,0,',','.')?></td>
@@ -69,12 +74,20 @@ $this->layout=false;
 		<td style="background-color: #ccc">Grand Total</td>
 		<td align="right"><?php echo number_format($total-($cek[0]['penjualans']['disc']),0,',','.')?></td>
 		<td style="background-color: #ccc">Sudah Bayar</td>
+		<?php if($sudahbayar >= $totdiskon){?>
+		<td align="right"><?php echo number_format($total-($cek[0]['penjualans']['disc']),0,',','.');?></td>
+		<?php }else{?>
 		<td align="right"><?php echo number_format($sudahbayar,0,',','.');?></td>
+		<?php }?>	
 	</tr>
 	<tr>
 		<td style="background-color: #ccc">Bayar</td>
 		<td align="right"><?php echo number_format($d['bayars']['bayar'],0,',','.')?></td>
 		<td style="background-color: #ccc"><?php if($sudahbayar < ($total-$cek[0]['penjualans']['disc'])) { echo "Kurang Bayar";}else{echo "Uang Kembali";}?></td>
+		<?php if($sudahbayar >= $totdiskon){?>
+		<td align="right">0</td>
+		<?php }else{?>
 		<td align="right"><?php echo str_replace("-", "", number_format(($total-($cek[0]['penjualans']['disc']))-$sudahbayar,0,',','.'));?></td>
+		<?php }?>
 	</tr>
 </table>

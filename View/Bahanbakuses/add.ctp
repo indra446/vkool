@@ -61,7 +61,7 @@
             <tr>
                 <th>Nama Produk</th>
                 <th>Dimensi</th>
-                <th>Luas/Jumlah</th>
+                <th>Luas</th>
                 <th class="actions">Aksi</th>
             </tr>
         </thead>
@@ -78,7 +78,7 @@
 					 $dimensi = explode(",", $prod['products']['dimensi']);
 						echo $dimensi[0] . " x " . $dimensi[1] . " mm";
                                                 } ?>&nbsp;</td>
-					<td><?php  echo $prod['0']['sisa'];  ?></td>
+					<td><?php  echo ($dimensi[0] * $dimensi[1])."mm";  ?></td>
                     <td class="actions">
                         <input value="pilih" class="btn btn-info  btn-xs" type="button" onClick="configurator<?php echo $id?>(this)" id="<?php echo $prod[0]['id'] . "," . $prod['products']['nama_produk']; ?>"/>
                         

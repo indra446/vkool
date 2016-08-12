@@ -54,6 +54,7 @@ class PenjualansController extends AppController {
 				penjualans
 				INNER JOIN customers ON penjualans.customer_id = customers.id
 				INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
+				INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
 				GROUP BY
 				penjualans.id,
 				penjualans.nomor,
@@ -63,6 +64,7 @@ class PenjualansController extends AppController {
 		$this->set(compact('data'));	
 
 	}
+
 
 	public function rekaphistori() {
 		if ($this -> request -> is('post')) {
@@ -81,6 +83,7 @@ class PenjualansController extends AppController {
 					penjualans
 					INNER JOIN customers ON penjualans.customer_id = customers.id
 					INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
+					INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
 					GROUP BY
 					penjualans.id,
 					penjualans.nomor,
@@ -148,7 +151,7 @@ public function detailpenj($id=null) {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"],));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])-$_POST["diskon"],'diskon' => $_POST["diskon"],));
 
 		if (!empty($_SESSION["cart_depan"])) {
 			$arr = array();
@@ -164,8 +167,9 @@ public function detailpenj($id=null) {
 						$_SESSION["cart_depan"][$k]["nama"] = $data[0]['products']['nama_produk'];
 						$_SESSION["cart_depan"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_depan"][$k]["harga"] = $_POST["harga"];
-						$_SESSION["cart_depan"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
-						$_SESSION["cart_depan"][$k]["diskon"] = $_POST["diskon"];
+                                                $_SESSION["cart_depan"][$k]["diskon"] = $_POST["diskon"];
+						$_SESSION["cart_depan"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"])-$_POST["diskon"];
+						
 
 					}
 				}
@@ -181,7 +185,7 @@ public function detailpenj($id=null) {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
+		@$itemArraysamping = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])-$_POST["diskon"],'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_samping"])) {
 			$arr = array();
@@ -197,15 +201,16 @@ public function detailpenj($id=null) {
 						$_SESSION["cart_samping"][$k]["nama"] = $data[0]['products']['nama_produk'];
 						$_SESSION["cart_samping"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_samping"][$k]["harga"] = $_POST["harga"];
-						$_SESSION["cart_samping"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
-						$_SESSION["cart_samping"][$k]["diskon"] = $_POST["diskon"];
+                                                $_SESSION["cart_samping"][$k]["diskon"] = $_POST["diskon"];
+						$_SESSION["cart_samping"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"])-$_POST["diskon"];
+						
 
 					}
 				}
 			} else
-				$_SESSION["cart_samping"] = array_merge($_SESSION["cart_samping"], $itemArray);
+				$_SESSION["cart_samping"] = array_merge($_SESSION["cart_samping"], $itemArraysamping);
 		} else
-			$_SESSION["cart_samping"] = $itemArray;
+			$_SESSION["cart_samping"] = $itemArraysamping;
 
 		$this -> set(compact('data', 'post'));
 	}
@@ -214,7 +219,7 @@ public function detailpenj($id=null) {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])-$_POST["diskon"],'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_belakang"])) {
 			$arr = array();
@@ -230,8 +235,9 @@ public function detailpenj($id=null) {
 						$_SESSION["cart_belakang"][$k]["nama"] = $data[0]['products']['nama_produk'];
 						$_SESSION["cart_belakang"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_belakang"][$k]["harga"] = $_POST["harga"];
-						$_SESSION["cart_belakang"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
-						$_SESSION["cart_belakang"][$k]["diskon"] = $_POST['diskon'];
+                        $_SESSION["cart_belakang"][$k]["diskon"] = $_POST['diskon'];
+						$_SESSION["cart_belakang"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"])-$_POST['diskon'];
+						
 
 					}
 				}
@@ -247,7 +253,7 @@ public function detailpenj($id=null) {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])-$_POST["diskon"],'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_aksesoris"])) {
 			$arr = array();
@@ -263,8 +269,9 @@ public function detailpenj($id=null) {
 						$_SESSION["cart_aksesoris"][$k]["nama"] = $data[0]['products']['nama_produk'];
 						$_SESSION["cart_aksesoris"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_aksesoris"][$k]["harga"] = $_POST["harga"];
-						$_SESSION["cart_aksesoris"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
-						$_SESSION["cart_aksesoris"][$k]["diskon"] = $_POST["diskon"];
+                                                $_SESSION["cart_aksesoris"][$k]["diskon"] = $_POST["diskon"];
+						$_SESSION["cart_aksesoris"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"])-$_POST["diskon"];
+						
 
 					}
 				}
@@ -280,7 +287,7 @@ public function detailpenj($id=null) {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]),'diskon' => $_POST["diskon"]));
+		@$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"])-$_POST["diskon"],'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_service"])) {
 			$arr = array();
@@ -296,8 +303,9 @@ public function detailpenj($id=null) {
 						$_SESSION["cart_service"][$k]["nama"] = $data[0]['products']['nama_produk'];
 						$_SESSION["cart_service"][$k]["jml"] = $_POST["jml"];
 						$_SESSION["cart_service"][$k]["harga"] = $_POST["harga"];
-						$_SESSION["cart_service"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"]);
-						$_SESSION["cart_service"][$k]["diskon"] = $_POST["diskon"];
+                                                $_SESSION["cart_service"][$k]["diskon"] = $_POST["diskon"];
+						$_SESSION["cart_service"][$k]["subtotal"] = ($_POST["harga"] * $_POST["jml"])- $_POST["diskon"];
+						
 
 					}
 				}
@@ -321,33 +329,34 @@ public function detailpenj($id=null) {
 
 	public function del_produksamping() {
 		if (!empty($_SESSION["cart_samping"])) {
+                    
 			unset($_SESSION["cart_samping"][$_POST["idp"]]);
-			if (empty($_POST["idp"]))
-				unset($_SESSION["cart_samping"]);
+		} elseif (empty($_POST["idp"])) {
+			unset($_SESSION["cart_samping"]);
 		}
 	}
 
 	public function del_produkbelakang() {
 		if (!empty($_SESSION["cart_belakang"])) {
 			unset($_SESSION["cart_belakang"][$_POST["idp"]]);
-			if (empty($_POST["idp"]))
-				unset($_SESSION["cart_belakang"]);
+		} elseif (empty($_POST["idp"])) {
+			unset($_SESSION["cart_belakang"]);
 		}
 	}
 
 	public function del_produkaksesoris() {
 		if (!empty($_SESSION["cart_aksesoris"])) {
 			unset($_SESSION["cart_aksesoris"][$_POST["idp"]]);
-			if (empty($_POST["idp"]))
-				unset($_SESSION["cart_aksesoris"]);
+		} elseif (empty($_POST["idp"])) {
+			unset($_SESSION["cart_aksesoris"]);
 		}
 	}
 
 	public function del_produkservice() {
 		if (!empty($_SESSION["cart_service"])) {
 			unset($_SESSION["cart_service"][$_POST["idp"]]);
-			if (empty($_POST["idp"]))
-				unset($_SESSION["cart_service"]);
+		} elseif (empty($_POST["idp"])) {
+			unset($_SESSION["cart_service"]);
 		}
 	}
 
@@ -523,9 +532,11 @@ public function detailpenj($id=null) {
 					}
 				}
 				unset($_SESSION["cart_service"]);
-				$this -> Session -> setFlash('Data berhasil disimpan', 'success');
-				//                return $this->redirect(array('action' => 'bahanbaku'));
-				echo "<script> window.location='../bahanbakuses/add/$lastin/ok';</script>";
+//				$this -> Session -> setFlash('Data berhasil disimpan', 'success');
+                                $this -> Session -> setFlash(__('Data berhasil disimpan'));
+//                                   return $this->redirect(array('action' => 'printorder/'.$lastin,array('target'=>'_blank')));
+				 echo "<script> window.open('../penjualans/printorder/$lastin');</script>";
+                                 
 			} else {
 				$this -> Session -> setFlash(__('The penjualan could not be saved. Please, try again.'));
 			}
@@ -533,7 +544,7 @@ public function detailpenj($id=null) {
 		$customers = $this -> Penjualan -> Customer -> find('list');
 		$merks = $this -> Penjualan -> Merk -> ParentMerk -> find('list', array('fields' => array('id', 'nama'), 'conditions' => array('parent_id' => NULL)));
 		$users = $this -> Penjualan -> User -> find('list');
-		$produks = $this->Product->find('list', array('fields' => array('id', 'nama_produk')));
+//		$produks = $this->Product->find('list', array('fields' => array('id', 'nama_produk')));
 //                $produks=$this->Product->find('list', array('fields' => array('rego', 'name'), 'recursive' => -1));
 		$this -> set(compact('customers', 'merks', 'users', 'produks', 'user_id', 'ac', 'tot'));
 	}
@@ -640,7 +651,7 @@ public function detailpenj($id=null) {
 	public function autoprodukd($t = null) {
 		$this -> layout = 'ajax';
 		@$term = $_GET['term'];
-		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE products.aktif='1'  and (category_id='4' and parent_id='1') and nama_produk LIKE '%$term%' ");
+		$data = $this -> Penjualan -> query("SELECT * FROM `products` INNER JOIN categories ON products.category_id = categories.id WHERE products.aktif='1'  and nama_produk LIKE '%$term%' ");
 		$this -> set(compact('data'));
 	}
         public function autoproduks($t = null) {
@@ -669,5 +680,49 @@ public function detailpenj($id=null) {
 		$data = $this -> Penjualan -> query("SELECT * FROM `products` WHERE products.aktif='1'and category_id='3' and nama_produk LIKE '%$term%' ");
 		$this -> set(compact('data'));
 	}
+        public function printorder($id=null){
+            if (!$this -> Penjualan -> exists($id)) {
+			throw new NotFoundException(__('Invalid penjualan'));
+		}
+            $data = $this -> Penjualan -> query("SELECT
+            penjualans.nomor,
+            penjualans.noorder,
+            penjualans.customer_id,
+            penjualans.merk_id,
+            penjualans.model_id,
+            penjualans.thn,
+            penjualans.nopol,
+            penjualans.nomesin,
+            penjualans.norangka,
+            penjualans.user_id,
+            penjualans.disc,
+            penjualans.hidden_disc,
+            penjualans.created,
+            penjualans.modified,
+            products.nama_produk,
+            categories.kategori,
+            merks.nama,
+            customers.nama,
+            customers.alamat,
+            customers.telp,
+            customers.hp,
+            bahanbakus.id_teknisi,
+            karyawans.nama,
+            bahanbakus.created
+            FROM
+            penjualans
+            INNER JOIN detail_penjualans ON detail_penjualans.penjualan_id = penjualans.id
+            INNER JOIN products ON detail_penjualans.id_product = products.id
+            INNER JOIN categories ON products.category_id = categories.id
+            INNER JOIN merks ON penjualans.merk_id = merks.id
+            INNER JOIN customers ON penjualans.customer_id = customers.id
+            LEFT JOIN bahanbakus ON bahanbakus.penjualan_id = detail_penjualans.penjualan_id
+            LEFT JOIN karyawans ON karyawans.id = bahanbakus.id_teknisi
+            WHERE
+            detail_penjualans.penjualan_id = '$id'
+            GROUP BY
+            detail_penjualans.id ");
+            $this->set(compact('data'));
+        }
 
 }

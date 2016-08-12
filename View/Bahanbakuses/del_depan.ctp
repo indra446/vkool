@@ -33,7 +33,7 @@ function configurator(clicked) {
 	url: "<?php echo $this -> webroot; ?>bahanbakuses/del_depan/",
 	data: { idp : id },
 	success: function(html) {
-	jq("#tampil_depan").html(html);
+	jq("#tampilsemua").html(html);
 	}
 	});																		 
 }

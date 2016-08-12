@@ -1,5 +1,11 @@
 <style>
-    .message {color: blue;}
+    .message {
+            color: white;
+    border: 1px solid gray;
+    margin-left: -5px;
+    margin-right: 231px;
+    background-color: #d43a36;
+    }
 </style>
 <div class="widget-header block-header margin-bottom-0 clearfix">
     <div class="pull-left">
@@ -31,19 +37,19 @@
         minLength: 1,
         });
         $("#samping").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoproduks",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         $("#belakang").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoprodukb",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         $("#aksesoris").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoaksesoris",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         $("#service").autocomplete({
-        source: "<?php echo $this->webroot; ?>penjualans/autoservice",
+        source: "<?php echo $this->webroot; ?>penjualans/autoprodukd",
         minLength: 1,
         });
         var jq = jQuery.noConflict();
@@ -421,7 +427,7 @@ var $$e=jQuery.noConflict();
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Sales</label>
                                     <div class=" col-md-8">
-                                        <?php echo $this->Form->input('id_karyawan', array('class' => 'form-control', 'label' => false)); ?>
+                                        <?php echo $this->Form->input('id_karyawan', array('required'=>true,'class' => 'form-control', 'label' => false)); ?>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -442,7 +448,7 @@ var $$e=jQuery.noConflict();
                         <!--<input type="submit" class="btn btn-xs primary-btn multi-submit-btn" name="add" value="Preview Work Order">-->
                         <button type="button" class="btn btn-warning btn-xs multi-submit-btn" id="printe">print</button>
                          <?php echo $this->Form->button('Simpan', array('type' => 'submit', 'class' => 'btn btn-primary multi-submit-btn')); ?>
-                        <button type="button" class="btn btn-primary primary-btn multi-next-btn">Selanjutnya</button>
+                        <!-- <button type="button" class="btn btn-primary primary-btn multi-next-btn">Selanjutnya</button> -->
                         <button type="button" class="btn btn-info secondary-btn multi-prev-btn">Back</button>
                     </div>
                     <!-- end /.footer -->

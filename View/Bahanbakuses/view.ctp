@@ -4,6 +4,7 @@
     </div>
 </div>
 <br>
+<?php //print_r($bayar[0][0]['bayare']);?>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script>
 <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script>
 <script>
@@ -15,6 +16,19 @@
             if (!isNaN(result)) {
                 document.getElementById('totalall').value = result;
             }
+//        $.ajax({
+//        type: "POST",
+//        url: "<?php // echo $this->webroot; ?>bahanbakuses/updatedisc/<?php // echo$id;?>",
+//        data: { idp : $("#discount").val(),jml :$("#hiddendiscount").val()},
+//         success: function(html) {
+//        $('#PenjualanIdProduct').val("");
+//        $('#PenjualanQty').val("");
+//        $('#PenjualanHarga').val("");
+//        $('#PenjualanDisc').val("");
+//        jq("#isi_cart").html(html);
+//       
+//        }
+//        });
         }
 </script>
 <script>
@@ -22,7 +36,7 @@
             var bayare = document.getElementById('bayar').value;
             var sisatag = document.getElementById('sisatagihan').value;
             var result = parseInt(sisatag)- parseInt(bayare);
-            <?php if(!empty($bayar[0][0]['bayare'])){?>
+            <?php if($bayar[0][0]['bayare'] !=Null && $bayar[0][0]['bayare']<1){?>
             if(bayare<1){ alert('Tidak Boleh Nol'); $(".simpan").hide();}
             	
             <?php }else{?>	
@@ -32,6 +46,7 @@
             	$(".simpan").show();
             if (!isNaN(result)) {
                 document.getElementById('kbayar').value = result;
+               
             }}
         }
 </script>
@@ -47,9 +62,14 @@ location.reload();
 </script>
 <table style="width: 28%;">
     <tr>
+        <td>Nomer Nota</td>
+        <td>:</td>
+        <td><?php echo $bakus[0]['penjualans']['nomor']; ?></td>
+    </tr>
+    <tr>
         <td>Nomer Order</td>
         <td>:</td>
-        <td><?php echo $id;?></td>
+        <td><?php echo $bakus[0]['penjualans']['noorder']; ?></td>
     </tr>
     <tr>
         <td>Waktu</td>
@@ -130,7 +150,8 @@ location.reload();
     <div class="form-group">
         <label class="col-md-8 control-label">Total All</label>
         <div class=" col-md-4">
-            <input type="text" readonly="" class="form-control" id="totalall" name="totalall" value="<?php  echo $t0-$d1-$d2;?>">
+        	<input type="hidden" value="<?php echo $bayaro=$bayar[0][0]['bayare'];?>" id="sdbyr">
+            <input type="text" readonly="" class="form-control" id="totalall" name="totalall" value="<?php  echo $totall=$t0-$d1-$d2;?>">
         </div>
     </div>
     <br>
@@ -138,28 +159,52 @@ location.reload();
     <div class="form-footer" align="right">
         <?php // echo $this->Form->button('Bayar', array('type' => 'submit', 'class' => 'btn btn-primary','style'=>'margin: 10px 16px 0px 0px;')); ?>
         <!--<button class="btn btn-primary" class="bayar" style="margin: 10px 16px 0px 0px;">Bayar</button>-->
-         <a onClick="configurator(this)" href="#" title="lihat"  class="btn btn-info btn-xs" id="<?php echo $id; ?>"><i class="fa fa-folder-open"></i>Bayar</a>
+         <?php if($bayaro<$totall){?><a onClick="configurator(this)" href="#" title="lihat"  class="btn btn-info btn-xs" id="<?php echo $id; ?>"><i class="fa fa-folder-open" ></i>Bayar</a><?php }?>
     </div>
     
     <?php // echo $this->Form->end(); ?>
 </div>
+<!--<script>
+ $(document).ready(function() {
+ $('#<?php // echo $id; ?>').on('click', function(){
+        $.ajax({
+        type: "POST",
+        url: "<?php // echo $this->webroot; ?>bahanbakuses/updatedisc/<?php echo$id;?>",
+        data: { idp : $("#discount").val(),jml :$("#hiddendiscount").val()},
+        success: function(html) {
+        $('#PenjualanIdProduct').val("");
+        $('#PenjualanQty').val("");
+        $('#PenjualanHarga').val("");
+        $('#PenjualanDisc').val("");
+        jq("#isi_cart").html(html);
+       
+        }
+        });
+        });   
+        });
+</script>-->
 <br>
 <br>
 <script type="text/javascript">
 function configurator(clicked) {
 var $$e=jQuery.noConflict();
-                var id = clicked.id;
+var disc=$$e("#discount").val();
+var hdisc=$$e("#hiddendiscount").val();
+var tot=$$e("#totalall").val();
+var sd=$$e("#sdbyr").val();
+var totsd=tot-sd;
+var id = clicked.id;
          bootbox.dialog({
         title: "Input Pembayaran",
-        message:'<table class="table"><tr><td><p>Riwayat Pembayaran <a class="btn btn-success btn-sm" href="<?php echo $this->webroot;?>bayars/riwayat/<?php echo$id; ?>">Detail</a></p><br>'+
+        message:'<table class="table"><tr><td><p>Riwayat Pembayaran <a class="btn btn-success btn-sm" href="<?php echo $this->webroot;?>bayars/riwayat/<?php echo $id; ?>">Detail</a></p><br>'+
             '<table class="table table-striped"><tr><th style="width: 95px;">Tanggal</th><th>Jumlah Bayar</th></tr>'+
          <?php foreach ($nyicil as $ny):?> '<tr><td><?php echo substr($ny['bayars']['created'],0,10); ?></td><td><?php echo $ny['bayars']['bayar'];?></td></tr>'+ <?php endforeach;?>
             '</table>'+    
             '</td><td>'+ 
             '<table class="table">' +
-            '<tr><td>Total</td><td>:</td><td><?php echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
-            '<tr><td>Discount</td><td>:</td><td><?php echo $dis1=$disc[0]['penjualans']['disc'];?></td></tr>'+
-            ' <tr><td>Hidden Discount</td><td>:</td><td><?php echo $dis2=$disc[0]['penjualans']['hidden_disc'];?></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php echo $t=$totalnya-$dis1-$dis2;?></td></tr><tr><td>Pembayaran</td><td>:</td><td><?php echo $b;?></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="<?php echo $totalnya-$dis1-$dis2-$b;?>" onkeyup="sumi();"></td></tr><tr></table>'+
+            '<tr><td>Total</td><td>:</td><td><?php //echo $_POST['idp'];?><?php //echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
+            '<tr><td>Discount</td><td>:</td><td><input id="discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+disc+' class="form-control" readonly></td></tr>'+
+            ' <tr><td>Hidden Discount</td><td>:</td><td> <input id="hid_discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+hdisc+' class="form-control" readonly></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php //echo $t=$totalnya-$dis1-$dis2;?>'+tot+'</td></tr><tr><td>Pembayaran</td><td>:</td><td><?php echo $b;?></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="'+totsd+'" onkeyup="sumi();"></td></tr><tr></table>'+
             '<form class="form-horizontal j-forms" action="#" id="j-forms-validation" method="post" accept-charset="utf-8"> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Metode Pembayaran</label> ' +
@@ -175,8 +220,8 @@ var $$e=jQuery.noConflict();
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Bayar</label> ' +
             '<div class="col-md-8"> ' +
-            '<input required="" id="bayar" name="bayar" type="number" placeholder="Bayar"  <?php if(!empty($b)){echo 'min="1"';}else{echo 'min="0"';} ?> class="form-control" onkeyup="sumi();"> ' +
-            '<input id="total" name="bayar" type="hidden" value="<?php echo $t;?>" placeholder="Bayar" class="form-control"> ' +
+            '<input required="" id="bayar" name="bayar" type="number" placeholder="Bayar"  <?php //if(!empty($b)){echo 'min="1"';}else{echo 'min="0"';} ?> class="form-control" onkeyup="sumi();"> ' +
+            '<input id="total" name="bayar" type="hidden" value="'+tot+'" placeholder="Bayar" class="form-control"> ' +
             '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control"> ' +
             '</div></div> ' +
             '<div class="form-group"> ' +
@@ -205,9 +250,13 @@ var $$e=jQuery.noConflict();
                 $.ajax({
                 type: "POST",
                 url: "<?php echo $this->webroot; ?>bahanbakuses/bayar/",
-                data: { disc : $("#discount").val(),hdisc : $("#hiddendiscount").val(),tipe : $("#tipebayar").val(),ket :$("#ket").val(),bayar :$("#bayar").val(),kbayar :$("#kbayar").val(),idpenju:$("#idpenju").val(),total:$("#totalall").val(),lunas:$("#lunas").val() },
+                data: { disc : $("#discone").val(),hdisc : $("#hid_discone").val(),tipe : $("#tipebayar").val(),ket :$("#ket").val(),bayar :$("#bayar").val(),kbayar :$("#kbayar").val(),idpenju:$("#idpenju").val(),total:$("#totalall").val() },
                 success: function(html) {
-                alert('Pembayaran Sukses.');	
+                alert('Pembayaran Sukses.');
+                location.reload();	
+                window.open('<?php echo $this->webroot;?>Bayars/printnota/'+<?php echo $id;?>,'_blank');
+//                window.focus();
+//                window.print();
                 $('#tipebayar').html("");
                 $('#ket').html("");
                 $('#bayar').html("");
