@@ -252,4 +252,70 @@ class BayarsController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+            public function printnota($id=null) {
+                $this->layout="ajax";
+              $idbayar=$this->Bayar->query(" SELECT bayars.id_penjualan, bayars.id, bayars.created FROM `bayars` where id_penjualan='$id' ORDER BY id desc limit 1 "); 
+//              print_r($idbayar);
+              $idby=$idbayar[0]['bayars']['id'];
+    	      $cek=$this->Bayar->query("SELECT
+			penjualans.nomor,penjualans.id,
+			penjualans.noorder,
+			penjualans.created,
+			merks.nama AS merk,
+			customers.nama AS nmplg,
+			customers.alamat,
+			customers.telp,
+			customers.hp,
+			bayars.tipe_bayar,
+			model.nama AS model,
+			penjualans.nomesin,
+			penjualans.norangka,
+			penjualans.nopol,
+			bayars.jatuh_tempo,IF(bayars.kembalian IS NULL,0,bayars.kembalian)kembalian,
+			detail_penjualans.id_product,
+			products.nama_produk,
+			categories.kategori,
+			detail_penjualans.harga,penjualans.hidden_disc,penjualans.disc,
+			detail_penjualans.disc as disc_item,
+			bayars.bayar,
+			bayars.total,detail_penjualans.qty,b.bayar
+			FROM
+			bayars
+			INNER JOIN penjualans ON bayars.id_penjualan = penjualans.id
+			INNER JOIN customers ON penjualans.customer_id = customers.id
+			INNER JOIN merks ON penjualans.merk_id = merks.id
+			INNER JOIN merks AS model ON penjualans.model_id = model.id
+			INNER JOIN detail_penjualans ON detail_penjualans.penjualan_id = penjualans.id
+			INNER JOIN products ON detail_penjualans.id_product = products.id
+			INNER JOIN categories ON products.category_id = categories.id
+                        LEFT JOIN(SELECT
+                        bayars.id,
+                        bayars.id_penjualan,
+                        sum(bayars.bayar) as bayar
+                        FROM `bayars`
+                        WHERE id_penjualan='$id') as b on b.id_penjualan=bayars.id_penjualan
+                                                WHERE
+                                                bayars.id ='$idby'");
+//                  print_r($cek);
+                  $a=$cek[0]['penjualans']['id'];
+//                  print_r($a);
+                  
+		$sudahbayar=$this->Bayar->query("SELECT
+			sum(bayar)bayar
+			FROM
+			bayars
+			INNER JOIN penjualans ON bayars.id_penjualan = penjualans.id
+			WHERE
+			bayars.id_penjualan = '$id' AND bayars.id <= $idby
+			GROUP BY
+			bayars.id_penjualan");
+//                print_r($sudahbayar);
+		if(!empty($sudahbayar)){
+			$sudahbayar=$sudahbayar[0][0]['bayar'];
+		}else{
+			$sudahbayar=0;
+		}	
+		$this->set(compact('cek','sudahbayar'));
+
+	}
 }

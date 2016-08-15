@@ -149,16 +149,16 @@ var $$e=jQuery.noConflict();
                         <div id="diprin">
                         <fieldset >
                             <!-- start name -->
-                            <div class="unit">
+<!--                            <div class="unit">
                                 <label class="label">Nomor Nota</label>
                                 <div class="input">
                                     <label class="icon-right" for="name">
                                         <i class="fa fa-bars"></i>
                                     </label>
-                                    <input type="text" id="nota" name="data[Penjualan][nomor]" value="<?php echo $nonota;?>"  readonly class="form-control">
-                                    <input type="hidden" id="nota" name="data[Penjualan][noorder]" value="<?php echo $order;?>"  readonly class="form-control">
+                                    <input type="text" id="nota" name="data[Penjualan][nomor]" value="<?php // echo $nonota;?>"  readonly class="form-control">
+                                    <input type="hidden" id="nota" name="data[Penjualan][noorder]" value="<?php // echo $order;?>"  readonly class="form-control">
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="unit">
                                 <label class="label">Nama Pelanggan</label>
                                 <div class="input">
@@ -408,13 +408,13 @@ var $$e=jQuery.noConflict();
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Discount</label>
                                     <div class=" col-md-4">
-                                        <input type="text" class="form-control" id="discount" name="data[Penjualan][disc]"  onkeyup="sum();">
+                                        <input type="number" class="form-control" id="discount" name="data[Penjualan][disc]"  onkeyup="sum();">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-8 control-label">Hidden Discount</label>
                                     <div class=" col-md-4">
-                                        <input type="text" class="form-control" id="hiddendiscount" name="data[Penjualan][hidden_disc]"  onkeyup="sum();">
+                                        <input type="number" class="form-control" id="hiddendiscount" name="data[Penjualan][hidden_disc]"  onkeyup="sum();">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -427,7 +427,7 @@ var $$e=jQuery.noConflict();
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Sales</label>
                                     <div class=" col-md-8">
-                                        <?php echo $this->Form->input('id_karyawan', array('required'=>true,'class' => 'form-control', 'label' => false)); ?>
+                                        <?php echo $this->Form->input('id_karyawan', array('class' => 'form-control', 'label' => false)); ?>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -446,9 +446,9 @@ var $$e=jQuery.noConflict();
 
                     <div class="form-footer block-form-footer">
                         <!--<input type="submit" class="btn btn-xs primary-btn multi-submit-btn" name="add" value="Preview Work Order">-->
-                        <button type="button" class="btn btn-warning btn-xs multi-submit-btn" id="printe">print</button>
+                        <!--<button type="button" class="btn btn-warning btn-xs multi-submit-btn" id="printe">print</button>-->
                          <?php echo $this->Form->button('Simpan', array('type' => 'submit', 'class' => 'btn btn-primary multi-submit-btn')); ?>
-                        <!-- <button type="button" class="btn btn-primary primary-btn multi-next-btn">Selanjutnya</button> -->
+                        <button type="button" class="btn btn-primary primary-btn multi-next-btn">Selanjutnya</button>
                         <button type="button" class="btn btn-info secondary-btn multi-prev-btn">Back</button>
                     </div>
                     <!-- end /.footer -->
@@ -459,7 +459,7 @@ var $$e=jQuery.noConflict();
         </div>
     </div>
 </div>
-<div id="modal"  style="display:none">
+<!--<div id="modal"  style="display:none">
 <table>
 	<thead>
 	<tr>
@@ -470,21 +470,21 @@ var $$e=jQuery.noConflict();
 	</tr>
 	</thead>
 	<tbody>
-	<?php foreach ($produks as $produk): ?>
+	<?php // foreach ($produks as $produk): ?>
 	<tr>
-		<td><?php echo h($produk['Product']['id']); ?>&nbsp;</td>
-		<td><?php echo h($produk['Product']['nama_produk']); ?>&nbsp;</td>
-		<td><?php echo h($produk['Product']['category_id']); ?>&nbsp;</td>
+		<td><?php // echo h($produk['Product']['id']); ?>&nbsp;</td>
+		<td><?php // echo h($produk['Product']['nama_produk']); ?>&nbsp;</td>
+		<td><?php // echo h($produk['Product']['category_id']); ?>&nbsp;</td>
 		<td class="actions">
 			<input value="pilih" class="btn btn-info  btn-xs" type="button" onClick="configurator(this)" id="<?php echo h($produk['Product']['id'])."-".h($produk['Product']['nama_produk']); ?>"/>
-			<!-- <input type="radio" name="pilih" id="<?php echo h($produk['Product']['id']); ?>" value="<?php echo h($produk['Product']['id']); ?>"></label> -->
+			 <input type="radio" name="pilih" id="<?php // echo h($produk['Product']['id']); ?>" value="<?php echo h($produk['Product']['id']); ?>"></label> 
  		</td>
 
 	</tr>
-<?php endforeach; ?>
+<?php // endforeach; ?>
 	</tbody>
 	</table>
-</div>
+</div>-->
 <script type="text/javascript">
 $(document).ready(function() {
  $('#add_produk').on('click', function(){
@@ -595,36 +595,36 @@ $(document).ready(function() {
         
        
         
-      $('#btn-show').on('click', function(){
-      var container = $('#modal').clone();
-      container.find('table').attr('id', 'example');
-      container.find('table').attr('class', 'table data-tbl');
-
-      var box = bootbox.dialog({
-        show: false,
-        message: container.html(),
-        title: "Pilih Vendor",
-        buttons: {
-          cancel: {
-            label: "Close",
-            className: "btn-danger"
-          }
-        }
-      });
-      
-      box.on("shown.bs.modal", function() {
-         $('#example').DataTable(); 
-      });
-      
-      box.modal('show'); 
-   });
+//      $('#btn-show').on('click', function(){
+//      var container = $('#modal').clone();
+//      container.find('table').attr('id', 'example');
+//      container.find('table').attr('class', 'table data-tbl');
+//
+//      var box = bootbox.dialog({
+//        show: false,
+//        message: container.html(),
+//        title: "Pilih Vendor",
+//        buttons: {
+//          cancel: {
+//            label: "Close",
+//            className: "btn-danger"
+//          }
+//        }
+//      });
+//      
+//      box.on("shown.bs.modal", function() {
+//         $('#example').DataTable(); 
+//      });
+//      
+//      box.modal('show'); 
+//   });
 });
-function config_vendor(clicked) {
-var $$e=jQuery.noConflict();
-		bootbox.hideAll()
-		var id = clicked.id;
-		document.getElementById("vendor").value = id;																		 
-}
+//function config_vendor(clicked) {
+//var $$e=jQuery.noConflict();
+//		bootbox.hideAll()
+//		var id = clicked.id;
+//		document.getElementById("vendor").value = id;																		 
+//}
 </script>
 <!--<script>
 $(document).ready(function(){

@@ -61,51 +61,15 @@
                         <a href="<?php echo $this->webroot;?>bahanbakuses/view/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Bayar</a>
                         <a id="<?php echo $id; ?>" onClick="configurator(this)" href="#myModal" role="button" class="btn btn-xs btn-warning" data-toggle="modal" title="detail penjualan">Detail</a>
 
-                        <?php // echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-chevron-circle-right')) . " Detail", array( 'action' => 'detail', $id), array('title'=>'edit','escape' => false,'class'=>'btn btn-warning btn-xs')); ?> 
-                        <?php // echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-chevron-circle-right')) . " Detail", array( 'action' => 'detail', $id), array('title'=>'edit','escape' => false,'class'=>'btn btn-warning btn-xs')); ?> 
-                             <?php
-                        // echo $this->Js->link("Detail", "/bahanbakuses/popdetail/" .$id, array('update' => '#view',
-                            // 'htmlAttributes' => array(
-                                // 'data-toggle' => 'modal',
-                                // 'data-target' => '#viewModal' . $id,
-                                // 'class' => 'btn btn-warning btn-xs'
-                        // )));
-                        ?>
-                        <!----modal edit-->
-                        <!-- <div class="modal fade" id="viewModal<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div> -->
+   
                         <?php }else{?>
                         <a href="<?php echo $this->webroot;?>bahanbakuses/add/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Input Bahan Baku</a>
-                        <a href="<?php echo $this->webroot;?>bahanbakuses/view/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Bayar</a>
+                         <?php if($bahanbakus['bayar']['total']<=$bahanbakus['bayar']['totbayar']){?>
+                        <a href="#" class="btn btn-danger btn-xs">Sudah Bayar</a>
+                                                        <?php } else {?>  <a href="<?php echo $this->webroot;?>bahanbakuses/view/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Bayar</a><?php } ?>
                                                 <a id="<?php echo $id; ?>" onClick="configurator(this)" href="#myModal" role="button" class="btn btn-xs btn-warning" data-toggle="modal" title="detail penjualan">Detail</a>
 
-                        <?php
-                        // echo $this->Js->link("Detail", "/bahanbakuses/popdetail/" .$id, array('update' => '#view',
-                            // 'htmlAttributes' => array(
-                                // 'data-toggle' => 'modal',
-                                // 'data-target' => '#viewModal' . $id,
-                                // 'class' => 'btn btn-warning btn-xs'
-                        // )));
-                        ?>
-                        <!----modal edit-->
-                        <!-- <div class="modal fade" id="viewModal<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div> -->
+                   
                         <?php } ?>
                     </td>
                 </tr>
@@ -113,7 +77,6 @@
         </tbody>
     </table>
 </div>
-<script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script>
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

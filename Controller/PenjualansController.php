@@ -9,13 +9,14 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class PenjualansController extends AppController {
+	public $helpers = array('Js');
 
 	/**
 	 * Components
 	 *
 	 * @var array
 	 */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'DataTable');
     public function ceklunas($id=null) {
     	$cek=$this->Penjualan->query("SELECT
 			Sum(bayars.bayar)-bayars.total as tagihan
@@ -32,11 +33,39 @@ class PenjualansController extends AppController {
 	 * @return void
 	 */
 	public function index() {
-		$this -> Penjualan -> recursive = 0;
-		$this -> set('penjualans', $this -> Paginator -> paginate());
+		// $this -> Penjualan -> recursive = 0;
+		// $this -> set('penjualans', $this -> Paginator -> paginate());
+		if ($this -> request -> is('ajax')) {
+			$this -> autoRender = false;
+			$this -> paginate = array('fields' => array('Penjualan.nomor', 'Cus.nama', 'Merk.nama','Penjualan.thn', 'Penjualan.nopol','Penjualan.nomesin','Penjualan.norangka','Penjualan.id'),'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')),array('table' => 'merks', 'alias' => 'Merk', 'type' => 'INNER', 'conditions' => array('Merk.id = Penjualan.merk_id'))));
 
+			$this -> DataTable -> mDataProp = true;
+			echo json_encode($this -> DataTable -> getResponse());
+			// exit ;
+		}
 	}
-
+	/**
+	 * view method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function isidel($id = null) {
+		// debug(base64_decode($id));
+		$datajual = $this -> Penjualan -> find('first', array('recursive' => 1, 'conditions' => array('Penjualan.id' => $id)));
+		if (empty($datajual)) {
+			throw new NotFoundException(__('Invalid Penjualan'));
+		}
+		// $tgl = $this -> konversi_tanggal("d M Y", $data[0]['Pembelian']['tgl_transaksi']);
+		// debug($tgl);
+		$this -> set(compact('datajual', 'tgl'));
+		// debug($data);
+		// $options = array('conditions' => array('Pembelian.' . $this -> Pembelian -> primaryKey => $id));
+		// $this -> set('pembelian', $this -> Pembelian -> find('first', $options));
+	}
+		public function hapus($id = null) {
+		}
 	/**
 	 * index method
 	 *
@@ -421,11 +450,13 @@ public function detailpenj($id=null) {
 	}
 
 	public function add() {
+                unset($_SESSION["cart_depan"]);unset($_SESSION["cart_samping"]);unset($_SESSION["cart_belakang"]);unset($_SESSION["cart_aksesoris"]);unset($_SESSION["cart_service"]);
 		$user_id = $this -> Session -> read("Auth.User.id");
 		$this -> loadModel('DetailPenjualan');
 		$this -> loadModel('Customer');
 		$this -> loadModel('Product');
 		$nonota = $this -> createnomor();
+                
 		$order = $this -> createorder();
 		$this -> set(compact('nonota','order'));
 		if ($this -> request -> is('post')) {
@@ -444,94 +475,41 @@ public function detailpenj($id=null) {
 
 			}
 			$this -> Penjualan -> create();
-			if ($this -> Penjualan -> save($this -> request['data'])) {
+                        $datap['Penjualan']['nomor']=$nonota;
+                        $datap['Penjualan']['noorder']=$order;
+                        $datap['Penjualan']['merk_id']=$zn['Penjualan']['merk_id'];
+                        $datap['Penjualan']['model_id']=$zn['Penjualan']['model_id'];
+                        $datap['Penjualan']['thn']=$zn['Penjualan']['thn'];
+                        $datap['Penjualan']['nopol']=$zn['Penjualan']['nopol'];
+                        $datap['Penjualan']['nomesin']=$zn['Penjualan']['nomesin'];
+                        $datap['Penjualan']['norangka']=$zn['Penjualan']['norangka'];
+                        $datap['Penjualan']['disc']=$zn['Penjualan']['disc'];
+                        $datap['Penjualan']['hidden_disc']=$zn['Penjualan']['hidden_disc'];
+                        $datap['Penjualan']['user_id']=$zn['Penjualan']['user_id'];
+			if ($this -> Penjualan -> save($datap,false)) {
 				$lastc = $this -> Customer -> getLastInsertID();
 				$lastin = $this -> Penjualan -> getLastInsertID();
+                                
 				if (!empty($plg)) {
 					$this -> Penjualan -> query("update penjualans set customer_id='$id_c' where id='$lastin'");
 				} else {
 					$this -> Penjualan -> query("update penjualans set customer_id='$lastc' where id='$lastin'");
 				}
-				if (!empty($_SESSION['cart_depan'])) {
-					foreach ($_SESSION['cart_depan'] as $d) {
-						$reqdata = $this -> request['data'];
-						$data['DetailPenjualan']['penjualan_id'] = $lastin;
-						@$data['DetailPenjualan']['id_product'] = $d['id'];
-						@$data['DetailPenjualan']['qty'] = $d['jml'];
-						@$data['DetailPenjualan']['harga'] = $d['harga'];
-						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $d['diskon'];
-						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
-						//                print_r($data);exit;
-						$this -> DetailPenjualan -> create();
-						$this -> DetailPenjualan -> save($data, false);
-					}
+                                $count = count($zn['DetailPenjualan']['id_product']) - 1;
+				for ($i = 0; $i <= $count; $i++) {
+                                    $data['DetailPenjualan']['penjualan_id'] = $lastin;
+                                    @$data['DetailPenjualan']['id_product'] = $zn['DetailPenjualan']['id_product'][$i];
+                                    @$data['DetailPenjualan']['qty'] = $zn['DetailPenjualan']['qty'][$i];
+                                    @$data['DetailPenjualan']['harga'] = $zn['DetailPenjualan']['harga'][$i];
+                                    @$data['DetailPenjualan']['id_karyawan'] = explode("-", $zn['Penjualan']['id_karyawan'])['1'];
+                                    @$data['DetailPenjualan']['disc'] = $zn['DetailPenjualan']['disc'][$i];
+                                    @$data['DetailPenjualan']['ket'] = $zn['Penjualan']['ket'];
+//                                                    print_r($data);exit;
+                                    $this -> DetailPenjualan -> create();
+                                    $this -> DetailPenjualan -> save($data, false);
 				}
-				unset($_SESSION["cart_depan"]);
-				if (!empty($_SESSION['cart_samping'])) {
-					foreach ($_SESSION['cart_samping'] as $s) {
-						$reqdata = $this -> request['data'];
-						$data['DetailPenjualan']['penjualan_id'] = $lastin;
-						@$data['DetailPenjualan']['id_product'] = $s['id'];
-						@$data['DetailPenjualan']['qty'] = $s['jml'];
-						@$data['DetailPenjualan']['harga'] = $s['harga'];
-						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $d['diskon'];
-						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
-						//                print_r($data);exit;
-						$this -> DetailPenjualan -> create();
-						$this -> DetailPenjualan -> save($data, false);
-					}
-				}
-				unset($_SESSION["cart_samping"]);
-				if (!empty($_SESSION['cart_belakang'])) {
-					foreach ($_SESSION['cart_belakang'] as $b) {
-						$reqdata = $this -> request['data'];
-						$data['DetailPenjualan']['penjualan_id'] = $lastin;
-						@$data['DetailPenjualan']['id_product'] = $b['id'];
-						@$data['DetailPenjualan']['qty'] = $b['jml'];
-						@$data['DetailPenjualan']['harga'] = $b['harga'];
-						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] =$d['diskon'];
-						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
-						//                  print_r($data);exit;
-						$this -> DetailPenjualan -> create();
-						$this -> DetailPenjualan -> save($data, false);
-					}
-				}
-				unset($_SESSION["cart_belakang"]);
-				if (!empty($_SESSION['cart_aksesoris'])) {
-					foreach ($_SESSION['cart_aksesoris'] as $a) {
-						$reqdata = $this -> request['data'];
-						$data['DetailPenjualan']['penjualan_id'] = $lastin;
-						@$data['DetailPenjualan']['id_product'] = $a['id'];
-						@$data['DetailPenjualan']['qty'] = $a['jml'];
-						@$data['DetailPenjualan']['harga'] = $a['harga'];
-						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $d['diskon'];
-						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
-						//                  print_r($data);exit;
-						$this -> DetailPenjualan -> create();
-						$this -> DetailPenjualan -> save($data, false);
-					}
-				}
-				unset($_SESSION["cart_aksesoris"]);
-				if (!empty($_SESSION['cart_service'])) {
-					foreach ($_SESSION['cart_service'] as $sc) {
-						$reqdata = $this -> request['data'];
-						$data['DetailPenjualan']['penjualan_id'] = $lastin;
-						@$data['DetailPenjualan']['id_product'] = $sc['id'];
-						@$data['DetailPenjualan']['qty'] = $sc['jml'];
-						@$data['DetailPenjualan']['harga'] = $sc['harga'];
-						@$data['DetailPenjualan']['id_karyawan'] = explode("-", $reqdata['Penjualan']['id_karyawan'])['1'];
-						@$data['DetailPenjualan']['disc'] = $d['diskon'];
-						@$data['DetailPenjualan']['ket'] = $reqdata['Penjualan']['ket'];
-						//                  print_r($data);exit;
-						$this -> DetailPenjualan -> create();
-						$this -> DetailPenjualan -> save($data, false);
-					}
-				}
-				unset($_SESSION["cart_service"]);
+				unset($_SESSION["cart_depan"]);unset($_SESSION["cart_samping"]);unset($_SESSION["cart_belakang"]);unset($_SESSION["cart_aksesoris"]);unset($_SESSION["cart_service"]);
+			
 //				$this -> Session -> setFlash('Data berhasil disimpan', 'success');
                                 $this -> Session -> setFlash(__('Data berhasil disimpan'));
 //                                   return $this->redirect(array('action' => 'printorder/'.$lastin,array('target'=>'_blank')));

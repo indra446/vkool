@@ -159,7 +159,7 @@ location.reload();
     <div class="form-footer" align="right">
         <?php // echo $this->Form->button('Bayar', array('type' => 'submit', 'class' => 'btn btn-primary','style'=>'margin: 10px 16px 0px 0px;')); ?>
         <!--<button class="btn btn-primary" class="bayar" style="margin: 10px 16px 0px 0px;">Bayar</button>-->
-         <?php if($bayaro<$totall){?><a onClick="configurator(this)" href="#" title="lihat"  class="btn btn-info btn-xs" id="<?php echo $id; ?>"><i class="fa fa-folder-open" ></i>Bayar</a><?php }?>
+         <?php // if($bayaro<$totall){?><a onClick="configurator(this)" href="#" title="lihat"  class="btn btn-info btn-xs" id="<?php echo $id; ?>"><i class="fa fa-folder-open" ></i>Bayar</a><?php // }?>
     </div>
     
     <?php // echo $this->Form->end(); ?>
@@ -202,7 +202,7 @@ var id = clicked.id;
             '</table>'+    
             '</td><td>'+ 
             '<table class="table">' +
-            '<tr><td>Total</td><td>:</td><td><?php //echo $_POST['idp'];?><?php //echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
+            '<tr><td>Total</td><td>:</td><td><?php echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
             '<tr><td>Discount</td><td>:</td><td><input id="discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+disc+' class="form-control" readonly></td></tr>'+
             ' <tr><td>Hidden Discount</td><td>:</td><td> <input id="hid_discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+hdisc+' class="form-control" readonly></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php //echo $t=$totalnya-$dis1-$dis2;?>'+tot+'</td></tr><tr><td>Pembayaran</td><td>:</td><td><?php echo $b;?></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="'+totsd+'" onkeyup="sumi();"></td></tr><tr></table>'+
             '<form class="form-horizontal j-forms" action="#" id="j-forms-validation" method="post" accept-charset="utf-8"> ' +
