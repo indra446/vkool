@@ -280,14 +280,15 @@ var $$e=jQuery.noConflict();
                                 
                                 <div class="w-section-header">
                                     <!--<h2>Depan</h2>-->
-                                </div>
+                                </div>                            <input type="hidden" value="<?php echo rand();?>" id="norandom">
+
                                 <div class="form-group">
                                     <label class="col-md-2 control-label"><h3>Depan</h3></label>
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false)); ?>
                                     </div>
 <!--                                    <div class="col-md-1 unit">
-                                            <button class="addon-btn adn-50 adn-right" type="button" id="btn-show">
+                                        <button class="addon-btn adn-50 adn-right" style="height: 38px;width: 38px;margin-left: -26px;" type="button" id="btn-show-depan">
                                                 <i class="fa fa-search"></i>
                                             </button>                
                                     </div>-->
@@ -313,6 +314,11 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'samping')); ?>
                                     </div>
+<!--                                    <div class="col-md-1 unit">
+                                        <button class="addon-btn adn-50 adn-right" style="height: 38px;width: 38px;margin-left: -26px;" type="button" id="btn-show-samping">
+                                                <i class="fa fa-search"></i>
+                                            </button>                
+                                    </div>-->
                                     <div class="col-xs-1 unit ">
                                         <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtysamping','type'=>'number','min'=>'0')); ?>
                                     </div>
@@ -335,6 +341,11 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'belakang')); ?>
                                     </div>
+<!--                                    <div class="col-md-1 unit">
+                                        <button class="addon-btn adn-50 adn-right" style="height: 38px;width: 38px;margin-left: -26px;" type="button" id="btn-show-belakang">
+                                                <i class="fa fa-search"></i>
+                                            </button>                
+                                    </div>-->
                                     <div class="col-xs-1 unit ">
                                         <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtybelakang','type'=>'number','min'=>'0')); ?>
                                     </div>
@@ -357,6 +368,11 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'aksesoris')); ?>
                                     </div>
+<!--                                    <div class="col-md-1 unit">
+                                        <button class="addon-btn adn-50 adn-right" style="height: 38px;width: 38px;margin-left: -26px;" type="button" id="btn-show-aksesoris">
+                                                <i class="fa fa-search"></i>
+                                            </button>                
+                                    </div>-->
                                     <div class="col-xs-1 unit ">
                                         <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtyaksesoris','type'=>'number','min'=>'0')); ?>
                                     </div>
@@ -379,6 +395,11 @@ var $$e=jQuery.noConflict();
                                     <div class=" col-md-4 unit">
                                         <?php  echo $this->Form->input('id_product',array('class' => 'form-control', 'label' => false,'id'=>'service')); ?>
                                     </div>
+<!--                                    <div class="col-md-1 unit">
+                                        <button class="addon-btn adn-50 adn-right" style="height: 38px;width: 38px;margin-left: -26px;" type="button" id="btn-show-service">
+                                                <i class="fa fa-search"></i>
+                                            </button>                
+                                    </div>-->
                                     <div class="col-xs-1 unit ">
                                         <?php echo $this->Form->input('qty', array('style' => 'width:139%;margin-left:-12px;', 'div' => false, 'class' => 'form-control', 'label' => false,  'placeholder' => 'qty','id'=>'qtyservice','type'=>'number','min'=>'0')); ?>
                                     </div>
@@ -459,56 +480,69 @@ var $$e=jQuery.noConflict();
         </div>
     </div>
 </div>
-<!--<div id="modal"  style="display:none">
-<table>
+<?php // $kategori=array('depan','samping','belakang','aksesoris','service');
+//
+// foreach ($kategori as $kat){
+////     print_r($kat);
+//?>
+
+<!--<div id="modal//<?php echo $kat;?>"  style="display:none">
+    <table class="table data-tbl">
 	<thead>
 	<tr>
 			<th>ID Produk</th>
 			<th>Nama Produk</th>
 			<th>Kategori</th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
+			<th class="actions">//<?php echo __('Actions'); ?></th>
 	</tr>
 	</thead>
 	<tbody>
-	<?php // foreach ($produks as $produk): ?>
+	//<?php  foreach ($produks as $produk){ ?>
 	<tr>
-		<td><?php // echo h($produk['Product']['id']); ?>&nbsp;</td>
-		<td><?php // echo h($produk['Product']['nama_produk']); ?>&nbsp;</td>
-		<td><?php // echo h($produk['Product']['category_id']); ?>&nbsp;</td>
+		<td>//<?php echo $id=$produk['Product']['id']; ?>&nbsp;</td>
+		<td>//<?php echo $produk['Product']['nama_produk']; ?>&nbsp;</td>
+		<td>//<?php echo $produk['Category']['kategori']; ?>&nbsp;</td>
 		<td class="actions">
-			<input value="pilih" class="btn btn-info  btn-xs" type="button" onClick="configurator(this)" id="<?php echo h($produk['Product']['id'])."-".h($produk['Product']['nama_produk']); ?>"/>
-			 <input type="radio" name="pilih" id="<?php // echo h($produk['Product']['id']); ?>" value="<?php echo h($produk['Product']['id']); ?>"></label> 
+			<input value="pilih" class="btn btn-info  btn-xs" type="button" onClick="configurator//<?php echo $id;?>(this)" id="<?php echo $produk['Product']['id']."-".$produk['Product']['nama_produk']; ?>"/>
  		</td>
 
 	</tr>
-<?php // endforeach; ?>
+        //<?php } ?>
 	</tbody>
 	</table>
 </div>-->
+<?php //  } ?>
+<?php
+//echo $this->Html->css(array('jquery.dataTables.min'));
+//echo $this->Html->script(array('lib/jquery.dataTables'));
+?>
 <script type="text/javascript">
 $(document).ready(function() {
  $('#add_produk').on('click', function(){
          var prod=$("#PenjualanIdProduct").val();
+         var norandom = $("#norandom").val();
          if(prod==""){
          alert("Produk masih kosong");
       return false;
          }else{
+        	// alert(norandom);
         $.ajax({
         type: "POST",
-        url: "<?php echo $this->webroot; ?>Penjualans/cart/",
-        data: { idp : $("#PenjualanIdProduct").val(),jml :$("#PenjualanQty").val(),harga :$("#PenjualanHarga").val(),diskon :$("#PenjualanDisc").val() },
+        url: "<?php echo $this->webroot; ?>Penjualans/cart/"+norandom,
+        data: {norandom:norandom ,idp : $("#PenjualanIdProduct").val(),jml :$("#PenjualanQty").val(),harga :$("#PenjualanHarga").val(),diskon :$("#PenjualanDisc").val() },
         success: function(html) {
         $('#PenjualanIdProduct').val("");
         $('#PenjualanQty').val("");
         $('#PenjualanHarga').val("");
         $('#PenjualanDisc').val("");
         jq("#isi_cart").html(html);
-        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot/'+norandom);
         }
         });}
         });
         
          $('#add_samping').on('click', function(){
+     	 var norandom = $("#norandom").val();
          var prod=$("#samping").val();
          if(prod==""){
          alert("Produk masih kosong");
@@ -516,20 +550,21 @@ $(document).ready(function() {
          }else{
         $.ajax({
         type: "POST",
-        url: "<?php echo $this->webroot; ?>Penjualans/samping/",
-        data: { idp : $("#samping").val(),jml :$("#qtysamping").val(),harga :$("#hargasamping").val(),diskon :$("#discsamping").val() },
+        url: "<?php echo $this->webroot; ?>Penjualans/samping/"+norandom,
+        data: { norandom:norandom ,idp : $("#samping").val(),jml :$("#qtysamping").val(),harga :$("#hargasamping").val(),diskon :$("#discsamping").val() },
         success: function(html) {
         $('#samping').val("");
         $('#qtysamping').val("");
         $('#hargasamping').val("");
         $('#discsamping').val("");
         jq("#samping_view").html(html);
-        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot/'+norandom);
         }
         });}
         });
         //belakang//
           $('#add_belakang').on('click', function(){
+         var norandom = $("#norandom").val();
          var prod=$("#belakang").val();
          if(prod==""){
          alert("Produk masih kosong");
@@ -537,20 +572,21 @@ $(document).ready(function() {
          }else{
         $.ajax({
         type: "POST",
-        url: "<?php echo $this->webroot; ?>Penjualans/belakang/",
-        data: { idp : $("#belakang").val(),jml :$("#qtybelakang").val(),harga :$("#hargabelakang").val(),diskon :$("#discbelakang").val() },
+        url: "<?php echo $this->webroot; ?>Penjualans/belakang/"+norandom,
+        data: { norandom:norandom ,idp : $("#belakang").val(),jml :$("#qtybelakang").val(),harga :$("#hargabelakang").val(),diskon :$("#discbelakang").val() },
         success: function(html) {
         $('#belakang').val("");
         $('#qtybelakang').val("");
         $('#hargabelakang').val("");
         $('#discbelakang').val("");
         jq("#belakang_view").html(html);
-        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot/'+norandom);
         }
         });}
         });
         //aksesoris//
           $('#add_aksesoris').on('click', function(){
+         var norandom = $("#norandom").val();
          var prod=$("#aksesoris").val();
          if(prod==""){
          alert("Produk masih kosong");
@@ -558,20 +594,21 @@ $(document).ready(function() {
          }else{
         $.ajax({
         type: "POST",
-        url: "<?php echo $this->webroot; ?>Penjualans/aksesoris/",
-        data: { idp : $("#aksesoris").val(),jml :$("#qtyaksesoris").val(),harga :$("#hargaaksesoris").val(),diskon :$("#discaksesoris").val() },
+        url: "<?php echo $this->webroot; ?>Penjualans/aksesoris/"+norandom,
+        data: { norandom:norandom ,idp : $("#aksesoris").val(),jml :$("#qtyaksesoris").val(),harga :$("#hargaaksesoris").val(),diskon :$("#discaksesoris").val() },
         success: function(html) {
         $('#aksesoris').val("");
         $('#qtyaksesoris').val("");
         $('#hargaaksesoris').val("");
         $('#discaksesoris').val("");
         jq("#aksesoris_view").html(html);
-        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot/'+norandom);
         }
         });}
         });
         //service//
             $('#add_service').on('click', function(){
+         var norandom = $("#norandom").val();
          var prod=$("#service").val();
          if(prod==""){
          alert("Produk masih kosong");
@@ -579,24 +616,24 @@ $(document).ready(function() {
          }else{
         $.ajax({
         type: "POST",
-        url: "<?php echo $this->webroot; ?>Penjualans/service/",
-        data: { idp : $("#service").val(),jml :$("#qtyservice").val(),harga :$("#hargaservice").val(),diskon :$("#discservice").val() },
+        url: "<?php echo $this->webroot; ?>Penjualans/service/"+norandom,
+        data: { norandom:norandom ,idp : $("#service").val(),jml :$("#qtyservice").val(),harga :$("#hargaservice").val(),diskon :$("#discservice").val() },
         success: function(html) {
         $('#service').val("");
         $('#qtyservice').val("");
         $('#hargaservice').val("");
         $('#discservice').val("");
         jq("#service_view").html(html);
-        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot');
+        $("#PenjualanTotal").load('<?php echo $this->webroot; ?>Penjualans/jumlahtot/'+norandom);
         }
         
         });}
         });
         
        
-        
-//      $('#btn-show').on('click', function(){
-//      var container = $('#modal').clone();
+      <?php // foreach ($kategori as $value) { ?>
+//      $('#btn-show-<?php // echo $value;?>').on('click', function(){
+//      var container = $('#modal<?php // echo $value;?>').clone();
 //      container.find('table').attr('id', 'example');
 //      container.find('table').attr('class', 'table data-tbl');
 //
@@ -618,6 +655,7 @@ $(document).ready(function() {
 //      
 //      box.modal('show'); 
 //   });
+   <?php // } ?>
 });
 //function config_vendor(clicked) {
 //var $$e=jQuery.noConflict();

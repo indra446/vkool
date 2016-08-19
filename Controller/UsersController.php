@@ -45,12 +45,18 @@ class UsersController extends AppController {
 	}
 
 	public function logout() {
-		$this -> Session -> setFlash('Good-Bye', 'info');
-		$this -> redirect($this -> Auth -> logout());
-		//Leave empty for now.
-	}
+            $this->Session->destroy();
+            $this->Session->setFlash('Good-Bye', 'info');
+            $this->redirect($this->Auth->logout());
+            unset($_SESSION["cart_depan"]);
+            unset($_SESSION["cart_samping"]);
+            unset($_SESSION["cart_belakang"]);
+            unset($_SESSION["cart_aksesoris"]);
+            unset($_SESSION["cart_service"]);
+        //Leave empty for now.
+    }
 
-	/**
+    /**
 	 * view method
 	 *
 	 * @throws NotFoundException

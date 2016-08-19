@@ -8,10 +8,7 @@ $this -> layout = false;
 		<tr>
 			<th>ID Produk</th>
 			<th>Nama</th>
-			<th>Serial Number</th>
-			<th>Dimensi</th>
-			<th>Luas</th>
-			<th>Luar Retur</th>
+			<th>Jml Retur</th>
 			<th>Hapus</th>
 		</tr>
 	</thead>
@@ -23,17 +20,17 @@ $x=0;
 foreach($_SESSION["cart_retur"] as $k => $item){
 	if($item['id']!=NULL){
 		
-	if($item['dimensi']!=NULL){
-		$dimensi=explode(",",$item['dimensi']);
-		$d=$dimensi[0]." x ".$dimensi[1]." mm";
-		$luas=$dimensi[0]*$dimensi[1]." mm2";
-	}else{
-		$d="";
-		$luas="";
-	}	
-	echo "<tr><td>".$item['id']."</td><td>".$item['nama']."</td>
-	<td>".$item['sn']."</td><td>".$d."</td><td>".$luas."</td><td>".$item['luas']." mm2</td>
-	<td><button type='button' class='btn btn-xs btn-danger' id='".$item['id']."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
+	// if($item['dimensi']!=NULL){
+		// $dimensi=explode(",",$item['dimensi']);
+		// $d=$dimensi[0]." x ".$dimensi[1]." mm";
+		// $luas=$dimensi[0]*$dimensi[1]." mm2";
+	// }else{
+		// $d="";
+		// $luas="";
+	// }	
+	echo "<tr><td>".$item['id']."<input type='hidden' name='data[Retur][product_id][]' value='$item[id]'></td><td>".$item['nama']."</td>
+	<td>".$item['jml']."<input type='hidden' name='data[Retur][qty][]' value='$item[jml]'><input type='hidden' name='data[Retur][idbaku][]' value='$item[idbaku]'></td>
+	<td><button type='button' class='btn btn-xs btn-danger' id='".$k."' onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td></tr>"; 
 	}
 	$x++;
 	}

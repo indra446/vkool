@@ -16,7 +16,9 @@ class BahanbakusesController extends AppController {
 	 *
 	 * @var array
 	 */
-	public $components = array('Paginator', 'Session');
+	public $components = array('Paginator', 'Session', 'DataTable');
+	public function success() {
+	}
 
 	/**
 	 * index method
@@ -80,11 +82,19 @@ class BahanbakusesController extends AppController {
             customers.nama,
             penjualans.id,penjualans.nomor,
             penjualans.created,
-            bahanbakus.id,bayar.totbayar,bayar.total
+            bahanbakus.id,bayar.totbayar,bayar.total,tipe.tipe
             FROM
             penjualans
             INNER JOIN customers ON penjualans.customer_id = customers.id
-			LEFT JOIN (SELECT
+			INNER JOIN (SELECT
+			products.tipe,
+			detail_penjualans.penjualan_id
+			FROM
+			detail_penjualans
+			INNER JOIN products ON detail_penjualans.id_product = products.id
+			GROUP BY penjualan_id
+			)tipe ON tipe.penjualan_id=penjualans.id			
+						LEFT JOIN (SELECT
 											bayars.id,
 											bayars.id_penjualan,
 											Sum(bayars.bayar)totbayar,
@@ -114,7 +124,41 @@ class BahanbakusesController extends AppController {
 							)a WHERE a.bayar>=a.total)
 			group by penjualans.nomor");
 			$this -> set(compact('bahanbakuses'));
+
+			if ($this -> request -> is('ajax')) {
+				$this -> autoRender = false;
+				$this -> paginate = array('fields' => array('Cus.nama', 'Penjualan.nomor', 'Penjualan.id'), 'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')), array('table' => 'merks', 'alias' => 'Merk', 'type' => 'INNER', 'conditions' => array('Merk.id = Penjualan.merk_id'))));
+
+				$this -> DataTable -> mDataProp = true;
+				echo json_encode($this -> DataTable -> getResponse());
+				// exit ;
+			}
 		}
+	}
+
+	public function retur() {
+		$dataretur=$this->Bahanbakus->query("SELECT bahanbakus.id,
+					products.nama_produk,
+					products.tipe,
+					bahanbakus.dm1,
+					bahanbakus.dm2,
+					penjualans.nomor
+					FROM
+					bahanbakus
+					INNER JOIN products ON bahanbakus.product_id = products.id
+					INNER JOIN penjualans ON bahanbakus.penjualan_id = penjualans.id
+					ORDER BY
+					products.nama_produk ASC");
+		$datastok=$this->Bahanbakus->query("SELECT products.id,
+					products.nama_produk,
+					products.tipe
+					FROM
+					products
+					WHERE
+					products.tipe <> 'Luas'
+					ORDER BY
+					products.nama_produk ASC");		
+		$this->set(compact('dataretur','datastok'));
 	}
 
 	public function tambah($id = null) {
@@ -228,33 +272,48 @@ class BahanbakusesController extends AppController {
 		if (empty($id)) {
 			throw new NotFoundException(__('Invalid bahanbakus'));
 		}
+		unset($_SESSION["cartbb"]);
 		if ($this -> request -> is(array('post', 'put'))) {
 			$zn = $this -> request['data'];
-			// debug($zn);die();
 			$count = count($zn['Penjualan']['ket']) - 1;
+			// debug($zn);
+			// die();
 			for ($i = 0; $i <= $count; $i++) {
-				if ($zn['Penjualan']['pjg'][$i] != '' || $zn['Penjualan']['pjg'][$i] > 0) {
+				$data['Bahanbakus']['penjualan_id'] = $id;
+				$data['Bahanbakus']['product_id'] = $zn['Penjualan']['ket'][$i];
+				$data['Bahanbakus']['dm1'] = $zn['Penjualan']['pjg'][$i];
+				$data['Bahanbakus']['dm2'] = $zn['Penjualan']['lbr'][$i];
+				$data['Bahanbakus']['tipe'] = 1;
+				$data['Bahanbakus']['id_teknisi'] = explode("-", $zn['Bahanbakuses']['id_teknisi'])['1'];
+				$data['Bahanbakus']['ket'] = $zn['Penjualan']['ket'][$i];
+				if ($zn['Penjualan']['jenis'][$i] == 'b') {
+					$this -> Bahanbakus -> query("DELETE FROM bahanbakus where id='" . $zn['Penjualan']['idp'][$i] . "'");
+				}
+				$this -> Bahanbakus -> create();
+				$this -> Bahanbakus -> save($data, false);
+				$this -> Bahanbakus -> query(" update detail_penjualans set flag='1' where penjualan_id='$id' ");
+			}
+			for ($i = 0; $i <= $count; $i++) {
+				if ($zn['Penjualan']['pjgsisa'][$i] != '' || $zn['Penjualan']['pjgsisa'][$i] > 0) {
 					$data['Bahanbakus']['penjualan_id'] = $id;
-					$data['Bahanbakus']['product_id'] = $zn['Penjualan']['ket'][$i];
-					$data['Bahanbakus']['dm1'] = $zn['Penjualan']['pjg'][$i];
-					$data['Bahanbakus']['dm2'] = $zn['Penjualan']['lbr'][$i];
-					$data['Bahanbakus']['tipe'] = $zn['Penjualan']['tipe'][$i];
+					$data['Bahanbakus']['product_id'] = $zn['Penjualan']['ketsisa'][$i];
+					$data['Bahanbakus']['dm1'] = $zn['Penjualan']['pjgsisa'][$i];
+					$data['Bahanbakus']['dm2'] = $zn['Penjualan']['lbrsisa'][$i];
+					$data['Bahanbakus']['tipe'] = 2;
 					$data['Bahanbakus']['id_teknisi'] = explode("-", $zn['Bahanbakuses']['id_teknisi'])['1'];
-					$data['Bahanbakus']['ket'] = $zn['Penjualan']['ket'][$i];
-					if ($zn['Penjualan']['jenis'][$i] == 'b') {
-						$this -> Bahanbakus -> query("DELETE FROM bahanbakus where id='" . $zn['Penjualan']['idp'][$i] . "'");
-					}
+					$data['Bahanbakus']['ket'] = $zn['Penjualan']['ketsisa'][$i];
 					$this -> Bahanbakus -> create();
 					$this -> Bahanbakus -> save($data, false);
 					$this -> Bahanbakus -> query(" update detail_penjualans set flag='1' where penjualan_id='$id' ");
 				}
 			}
-			unset($_SESSION["cartbb"]);
 			$this -> Session -> setFlash('Data berhasil disimpan', 'success');
 			// echo '<script language="javascript">';
-			// echo 'alert(Bahan Baku berhasil ditambahkan")';
+			// echo "window.alert('Bahanbaku ditambahkan')";
+			// echo 'window.location== "../../index";';
 			// echo '</script>';
-			return $this -> redirect(array('action' => 'index'));
+			return $this -> redirect(array('action' => 'success'));
+			// unset($_SESSION["cartbb"]);
 		}
 		$detailpenjualan = $this -> Bahanbakus -> query("SELECT
                 detail_penjualans.penjualan_id,
@@ -285,7 +344,7 @@ class BahanbakusesController extends AppController {
 				products.satuan
 				FROM
 				products
-				LEFT JOIN pembelians ON pembelians.product_id = products.id
+				INNER JOIN pembelians ON pembelians.product_id = products.id
 				LEFT JOIN (SELECT
 						products.id,
 						products.nama_produk,
@@ -370,7 +429,7 @@ class BahanbakusesController extends AppController {
 		$bk = $produk[1];
 		//        print_r($bk);
 		if ($bk == 'p') {
-			$data = $this -> Bahanbakus -> query(" SELECT * FROM `products` INNER JOIN bahanbakus ON bahanbakus.product_id=products.id WHERE bahanbakus.product_id ='" . $produk[0] . "'");
+			$data = $this -> Bahanbakus -> query(" SELECT * FROM `products` WHERE products.id ='" . $produk[0] . "'");
 			$idp = $data['0']['products']['id'];
 			$dm = $data['0']['products']['dimensi'];
 			$pd = $data[0]['products']['nama_produk'];
@@ -388,7 +447,30 @@ class BahanbakusesController extends AppController {
 			$dm = $data[0][0]['dimensi'];
 			$pd = $data[0]['products']['nama_produk'];
 		}
-		// print_r($dm);
+		// debug($data);die();
+		//sesi panjang
+		// $idsesip="";
+		if (!empty($_POST['datap'])) {
+			$sp = explode("&", $_POST['datap']);
+			// $idsesip = array();
+			foreach ($sp as $sp) {
+				$nsp = explode("=", $sp);
+				$idsesip[] = $nsp[1];
+			}
+
+		}
+		//sesi lebar
+		if (!empty($_POST['datal'])) {
+			$sl = explode("&", $_POST['datal']);
+			// $idsesil = array();
+			foreach ($sl as $sl) {
+				$nsl = explode("=", $sl);
+				$idsesil[] = $nsl[1];
+			}
+
+		}
+		$this -> set(compact('idsesip', 'idsesil'));
+
 		@$itemArray = array($produk[0] => array('id' => $produk[0], 'dimensi' => $dm, 'nama' => $produk[2], 'idp' => $idp, 'jenis' => $produk[1], 'nama_produk' => $pd));
 		if (!empty($_SESSION["cartbb"])) {
 			$ceksisa = $this -> Bahanbakus -> query("SELECT
@@ -431,7 +513,7 @@ class BahanbakusesController extends AppController {
 
 			$arr = array();
 			foreach ($_SESSION["cartbb"] as $s) {
-				$arr[] =$s['id'];
+				$arr[] = $s['id'];
 				//                print_r($arr);
 			}
 			//            if (in_array($produk['1'].$produk['0'], $arr)) {
@@ -439,10 +521,10 @@ class BahanbakusesController extends AppController {
 			// debug($bk);
 			// die();
 			//bahanbaku
-				// foreach ($_SESSION["cartbb"] as $k => $v) {
-					
-				if ($produk[1]=='b') {
-					if (in_array($produk['0'], $arr)) {
+			// foreach ($_SESSION["cartbb"] as $k => $v) {
+
+			if ($produk[1] == 'b') {
+				if (in_array($produk['0'], $arr)) {
 					// if  ($produk['1'].$produk['0'] == $v['jenis'].$v['id']) {
 					// $_SESSION["cartbb"][$k]["nama"] = $produk[1];
 					// $_SESSION["cartbb"][$k]["dimensi"] = $dm;
@@ -451,28 +533,30 @@ class BahanbakusesController extends AppController {
 					// $_SESSION["cartbb"][$k]["nama_produk"] = $pd;
 					// print_r($v['id']."/".$idp."-");
 					// if ($v['id'] == $idp) {
-						echo '<script language="javascript">';
-						echo 'alert("Produk sedang kosong/tidak ada sisa")';
-						echo '</script>';
-					}else{						$_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
-							
-						
-					}
-						// $_SESSION["cartbb"] = $itemArray;
-					}else{
-						$_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
-					}
-				// }
+					echo '<script language="javascript">';
+					echo 'alert("Produk sedang kosong/tidak ada sisa")';
+					echo '</script>';
+					$idsesip = $idsesip;
+				} else {
+
+					$_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
+
+				}
+				// $_SESSION["cartbb"] = $itemArray;
+			} else {
+				$_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
+			}
+			// }
 			// }else{
 			// }
 			// } else
 			// if ($ceksisa[0][0]['sisa'] > 0) {
-				// $_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
-			// }	
+			// $_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
+			// }
 			// } else {
-				// echo '<script language="javascript">';
-				// echo 'alert("Stok Produk sedang kosong/tidak ada sisa")';
-				// echo '</script>';
+			// echo '<script language="javascript">';
+			// echo 'alert("Stok Produk sedang kosong/tidak ada sisa")';
+			// echo '</script>';
 			// }
 		} else
 			$_SESSION["cartbb"] = $itemArray;
@@ -482,6 +566,26 @@ class BahanbakusesController extends AppController {
 
 	public function del_depan() {
 		//            print_r($_SESSION["cartbb"]);
+		if (!empty($_POST['datap'])) {
+			$sp = explode("&", $_POST['datap']);
+			// $idsesip = array();
+			foreach ($sp as $sp) {
+				$nsp = explode("=", $sp);
+				$idsesip[] = $nsp[1];
+			}
+
+		}
+		//sesi lebar
+		if (!empty($_POST['datal'])) {
+			$sl = explode("&", $_POST['datal']);
+			// $idsesil = array();
+			foreach ($sl as $sl) {
+				$nsl = explode("=", $sl);
+				$idsesil[] = $nsl[1];
+			}
+
+		}
+		$this -> set(compact('idsesip', 'idsesil'));
 		if (!empty($_SESSION["cartbb"])) {
 			// foreach($_SESSION["cart_item"] as $k => $v) {
 			// debug($k);die();

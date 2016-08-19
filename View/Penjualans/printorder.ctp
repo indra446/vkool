@@ -31,7 +31,7 @@
         <tr>
             <td><p>Pemberi Order</p></td>
             <td>:</td>
-            <td><?php echo $data[0]['customers']['nama'];?></td>
+            <td><?php echo $data[0]['karyawans']['nama'];?></td>
         </tr>
     </table>
     <br>
@@ -49,7 +49,7 @@
     <tr>
         <td>Merk/Tipe Mobil</td>
         <td>:</td>
-        <td><?php echo $data[0]['merks']['nama'];?></td>
+        <td><?php echo $data[0]['merks']['nama'];?>/<?php echo $data[0]['modele']['nama'];?></td>
     </tr>
     <tr>
         <td>No Polisi/Rangka/Mesin</td>
@@ -71,16 +71,7 @@
         <td>:</td>
         <td><?php echo $data[0]['customers']['hp'];?></td>
     </tr>
-    <tr>
-        <td>Yang Mengerjakan</td>
-        <td>:</td>
-        <td><?php echo $data[0]['karyawans']['nama'];?></td>
-    </tr>
-    <tr>
-        <td>Tanggal Pengerjaan</td>
-        <td>:</td>
-        <td><?php echo $data[0]['bahanbakus']['created'];?></td>
-    </tr>
+    
 </table>
     <table class="table table-striped" style="width: 500px; border: 1px solid gray;" id="order">
         <tr style="    background-color: gray;">

@@ -1457,6 +1457,31 @@ jQuery(document).ready(function($) {
         }
     }
 
+    if ($.fn.dataTable) {
+        $('.data-tbl-retur').DataTable({
+            responsive: true,
+                        "columnDefs": [ { "targets": [1, 2], "orderable": false }],
+            "oLanguage": {
+                "sLengthMenu": '<select class="tbl-data-select">' +
+                    '<option value="10">10</option>' +
+                    '<option value="20">20</option>' +
+                    '<option value="30">30</option>' +
+                    '<option value="40">40</option>' +
+                    '<option value="50">50</option>' +
+                    '<option value="-1">All</option>' +
+                    '</select>' + '<span class="r-label">Entries</span>'
+            },
+            "dom": '<"row" <"col-md-6"l><"col-md-6"f>><"row" <"col-md-12"<"td-content"rt>>><"row" <"col-md-6"i><"col-md-6"p>>'
+        });
+
+
+        if ($.fn.select2) {
+            $('.tbl-data-select').select2({
+                minimumResultsForSearch: -1
+            });
+        }
+    }
+
 
     // Sparkline Chart
     if ($.fn.sparkline) {

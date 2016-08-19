@@ -69,8 +69,7 @@ class ProductsController extends AppController {
 						IF (Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml)) beli,
 						a.jual,
 						IF (Sum(pembelians.jml) IS NULL,0,Sum(pembelians.jml)) - IF(a.jual IS NULL,0,a.jual) AS sisa,
-						baku.jmlbaku,
-						products.satuan
+						baku.jmlbaku,retur.jml as jmlretur,	products.satuan
 					FROM
 						products
 					LEFT JOIN pembelians ON pembelians.product_id = products.id
@@ -95,6 +94,16 @@ class ProductsController extends AppController {
 										bahanbakus
 										WHERE tipe=2
 										GROUP BY bahanbakus.product_id) baku ON baku.product_id=products.id
+					LEFT JOIN (SELECT
+							Sum(returs.qty) AS jml,products.id,
+							products.nama_produk,
+							products.dimensi,
+							products.tipe
+							FROM
+							returs
+							INNER JOIN products ON returs.product_id = products.id
+							GROUP BY
+							returs.product_id)retur ON retur.id=products.id
 					GROUP BY
 					products.id");
 		// $products = $this -> Product -> query("SELECT
@@ -182,6 +191,29 @@ class ProductsController extends AppController {
 						products.nama_produk ASC
 						)a ON a.id=products.id
 				WHERE products.id='".$id."'	GROUP BY products.id");
+		$retura=$this->Product->query("SELECT
+				Sum(returs.qty) AS jml,
+				products.nama_produk,
+				products.dimensi,
+				products.tipe
+				FROM
+				returs
+				INNER JOIN products ON returs.product_id = products.id
+				WHERE
+				products.id='".$id."'
+				GROUP BY
+				returs.product_id");	
+		$returb=$this->Product->query("SELECT
+				Sum(returs.qty) AS jml,
+				products.nama_produk,
+				products.dimensi,
+				products.tipe
+				FROM
+				returs
+				INNER JOIN products ON returs.product_id = products.id
+				WHERE jenis=2 AND products.id='".$id."'
+				GROUP BY
+				returs.product_id");	
 		$baku=$this->Product->query("SELECT
 				bahanbakus.id,
 				bahanbakus.product_id,
@@ -197,7 +229,7 @@ class ProductsController extends AppController {
 				WHERE
 				bahanbakus.product_id ='".$id."' AND bahanbakus.tipe=2");		
 		// $options = array('recursive' => 2, 'conditions' => array('Product.' . $this -> Product -> primaryKey => $id));
-		$this -> set(compact('product','sisa','baku'));
+		$this -> set(compact('product','sisa','baku','retura','returb'));
 	}
 
 	/**

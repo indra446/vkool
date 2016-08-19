@@ -285,43 +285,141 @@
         	if(aktif==1){
             $tb('td:eq(4)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
            }else{
-            $tb('td:eq(4)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
+            $tb('td:eq(4)',nRow).html("<button class='btn btn-danger  btn-xs'><i class='zmdi zmdi-minus zmdi-hc-fw'></i></button>");
            }
             $tb('td:eq(5)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>products/edit/'+aData.Product.id+'"><i class="fa fa-edit"></i></a>');
         }
     });
     
-		// $tb("#tb_beli").dataTable({
-		// // oTable=$tb('#example').dataTable({
-		// "sPaginationType" : "full_numbers",
-        // "iDisplayLength": 10,
-        // "bProcessing": true,
-        // "bServerSide": true,
-        // "sAjaxSource": "<?php echo $this->webroot;?>Pembelians/index",
-        // "sDom": 'frtip',
-        // "aoColumns": [
-            // {mData:"Pembelian.nomor"},
-            // {mData:"Pembelian.tgl_transaksi"},
-            // {mData:"Vendor.nama_vendor"},
-            // {mData:"Pembelian.nomor"}
-//          
-        // ],
-        // "aoColumnDefs" : [{
-// 
-				// "sWidth" : "10%",
-				// "aTargets" : [3]
-			// },{
-// 
-				// "sWidth" : "15%",
-				// "aTargets" : [0,1]
-			// },],
-//         
-//         
-        // "fnCreatedRow": function(nRow, aData, iDataIndex){
-            // // $tb('td:eq(3)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
-            // $tb('td:eq(3)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Pembelians/view/'+aData.Pembelian.nomor+'"><i class="fa fa-folder-open"></i></a><a id="'+aData.Pembelian.nomor+'" onClick="config_del(this)" href="#myModal" role="button" class="btn btn-xs btn-danger" data-toggle="modal"><i class="fa fa-trash-o"></i></a>');
-        // }
-    // });
+		$tb("#tb_beli").dataTable({
+		// oTable=$tb('#example').dataTable({
+		"sPaginationType" : "full_numbers",
+        "iDisplayLength": 10,
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "<?php echo $this->webroot;?>Pembelians/index",
+        "sDom": 'frtip',
+        "aoColumns": [
+            {mData:"Pembelian.nomor"},
+            {mData:"Pembelian.tgl_transaksi"},
+            {mData:"Vendor.nama_vendor"},
+            {mData:"Pembelian.nomor"}
+         
+        ],
+        "aoColumnDefs" : [{
+
+				"sWidth" : "10%",
+				"aTargets" : [3]
+			},{
+
+				"sWidth" : "15%",
+				"aTargets" : [0,1]
+			},],
+        
+        
+        "fnCreatedRow": function(nRow, aData, iDataIndex){
+            // $tb('td:eq(3)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
+            $tb('td:eq(3)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Pembelians/view/'+aData.Pembelian.nomor+'"><i class="fa fa-folder-open"></i></a><a id="'+aData.Pembelian.nomor+'" onClick="config_del(this)" href="#myModal" role="button" class="btn btn-xs btn-danger" data-toggle="modal"><i class="fa fa-trash-o"></i></a>');
+        }
+    });
+		$tb("#tbjual").dataTable({
+		// oTable=$tb('#example').dataTable({
+		"sPaginationType" : "full_numbers",
+        "iDisplayLength": 10,
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "<?php echo $this->webroot;?>Penjualans/index",
+        "sDom": 'frtip',
+        "aoColumns": [
+            {mData:"Penjualan.nomor"},
+            {mData:"Cus.nama"},
+            {mData:"Merk.nama"},
+            {mData:"Penjualan.thn"},
+            {mData:"Penjualan.nopol"},
+            {mData:"Penjualan.nomesin"},
+            {mData:"Penjualan.norangka"},
+            {mData:"Penjualan.nomor"}
+         
+        ],
+        "aoColumnDefs" : [{
+
+				"sWidth" : "10%",
+				"aTargets" : [3]
+			},{
+
+				"sWidth" : "15%",
+				"aTargets" : [0,1]
+			},],
+        
+        
+        "fnCreatedRow": function(nRow, aData, iDataIndex){
+            // $tb('td:eq(3)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
+            $tb('td:eq(7)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Penjualans/edit/'+aData.Penjualan.id+'"><i class="fa fa-edit"></i></a><a id="'+aData.Penjualan.id+'" onClick="deljual(this)" href="#myModal" role="button" class="btn btn-xs btn-danger" data-toggle="modal"><i class="fa fa-trash-o"></i></a>');
+        }
+    });
+    
+		$tb("#tbhistori").dataTable({
+		// oTable=$tb('#example').dataTable({
+		"sPaginationType" : "full_numbers",
+        "iDisplayLength": 10,
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "<?php echo $this->webroot;?>Penjualans/histori",
+        "sDom": 'frtip',
+        "aoColumns": [
+            {mData:"Penjualan.nomor"},
+            {mData:"Penjualan.created"},
+            {mData:"Cus.nama"},
+            {mData:"Penjualan.nomor"}
+         
+        ],
+        "aoColumnDefs" : [{
+
+				"sWidth" : "10%",
+				"aTargets" : [3]
+			},{
+
+				"sWidth" : "20%",
+				"aTargets" : [0,1]
+			},],
+        
+        
+        "fnCreatedRow": function(nRow, aData, iDataIndex){
+            // $tb('td:eq(3)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
+            $tb('td:eq(3)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Penjualans/detail/'+aData.Penjualan.id+'"><i class="fa fa-chevron-circle-right"></i>&nbsp;Detail</a>');
+        }
+    });
+		$tb("#tbrekaphistori").dataTable({
+		// oTable=$tb('#example').dataTable({
+		"sPaginationType" : "full_numbers",
+        "iDisplayLength": 10,
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "<?php echo $this->webroot;?>Penjualans/rekaphistori",
+        "sDom": 'frtip',
+        "aoColumns": [
+            {mData:"Penjualan.nomor"},
+            {mData:"Penjualan.created"},
+            {mData:"Cus.nama"},
+            {mData:"Penjualan.nomor"}
+         
+        ],
+        "aoColumnDefs" : [{
+
+				"sWidth" : "10%",
+				"aTargets" : [3]
+			},{
+
+				"sWidth" : "20%",
+				"aTargets" : [0,1]
+			},],
+        
+        
+        "fnCreatedRow": function(nRow, aData, iDataIndex){
+            // $tb('td:eq(3)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
+            $tb('td:eq(3)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Penjualans/detail/'+aData.Penjualan.id+'"><i class="fa fa-chevron-circle-right"></i>&nbsp;Detail</a>');
+        }
+    });
  });
 </script>		
 <script type="text/javascript">

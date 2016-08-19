@@ -56,10 +56,21 @@
 		<td align="right">1</td>
 	</tr>
 <?php $i++;endforeach; ?>
-<tfoot><td colspan="2"><font style="font-weight: bold">Total</td><td align="right"><font style="font-weight: bold"><?php echo ($a+$i)-1;?></td></tfoot>
+	<?php $c=0;foreach ($retura as $returb): ?>
+	<tr>
+		<td><?php if ($returb['products']['dimensi'] != NULL) {
+					 $dimensi = explode(",", $returb['products']['dimensi']);
+						echo $dimensi[0] . " x " . $dimensi[1] . " mm";
+						}
+						?></td>
+		<td><?php if ($returb['products']['dimensi'] != NULL) { echo h(number_format($dimensi[0] * $dimensi[1], 0, ',', '.'))." mm2";} ?></td>
+		<td align="right"><?php echo h($returb[0]['jml']); ?></td>
+	</tr>
+<?php $c +=$returb[0]['jml'];endforeach; ?>
+<tfoot><td colspan="2"><font style="font-weight: bold">Total</td><td align="right"><font style="font-weight: bold"><?php echo (($a+$i)-1)+$retura[0][0]['jml'];?></td></tfoot>
 	</tbody>
 	</table>
 <?php } else{
-	echo "<h4>Stok yang masih tersedia: ".$sisa[0][0]['sisa']." ".$sisa[0]['products']['satuan']."</h4>";
+	echo "<h4>Stok yang masih tersedia: ".($sisa[0][0]['sisa']-$retura[0][0]['jml'])+$returb[0][0]['jml']." ".$sisa[0]['products']['satuan']."</h4>";
 }?>	
 	</div>

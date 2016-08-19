@@ -51,7 +51,8 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($bahanbakuses as $bahanbakus):   ?>
+            <?php foreach ($bahanbakuses as $bahanbakus):  
+			?>
                 <tr>
                     <?php $id=($bahanbakus['penjualans']['id']); ?>
                     <td><?php echo $bahanbakus['penjualans']['nomor']; ?>&nbsp;</td>
@@ -60,16 +61,14 @@
                     <td><?php $b=($bahanbakus['bahanbakus']['id']); if(!empty($b)){?>
                         <a href="<?php echo $this->webroot;?>bahanbakuses/view/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Bayar</a>
                         <a id="<?php echo $id; ?>" onClick="configurator(this)" href="#myModal" role="button" class="btn btn-xs btn-warning" data-toggle="modal" title="detail penjualan">Detail</a>
-
-   
                         <?php }else{?>
+                        	<?php if($bahanbakus['tipe']['tipe']=='Luas'){?>
                         <a href="<?php echo $this->webroot;?>bahanbakuses/add/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Input Bahan Baku</a>
-                         <?php if($bahanbakus['bayar']['total']<=$bahanbakus['bayar']['totbayar']){?>
-                        <a href="#" class="btn btn-danger btn-xs">Sudah Bayar</a>
-                                                        <?php } else {?>  <a href="<?php echo $this->webroot;?>bahanbakuses/view/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Bayar</a><?php } ?>
-                                                <a id="<?php echo $id; ?>" onClick="configurator(this)" href="#myModal" role="button" class="btn btn-xs btn-warning" data-toggle="modal" title="detail penjualan">Detail</a>
-
-                   
+                        <?php }?>
+                         <?php if(!empty($bahanbakus['bayar']['total']) and $bahanbakus['bayar']['total']<=$bahanbakus['bayar']['totbayar']){?>
+                        <!--<a href="#" class="btn btn-danger btn-xs">Lunas</a>-->
+                        <?php } else {?>  <a href="<?php echo $this->webroot;?>bahanbakuses/view/<?php echo $id;?>/ueurwoe" class="btn btn-primary btn-xs">Bayar</a><?php } ?>
+                        <a id="<?php echo $id; ?>" onClick="configurator(this)" href="#myModal" role="button" class="btn btn-xs btn-warning" data-toggle="modal" title="detail penjualan">Detail</a>
                         <?php } ?>
                     </td>
                 </tr>

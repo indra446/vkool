@@ -18,7 +18,7 @@
         <label class="col-md-2 control-label">Vendor</label>
         <div class=" col-md-6">
         	 <div class="widget right-50">
-            <?php echo $this->Form->input('vendorid', array('id'=>'vendor','class' => 'form-control', 'label' => false, 'required' => true)); ?>
+            <?php echo $this->Form->input('vendorid', array('readonly'=>true,'id'=>'vendor','class' => 'form-control', 'label' => false, 'required' => true)); ?>
                 <label class="addon adn-50 adn-right" for="vendor">
                 <i class="fa fa-search" id="btn-show"></i>
                </label>
@@ -30,7 +30,13 @@
 		<div class="input col-md-8">
 			<?php echo $this -> Form -> input('ket', array('type'=>'textarea','class' => 'form-control', 'label' => false)); ?>
 		</div>
-	</div>	   
+	</div>	
+<!--    <div class="form-group">
+		<label class="col-md-2 control-label">Jenis Retur</label>
+		<div class="input col-md-8">
+		<?php //	echo $this->Form->input('jenis',array('options' => array(' '=>'--Pilih Salah Satu--','0'=>'Kirim','1'=>'Terima'),'label'=>FALSE,'class'=>'form-control'));?>
+		</div>
+	</div>	-->
 	<div class="w-section-header">
                         <h2>Detail Retur</h2>
                     </div>
@@ -43,18 +49,15 @@
         <div class=" col-md-4 unit">
             <?php echo $this->Form->input('produk', array('id'=>'produk','class' => 'form-control', 'label' => false)); ?>
         </div>
-        <div class="col-xs-2 unit " style="margin-right: -43px">
-            <?php echo $this->Form->input('luas', array('style'=>'width:60%;margin-right:-10px;','div'=>false,'id'=>'luas','class' => 'form-control', 'label' => false, 'placeholder'=>'luas')); ?>
-        </div>
         <div class=" col-md-4 unit input-group" >
-            <?php echo $this->Form->input('sn', array('id'=>'sn','class' => 'form-control', 'label' => false, 'placeholder'=>'serial number')); ?>
+            <?php echo $this->Form->input('qty', array('id'=>'qty','class' => 'form-control', 'label' => false, 'placeholder'=>'jml produk','type'=>'number','min'=>0)); ?>
         <span class="input-group-btn">
 			<button type="button" class="btn btn-success" id="add_produk">+</button>
 		</span>
         </div>
     </div>	
  	<div id="isi_cart">
- 		<table class="table table-striped">
+    <!-- <table class="table data-tbl">
 	<thead>
 		<tr>
 			<th>ID Produk</th>
@@ -65,7 +68,7 @@
 			<th>Hapus</th>
 		</tr>
 	</thead>
-	</table>	
+	</table>	 -->
  		
  	</div>
 
@@ -75,7 +78,7 @@
 </div>
 
 <div id="example-container"  style="display:none">
-<table>
+   <table class="table data-tbl">
 	<thead>
 	<tr>
 			<th>Nama Vendor</th>
@@ -101,7 +104,7 @@
 <!-- <script src="<?php echo $this->webroot; ?>js/jq/jquery-1.10.2.js"></script> -->
 <!-- <script src="<?php echo $this->webroot; ?>js/jq/jquery-ui.js"></script> -->
 <?php
-		//echo $this -> Html -> css(array('jquery.dataTables.min'));
+		echo $this -> Html -> css(array('jquery.dataTables.min'));
 		echo $this -> Html -> script(array('jquery.min','lib/jquery.dataTables'));
 
 ?>
@@ -120,12 +123,11 @@ $(document).ready(function() {
  	$.ajax({
 	type: "POST",
 	url: "<?php echo $this -> webroot; ?>Returs/cart/",
-	data: { idp : $("#produk").val(),luas :$("#luas").val(),sn :$("#sn").val() },
+	data: { idp : $("#produk").val(),qty :$("#qty").val() },
 	success: function(html) {
 	$('#produk').val("");
-	$('#luas').val("");
-	$('#sn').val("");
-	
+
+	$('#qty').val("");
 	jq("#isi_cart").html(html);
 	}
 	});}

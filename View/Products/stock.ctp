@@ -1,3 +1,4 @@
+<?php //debug($products);die();?>
 <div class="widget-header block-header margin-bottom-0 clearfix">
     <div class="pull-left">
         <h3>Stok Produk</h3>
@@ -29,7 +30,7 @@
 		<td><?php echo h($product['products']['nama_produk']); ?>&nbsp;</td>
 		<!-- <td><?php echo h($product[0]['beli']); ?>&nbsp;</td>
 		<td><?php echo h($product['a']['jual']); ?>&nbsp;</td> -->
-		<td align="right"><?php echo number_format($product[0]['sisa'],0,',','.'); ?>&nbsp;</td>
+		<td align="right"><?php echo number_format($product[0]['sisa']+$product['baku']['jmlbaku']+$product['retur']['jmlretur'],0,',','.'); ?>&nbsp;</td>
 		<!-- <td><?php echo h($product['stoks']['jml']); ?>&nbsp;</td> -->
 		<td><?php echo h($product['products']['satuan']); ?>&nbsp;</td>
 		<td class="actions">

@@ -17,6 +17,7 @@
         });
     });
 </script>
+<?php // print_r($detailpenjualan);?>
 <div class="bahanbakuses form">
     <?php echo $this->Form->create('Bahanbakuses', array('class' => 'form-horizontal j-forms')); ?>      
     <div class="form-group">
@@ -24,6 +25,20 @@
         <label class="col-md-2 control-label">:</label>
         <div class=" col-md-2">
             <p style="margin-top: 7px;"> <?php echo Date('Y-m-d H:i:s'); ?></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Nomor Nota</label>
+        <label class="col-md-2 control-label">:</label>
+        <div class=" col-md-2">
+            <p style="margin-top: 7px;"> <?php  echo $detailpenjualan['0']['penjualans']['nomor']; ?></p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Nomor Order</label>
+        <label class="col-md-2 control-label">:</label>
+        <div class=" col-md-2">
+            <p style="margin-top: 7px;"> <?php echo $detailpenjualan['0']['penjualans']['noorder']; ?></p>
         </div>
     </div>
     <?php foreach ($detailpenjualan as $detail): ?>
@@ -62,6 +77,7 @@
                 <th>Nama Produk</th>
                 <th>Dimensi</th>
                 <th>Luas</th>
+                <th>Jenis</th>
                 <th class="actions">Aksi</th>
             </tr>
         </thead>
@@ -78,7 +94,7 @@
 					 $dimensi = explode(",", $prod['products']['dimensi']);
 						echo $dimensi[0] . " x " . $dimensi[1] . " mm";
                                                 } ?>&nbsp;</td>
-					<td><?php  echo ($dimensi[0] * $dimensi[1])."mm";  ?></td>
+					<td><?php  echo ($dimensi[0] * $dimensi[1])."mm";  ?></td><td>Stok</td>
                     <td class="actions">
                         <input value="pilih" class="btn btn-info  btn-xs" type="button" onClick="configurator<?php echo $id?>(this)" id="<?php echo $prod[0]['id'] . "," . $prod['products']['nama_produk']; ?>"/>
                         
@@ -96,10 +112,10 @@
                     <td><?php if ($baku['bahanbakus']['dm1'] != NULL) {
 						echo $baku['bahanbakus']['dm1'] . " x " . $baku['bahanbakus']['dm2'] . " mm";
 						} ?>&nbsp;</td>
-					<td><?php if ($baku['bahanbakus']['dm1'] != NULL) { echo h(number_format($baku['bahanbakus']['dm2'] * $baku['bahanbakus']['dm1'], 0, ',', '.'))." mm2";} ?></td>
+					<td><?php if ($baku['bahanbakus']['dm1'] != NULL) { echo h(number_format($baku['bahanbakus']['dm2'] * $baku['bahanbakus']['dm1'], 0, ',', '.'))." mm2";} ?></td><td>sisa</td>
                     <td class="actions">
                         <input value="pilih" class="btn btn-info  btn-xs" type="button" onClick="configurator<?php echo $id;?>(this)" id="<?php echo $baku[0]['id'] . "," . $baku['products']['nama_produk']; ?>"/>
-                        
+
                     </td>
 
                 </tr>
@@ -148,10 +164,13 @@ echo $this->Html->script(array('lib/jquery.dataTables'));
         var $$e = jQuery.noConflict();
         bootbox.hideAll()
         var id = clicked.id;
+        var datap = $$e('input[name="data[Penjualan][pjgsisa][]"]').serialize();
+        var datal = $$e('input[name="data[Penjualan][lbrsisa][]"]').serialize();
+
          $.ajax({
                     type: "POST",
                     url: "<?php echo $this->webroot; ?>Bahanbakuses/depan/",
-                    data: {idp:id },
+                    data: {idp:id,datal:datal,datap:datap },
                     success: function (html) {
                         $('#PenjualanIdProduct').html("");
                         $('#PenjualanQty').html("");

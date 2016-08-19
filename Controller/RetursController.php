@@ -68,9 +68,11 @@ class RetursController extends AppController {
 	 * @return void
 	 */
 	public function add() {
+		unset($_SESSION['cart_retur']);
+		
 		if ($this -> request -> is('post')) {
 			$cek = $this -> Retur -> find('first', array('fields' => 'MAX(Retur.noretur)noretur'));
-			// debug($cek);die();
+			// debug($this -> request -> data);die();
 			if ($cek[0]['noretur'] == NULL) {
 				$newno = "RE00001";
 			} else {
@@ -78,16 +80,21 @@ class RetursController extends AppController {
 				// debug(sprintf('%05d', $no+1));die();
 				$newno = "RE".sprintf('%05d', $no+1);
 			}
-			foreach ($_SESSION['cart_retur'] as $d) {
-
+                        $zn=$this -> request -> data;
+                        $count=count($this -> request -> data['Retur']['product_id'])-1;
+			for ($i=0;$i<=$count;$i++) {
+				$this->Retur->query("DELETE FROM bahanbakus WHERE id='".$zn['Retur']['idbaku'][$i]."'");
 				$vendor = explode("-", $this -> request -> data['Retur']['vendorid']);
 				$a['Retur']['noretur'] = $newno;
-				$a['Retur']['tgl_transaksi'] = date("Y-m-d", strtotime($this -> request -> data['Retur']['tgl']));
+				$a['Retur']['tgl_transaksi'] = date("Y-m-d", strtotime($zn['Retur']['tgl']));
 				$a['Retur']['vendor_id'] = $vendor[0];
 				$a['Retur']['ket'] = $this -> request -> data['Retur']['ket'];
-				$a['Retur']['product_id'] = $d['id'];
-				$a['Retur']['sn'] = $d['sn'];
-				$a['Retur']['luas'] = $d['luas'];
+				$a['Retur']['product_id'] = $zn['Retur']['product_id'][$i];
+				$a['Retur']['bahanbakus_id'] = $zn['Retur']['idbaku'][$i];
+				// $a['Retur']['sn'] = $d['sn'];
+				$a['Retur']['qty'] =$zn['Retur']['qty'][$i];
+				// $a['Retur']['jenis'] =$zn['Retur']['jenis'][$i];
+//                                debug($a);exit;
 				$this -> Retur -> create();
 				$this -> Retur -> save($a, false);
 			}
@@ -107,7 +114,17 @@ class RetursController extends AppController {
 	public function auto_produk($t = null) {
 		// $this->layout = 'ajax';
 		$t = $_GET['term'];
-		$data = $this -> Retur -> query(" SELECT * FROM `products` WHERE nama_produk LIKE '%$t%' ");
+		$data = $this -> Retur -> query(" SELECT
+				bahanbakus.id,bahanbakus.dm1,bahanbakus.dm2,
+				products.id as idp,
+				products.nama_produk
+				FROM
+				bahanbakus
+				INNER JOIN products ON bahanbakus.product_id = products.id
+				WHERE
+				bahanbakus.tipe = 2  ORDER BY
+				products.nama_produk ASC");
+				
 		$this -> set(compact('data'));
 	}
 
@@ -126,24 +143,35 @@ class RetursController extends AppController {
 		// debug($_POST);die();
 		// if ($_POST) {
 		$produk = explode("|", $_POST['idp']);
-		$data = $this -> Retur -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
+		// $data = $this -> Retur -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
+		$data = $this -> Retur -> query(" SELECT
+				bahanbakus.id,
+				products.id as idp,
+				products.nama_produk
+				FROM
+				bahanbakus
+				INNER JOIN products ON bahanbakus.product_id = products.id
+				WHERE
+				bahanbakus.tipe = 2 AND bahanbakus.id ='" . $produk[0] . "'
+				ORDER BY
+				products.nama_produk ASC");
 		// debug($data);
 		$post = $_POST;
 		// $_SESSION['cart_retur'] = array();
-		$itemArray = array($data[0]['products']['id'] => array('id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'tipe' => $data[0]['products']['tipe'], 'dimensi' => $data[0]['products']['dimensi'], 'satuan' => $data[0]['products']['satuan'], 'luas' => $_POST["luas"], 'sn' => $_POST["sn"]));
+		@$itemArray = array($data[0]['products']['idp'] => array('id' => $data[0]['products']['idp'], 'idbaku' => $data[0]['bahanbakus']['id'],'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["qty"]));
 		if (!empty($_SESSION["cart_retur"])) {
 			$arr = array();
 			foreach ($_SESSION["cart_retur"] as $s) {
 				$arr[] = $s['id'];
 			}
 			// debug($_SESSION["cart_retur"]);
-			if (in_array($data[0]['products']['id'], $arr)) {
+			if (in_array($data[0]['products']['idp'], $arr)) {
 				// echo "match";
 				foreach ($_SESSION["cart_retur"] as $k => $v) {
 					// debug($data[0]['products']['id']."-".$v['id']."/".$k);
-					if ($data[0]['products']['id'] == $v['id']) {
-						$_SESSION["cart_retur"][$k]["luas"] = $_POST["luas"];
-						$_SESSION["cart_retur"][$k]["sn"] = $_POST["sn"];
+					if ($data[0]['products']['idp'] == $v['id']) {
+						$_SESSION["cart_retur"][$k]["jml"] = $_POST["qty"];
+						// $_SESSION["cart_retur"][$k]["sn"] = $_POST["sn"];
 					}
 				}
 			} else

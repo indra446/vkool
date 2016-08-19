@@ -40,10 +40,9 @@
 			<tr>
 				<th>ID</th>
 				<th>Nama Produk</th>
-				<th>Luas Retur</th>
-				<th>Serial Number</th>
 				<th>Dimensi</th>
 				<th>Luas Dimensi</th>
+				<th>Qty</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -52,10 +51,9 @@
 		<tr>
 			<td><?php echo $data['Product']['id']?></td>
 			<td><?php echo $data['Product']['nama_produk']?></td>
-			<td><?php echo $data['Retur']['luas']?></td>
-			<td><?php echo $data['Retur']['sn']?></td>
 			<td><?php if($data['Product']['dimensi']!=NULL){ $dimensi=explode(",", $data['Product']['dimensi']); echo $dimensi[0]." x ".$dimensi[1];}?></td>
 			<td><?php if($data['Product']['dimensi']!=NULL){echo $dimensi[0]*$dimensi[1]." mm2";}?></td>
+			<td><?php echo $data['Retur']['qty']?></td>
 		</tr>
 			<?php }
 			?>

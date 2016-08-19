@@ -7,14 +7,14 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class PembeliansController extends AppController {
-    public $helpers = array('Js');
+	public $helpers = array('Js');
 
 	/**
 	 * Components
 	 *
 	 * @var array
 	 */
-    public $components = array('Paginator', 'DataTable');
+	public $components = array('Paginator', 'DataTable');
 	/**
 	 * Components
 	 *
@@ -53,25 +53,24 @@ class PembeliansController extends AppController {
 	public function index() {
 
 		// $this -> Pembelian -> recursive = 0;
-		$pembelians = $this -> Pembelian -> find('all', array('recursive' => 1, 'group' => 'Pembelian.nomor', 'order' => array('Pembelian.tgl_transaksi')));
-		$this -> set(compact('pembelians'));
-		
-        // $this->paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor','Pembelian.id'),'group' => 'Pembelian.nomor', 'joins' => array(array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER','conditions' => array('Vendor.id = Pembelian.vendor_id'))));
+		// $pembelians = $this -> Pembelian -> find('all', array('recursive' => 1, 'group' => 'Pembelian.nomor', 'order' => array('Pembelian.tgl_transaksi')));
+		// $this -> set(compact('pembelians'));
 
-        // $this->DataTable->mDataProp = true;
-        // debug($this -> DataTable -> getResponse());
-        // exit ;
-        // if ($this->request->is('ajax')) {
-            // $this->autoRender = false;
-        // $this->paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor','Pembelian.id'),'group' => 'Pembelian.nomor', 'joins' => array(array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER','conditions' => array('Vendor.id = Pembelian.vendor_id'))));
-// 
-            // $this->DataTable->mDataProp = true;
-            // echo json_encode($this->DataTable->getResponse());
-            // // exit ;
-        // }
-        // $this -> set('pembelians', $this -> Paginator -> paginate());
-	}		
+		// $this->paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor','Pembelian.id'),'group' => 'Pembelian.nomor', 'joins' => array(array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER','conditions' => array('Vendor.id = Pembelian.vendor_id'))));
 
+		// $this->DataTable->mDataProp = true;
+		// debug($this -> DataTable -> getResponse());
+		// exit ;
+		if ($this -> request -> is('ajax')) {
+			$this -> autoRender = false;
+			$this -> paginate = array('fields' => array('Pembelian.nomor', 'tgl_transaksi', 'Vendor.nama_vendor', 'Pembelian.id'), 'group' => 'Pembelian.nomor', 'joins' => array( array('table' => 'vendors', 'alias' => 'Vendor', 'type' => 'INNER', 'conditions' => array('Vendor.id = Pembelian.vendor_id'))));
+
+			$this -> DataTable -> mDataProp = true;
+			echo json_encode($this -> DataTable -> getResponse());
+			// exit ;
+		}
+		// $this -> set('pembelians', $this -> Paginator -> paginate());
+	}
 
 	public function auto_produk($t = null) {
 		// $this->layout = 'ajax';
@@ -108,26 +107,26 @@ class PembeliansController extends AppController {
 			}
 			// debug($_SESSION["cart_item"]);
 			// if (in_array($data[0]['products']['id'], $arr)) {
-				// // echo "match";
-				// foreach ($_SESSION["cart_item"] as $k => $v) {
-					// // debug($data[0]['products']['id']."-".$v['id']."/".$k);
-					// if ($data[0]['products']['id'] == $v['id']) {
-						// $_SESSION["cart_item"][$k]["tipe"] = $data[0]['products']['tipe'];
-						// $_SESSION["cart_item"][$k]["jml"] = $_POST["jml"];
-						// $_SESSION["cart_item"][$k]["potitem"] = $_POST["potitem"];
-						// $_SESSION["cart_item"][$k]["pot"] = str_replace("%", "", $_POST["potitem"]) / 100;
-						// $_SESSION["cart_item"][$k]["harga"] = $_POST["harga"];
-					// }
-				// }
+			// // echo "match";
+			// foreach ($_SESSION["cart_item"] as $k => $v) {
+			// // debug($data[0]['products']['id']."-".$v['id']."/".$k);
+			// if ($data[0]['products']['id'] == $v['id']) {
+			// $_SESSION["cart_item"][$k]["tipe"] = $data[0]['products']['tipe'];
+			// $_SESSION["cart_item"][$k]["jml"] = $_POST["jml"];
+			// $_SESSION["cart_item"][$k]["potitem"] = $_POST["potitem"];
+			// $_SESSION["cart_item"][$k]["pot"] = str_replace("%", "", $_POST["potitem"]) / 100;
+			// $_SESSION["cart_item"][$k]["harga"] = $_POST["harga"];
+			// }
+			// }
 			// } else
-				$_SESSION["cart_item"] = array_merge($_SESSION["cart_item"], $itemArray);
+			$_SESSION["cart_item"] = array_merge($_SESSION["cart_item"], $itemArray);
 		} else
 			$_SESSION["cart_item"] = $itemArray;
 
 		// array_push($_SESSION['cart-item'], $data);
 		// array_push($_SESSION['cart-item'], $post);
 		$this -> set(compact('data', 'post'));
-	// }
+		// }
 	}
 
 	/**
@@ -141,7 +140,7 @@ class PembeliansController extends AppController {
 		// debug(base64_decode($id));
 		$data = $this -> Pembelian -> find('all', array('recursive' => 1, 'conditions' => array('Pembelian.nomor' => $id)));
 		if (empty($data)) {
-		throw new NotFoundException(__('Invalid pembelian'));
+			throw new NotFoundException(__('Invalid pembelian'));
 		}
 		$tgl = $this -> konversi_tanggal("d M Y", $data[0]['Pembelian']['tgl_transaksi']);
 		// debug($tgl);
@@ -150,6 +149,7 @@ class PembeliansController extends AppController {
 		// $options = array('conditions' => array('Pembelian.' . $this -> Pembelian -> primaryKey => $id));
 		// $this -> set('pembelian', $this -> Pembelian -> find('first', $options));
 	}
+
 	/**
 	 * view method
 	 *
@@ -161,7 +161,7 @@ class PembeliansController extends AppController {
 		// debug(base64_decode($id));
 		$data = $this -> Pembelian -> find('all', array('recursive' => 1, 'conditions' => array('Pembelian.nomor' => $id)));
 		if (empty($data)) {
-		throw new NotFoundException(__('Invalid pembelian'));
+			throw new NotFoundException(__('Invalid pembelian'));
 		}
 		$tgl = $this -> konversi_tanggal("d M Y", $data[0]['Pembelian']['tgl_transaksi']);
 		// debug($tgl);
@@ -170,6 +170,7 @@ class PembeliansController extends AppController {
 		// $options = array('conditions' => array('Pembelian.' . $this -> Pembelian -> primaryKey => $id));
 		// $this -> set('pembelian', $this -> Pembelian -> find('first', $options));
 	}
+
 	/**
 	 * view method
 	 *
@@ -181,7 +182,7 @@ class PembeliansController extends AppController {
 		// debug(base64_decode($id));
 		$data = $this -> Pembelian -> find('all', array('recursive' => 1, 'conditions' => array('Pembelian.nomor' => $id)));
 		if (empty($data)) {
-		throw new NotFoundException(__('Invalid pembelian'));
+			throw new NotFoundException(__('Invalid pembelian'));
 		}
 		$tgl = $this -> konversi_tanggal("d M Y", $data[0]['Pembelian']['tgl_transaksi']);
 		// debug($tgl);
@@ -190,23 +191,33 @@ class PembeliansController extends AppController {
 		// $options = array('conditions' => array('Pembelian.' . $this -> Pembelian -> primaryKey => $id));
 		// $this -> set('pembelian', $this -> Pembelian -> find('first', $options));
 	}
-
+		public function success() {
+		}
 	/**
 	 * add method
 	 *
 	 * @return void
 	 */
 	public function add() {
+		unset($_SESSION['cart_item']);
+	
+		$vendors = $this -> Pembelian -> Vendor -> find('all', array('recursive' => 0, 'conditions' => array('Vendor.aktif' => 1)));
+		// debug($vendors);
+		$products = $this -> Pembelian -> Product -> find('list');
+		$users = $this -> Pembelian -> User -> find('list');
+		$this -> set(compact('vendors', 'products', 'users'));
+	}
+	/**
+	 * add method
+	 *
+	 * @return void
+	 */
+	public function simpan() {
+		// unset($_SESSION['cart_item']);
 		if ($this -> request -> is('post')) {
-			// $this->loadModel('Product');
-			// debug($this -> request -> data);
-			// debug($_SESSION["cart_item"]);
-			// die();
+
 			foreach ($_SESSION['cart_item'] as $d) {
-				// $cek=$this->Product->find('first',array('fields'=>array('id','stok'),'conditions'=>array('Product.id'=>$d['id'])));
-				// $p['Product']['id']=$d['id'];
-				// $p['Product']['stok']=$cek['Product']['stok']+$d['jml'];
-				// $this -> Product -> save($p, false);
+
 				$vendor = explode("-", $this -> request -> data['Pembelian']['vendorid']);
 				$a['Pembelian']['nomor'] = $this -> request -> data['Pembelian']['nomor'];
 				$a['Pembelian']['tgl_transaksi'] = date("Y-m-d", strtotime($this -> request -> data['Pembelian']['tgl']));
@@ -231,14 +242,14 @@ class PembeliansController extends AppController {
 			// if ($this -> Pembelian -> save($this -> request -> data)) {
 			unset($_SESSION["cart_item"]);
 			$this -> Session -> setFlash('Data berhasil disimpan', 'success');
-			// return $this->redirect($this->request->here); 
-			return $this -> redirect(array('action' => 'index'));
+			// return $this->redirect($this->request->here);
+			return $this -> redirect(array('action' => 'success'));
 			// $this->redirect('http://www.google.com');
 			// } else {
 			// $this -> Session -> setFlash(__('The pembelian could not be saved. Please, try again.'));
 			// }
 		}
-		$vendors = $this -> Pembelian -> Vendor -> find('all', array('recursive' => 0,'conditions'=>array('Vendor.aktif'=>1)));
+		$vendors = $this -> Pembelian -> Vendor -> find('all', array('recursive' => 0, 'conditions' => array('Vendor.aktif' => 1)));
 		// debug($vendors);
 		$products = $this -> Pembelian -> Product -> find('list');
 		$users = $this -> Pembelian -> User -> find('list');
@@ -291,11 +302,11 @@ class PembeliansController extends AppController {
 		// $this -> Session -> setFlash(__('The pembelian could not be deleted. Please, try again.'));
 		// }
 		// debug($id);die();
-		$this -> Pembelian -> query("DELETE FROM pembelians WHERE nomor='". $id."'");
+		$this -> Pembelian -> query("DELETE FROM pembelians WHERE nomor='" . $id . "'");
 		$this -> Session -> setFlash('Data berhasil dihapus', 'success');
 		return $this -> redirect(array('action' => 'index'));
 		// $this->redirect('/Pembelians/index');
-		
+
 	}
 
 }

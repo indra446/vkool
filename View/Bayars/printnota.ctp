@@ -84,7 +84,7 @@
 	<tr>
 		<td style="background-color: #ccc">Bayar</td>
 		<td align="right"><?php echo number_format($d['bayars']['bayar'],0,',','.')?></td>
-                <td style="background-color: #ccc"><?php if($sudahbayar < ($total-$cek[0]['penjualans']['disc'])-$hidedis) { echo "Kurang Bayar";}elseif($sudahbayar = ($total-$cek[0]['penjualans']['disc'])-$hidedis){echo "Uang Kembali";}else{echo "Uang Kembali";}?></td>
+                <td style="background-color: #ccc"><?php if($sudahbayar < ($total-$cek[0]['penjualans']['disc'])-$hidedis) { echo "Kurang Bayar";}elseif($sudahbayar == ($total-$cek[0]['penjualans']['disc'])-$hidedis){echo "Uang Kembali";}else{echo "Uang Kembali";}?></td>
 		<td align="right"><?php echo str_replace("-", "", number_format(($total-($cek[0]['penjualans']['disc']))-$sudahbayar,0,',','.')-$hidedis);?></td>
 	</tr>
 </table>

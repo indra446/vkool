@@ -159,7 +159,11 @@ location.reload();
     <div class="form-footer" align="right">
         <?php // echo $this->Form->button('Bayar', array('type' => 'submit', 'class' => 'btn btn-primary','style'=>'margin: 10px 16px 0px 0px;')); ?>
         <!--<button class="btn btn-primary" class="bayar" style="margin: 10px 16px 0px 0px;">Bayar</button>-->
-         <?php // if($bayaro<$totall){?><a onClick="configurator(this)" href="#" title="lihat"  class="btn btn-info btn-xs" id="<?php echo $id; ?>"><i class="fa fa-folder-open" ></i>Bayar</a><?php // }?>
+         <?php if($bayaro>=$totall){?>
+        <!--<a href="" class="btn btn-info btn-xs">Lunas</a>-->
+             <?php } else {?>
+        <a onClick="configurator(this)" href="#" title="lihat"  class="btn btn-info btn-xs" id="<?php echo $id; ?>"><i class="fa fa-folder-open" ></i>Bayar</a>
+         <?php } ?>
     </div>
     
     <?php // echo $this->Form->end(); ?>
