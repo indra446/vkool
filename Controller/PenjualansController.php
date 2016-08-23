@@ -75,41 +75,49 @@ class PenjualansController extends AppController {
 	 *
 	 * @return void
 	 */
-	public function histori() {
-		if ($this -> request -> is('post')) {
-			$d = $this -> request -> data;
-			$tgla = date("Y-m-d", strtotime($this->request->data['start']));
-			$tglb = date("Y-m-d", strtotime($this->request->data['end']));
-			$data = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
-					penjualans.id,
-					penjualans.nomor,
-					penjualans.created,
-					customers.nama,
-					Sum(bayars.bayar)bayar,
-					bayars.total
-					FROM
-					penjualans
-					INNER JOIN customers ON penjualans.customer_id = customers.id
-					INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
-					INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
-					GROUP BY
-					penjualans.id,
-					penjualans.nomor,
-					penjualans.created,
-					customers.nama
-					)a WHERE a.bayar>=a.total AND a.nomor LIKE '%" . $this->request->data['Penjualan']['nomor'] . "%' OR a.nama LIKE '%" . $this->request->data['Penjualan']['pelanggan'] ."%' OR SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '" . $tgla . "' AND '" . $tglb . "'");
-			// debug($this->request->data['Penjualan']['pelanggan']);die();
-		if ($this -> request -> is('ajax')) {
-			$this -> autoRender = false;
-			$this -> paginate = array('fields' => array('SUM(Bayar.bayar)bayar', 'Bayar.total', 'Penjualan.id', 'Penjualan.nomor', 'Penjualan.created', 'Cus.nama'), 'conditions' => array('Penjualan.id' => $data[0][0]['id']), 'group' => 'Penjualan.nomor', 'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')), array('table' => 'bayars', 'alias' => 'Bayar', 'type' => 'INNER', 'conditions' => array('Bayar.id_penjualan = Penjualan.id')), array('table' => 'bahanbakus', 'alias' => 'Baku', 'type' => 'INNER', 'conditions' => array('Baku.penjualan_id = Penjualan.id'))));
-			$this -> DataTable -> mDataProp = true;
-			 // debug($this -> DataTable -> getResponse());
-			 // die ;
-			echo json_encode($this -> DataTable -> getResponse());
-		}
-		} else {
+	public function histori($no = null) {
+		// if (!empty($_GET['no'])) {
+		// // debug($_GET['no']);
+		// // $d = $this -> request -> data;
+		// // $tgla = date("Y-m-d", strtotime($this->request->data['start']));
+		// // $tglb = date("Y-m-d", strtotime($this->request->data['end']));
+		// $data = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
+		// penjualans.id,
+		// penjualans.nomor,
+		// penjualans.created,
+		// customers.nama,
+		// Sum(bayars.bayar)bayar,
+		// bayars.total
+		// FROM
+		// penjualans
+		// INNER JOIN customers ON penjualans.customer_id = customers.id
+		// INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
+		// LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
+		// GROUP BY
+		// penjualans.id,
+		// penjualans.nomor,
+		// penjualans.created,
+		// customers.nama
+		// )a WHERE a.bayar>=a.total AND a.nomor= '" . $_GET['no'] . "'");
+		// // debug($data);die();
+		// // if ($this -> request -> is('ajax')) {
+		// // $this -> autoRender = false;
+		// // $this -> paginate = array('fields' => array('SUM(Bayar.bayar)bayar', 'Bayar.total', 'Penjualan.id', 'Penjualan.nomor', 'Penjualan.created', 'Cus.nama'), 'conditions' => array('Penjualan.id IN (5)'), 'group' => 'Penjualan.nomor', 'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')), array('table' => 'bayars', 'alias' => 'Bayar', 'type' => 'INNER', 'conditions' => array('Bayar.id_penjualan = Penjualan.id')), array('table' => 'bahanbakus', 'alias' => 'Baku', 'type' => 'LEFT', 'conditions' => array('Baku.penjualan_id = Penjualan.id'))));
+		// // $this -> DataTable -> mDataProp = true;
+		// // // debug($this -> DataTable -> getResponse());
+		// // // die ;
+		// // echo json_encode($this -> DataTable -> getResponse());
+		// // }
+		// } else {
 
-			$data = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
+		// if (isset($_POST)) {
+		// $no = $_POST['sSearch_0'];
+		// $filter = "AND a.nomor= '" . $no . "'";
+		// } else {
+		// $filter = "";
+		// $no = "";
+		// }
+		$data = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
 				penjualans.id,
 				penjualans.nomor,
 				penjualans.created,
@@ -120,121 +128,99 @@ class PenjualansController extends AppController {
 				penjualans
 				INNER JOIN customers ON penjualans.customer_id = customers.id
 				INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
-				INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
+				LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
 				GROUP BY
 				penjualans.id,
 				penjualans.nomor,
 				penjualans.created,
 				customers.nama
-				)a WHERE a.bayar>=a.total");
+				)a WHERE a.bayar>=a.total ");
+		// }
+		// debug($this->request->data);
+		// debug($_POST);die();
 		if ($this -> request -> is('ajax')) {
 			$this -> autoRender = false;
 
-				$this -> paginate = array('fields' => array('SUM(Bayar.bayar)bayar', 'Bayar.total', 'Penjualan.id', 'Penjualan.nomor', 'Penjualan.created', 'Cus.nama'), 'conditions' => array('Penjualan.id' => array($data[0][0]['id'])), 'group' => 'Penjualan.nomor', 'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')), array('table' => 'bayars', 'alias' => 'Bayar', 'type' => 'INNER', 'conditions' => array('Bayar.id_penjualan = Penjualan.id')), array('table' => 'bahanbakus', 'alias' => 'Baku', 'type' => 'INNER', 'conditions' => array('Baku.penjualan_id = Penjualan.id'))));
-	
-			$this -> DataTable -> mDataProp = true;
-			 // debug($this -> DataTable -> getResponse());
-			 // die ;
-			echo json_encode($this -> DataTable -> getResponse());
-		}
-		}
-		$this -> set(compact('data'));
-		// debug($data);
-
-
-	}
-        public function historirekap(){
-            		if ($this -> request -> is('post')) {
-			$d = $this -> request -> data;
-			$tgla = date("Y-m-d", strtotime($d[1]));
-			$tglb = date("Y-m-d", strtotime($d[2]));
-			// debug($tgla);
-			$data = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
-					penjualans.id,
-					penjualans.nomor,
-					penjualans.created,
-					customers.nama,
-					Sum(bayars.bayar)bayar,
-					bayars.total
-					FROM
-					penjualans
-					INNER JOIN customers ON penjualans.customer_id = customers.id
-					INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
-					INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
-					GROUP BY
-					penjualans.id,
-					penjualans.nomor,
-					penjualans.created,
-					customers.nama
-					)a WHERE a.bayar>=a.total AND a.nomor LIKE '%" . $d[3] . "%' AND a.nama LIKE '%" . $d[4] . "%' OR SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '" . $tgla . "' AND '" . $tglb . "'");
-
-		} else {
-
-			$data = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
-				penjualans.id,
-				penjualans.nomor,
-				penjualans.created,
-				customers.nama,
-				Sum(bayars.bayar)bayar,
-				bayars.total
-				FROM
-				penjualans
-				INNER JOIN customers ON penjualans.customer_id = customers.id
-				INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
-				INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
-				GROUP BY
-				penjualans.id,
-				penjualans.nomor,
-				penjualans.created,
-				customers.nama
-				)a WHERE a.bayar>=a.total");
-		}
-            if ($this -> request -> is('ajax')) {
-			$this -> autoRender = false;
-
-			$this -> paginate = array('fields' => array('SUM(Bayar.bayar)bayar', 'Bayar.total', 'Penjualan.id', 'Penjualan.nomor', 'Penjualan.created', 'Cus.nama'), 'conditions' => array('Penjualan.id' => array($data[0][0]['id'])), 'group' => 'Penjualan.nomor', 'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')), array('table' => 'bayars', 'alias' => 'Bayar', 'type' => 'INNER', 'conditions' => array('Bayar.id_penjualan = Penjualan.id')), array('table' => 'bahanbakus', 'alias' => 'Baku', 'type' => 'INNER', 'conditions' => array('Baku.penjualan_id = Penjualan.id'))));
-
-			$this -> DataTable -> mDataProp = true;
-//			 debug($this -> DataTable -> getResponse());
-//			 die ;
-			echo json_encode($this -> DataTable -> getResponse());
-		}
-        }
-
-        public function rekaphistori() {
-		// if ($this -> request -> is('post')) {
-		$d = $this -> request -> data;
-		
-		// $tgla = date("Y-m-d", strtotime($d[2]));
-		// $tglb = date("Y-m-d", strtotime($d[3]));
-		// debug($tgla);
-					$data = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
-				penjualans.id,
-				penjualans.nomor,
-				penjualans.created,
-				customers.nama,
-				Sum(bayars.bayar)bayar,
-				bayars.total
-				FROM
-				penjualans
-				INNER JOIN customers ON penjualans.customer_id = customers.id
-				INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
-				INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
-				GROUP BY
-				penjualans.id,
-				penjualans.nomor,
-				penjualans.created,
-				customers.nama
-				)a WHERE a.bayar>=a.total");		$this -> set(compact('data'));
-		if ($this -> request -> is('ajax')) {
-			$this -> autoRender = false;
-
-			$this -> paginate = array('fields' => array('SUM(Bayar.bayar)bayar', 'Bayar.total', 'Penjualan.id', 'Penjualan.nomor', 'Penjualan.created', 'Cus.nama'), 'conditions' => array('Penjualan.id' => array($data[0][0]['id'])), 'group' => 'Penjualan.nomor', 'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')), array('table' => 'bayars', 'alias' => 'Bayar', 'type' => 'INNER', 'conditions' => array('Bayar.id_penjualan = Penjualan.id')), array('table' => 'bahanbakus', 'alias' => 'Baku', 'type' => 'INNER', 'conditions' => array('Baku.penjualan_id = Penjualan.id'))));
+			$this -> paginate = array('fields' => array('SUM(Bayar.bayar)bayar', 'Bayar.total', 'Penjualan.id', 'Penjualan.nomor', 'Penjualan.created', 'Cus.nama'), 'conditions' => array('Penjualan.id IN (' . $data[0][0]['id'] . ')'), 'group' => 'Penjualan.nomor', 'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')), array('table' => 'bayars', 'alias' => 'Bayar', 'type' => 'INNER', 'conditions' => array('Bayar.id_penjualan = Penjualan.id')), array('table' => 'bahanbakus', 'alias' => 'Baku', 'type' => 'LEFT', 'conditions' => array('Baku.penjualan_id = Penjualan.id'))));
 
 			$this -> DataTable -> mDataProp = true;
 			// debug($this -> DataTable -> getResponse());
 			// die ;
 			echo json_encode($this -> DataTable -> getResponse());
+		}
+		$this -> set(compact('data'));
+		// debug($data);
+
+	}
+
+	public function rekaphistori() {
+		// if ($this -> request -> is('post')) {
+		$dd = $this -> request -> data;
+		// debug($d);die();
+		if (!empty($d['start'])) {
+			$tgla = date("Y-m-d", strtotime($d['start']));
+		} else {
+			$tgla = "";
+		}
+		if (!empty($d['end'])) {
+			$tglb = date("Y-m-d", strtotime($d['end']));
+		} else {
+			$tglb = "";
+		}
+		debug($_POST['nomor']);
+		// die();
+		$cek = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
+					penjualans.id,
+					penjualans.nomor,
+					penjualans.created,
+					customers.nama,
+					Sum(bayars.bayar)bayar,
+					bayars.total
+					FROM
+					penjualans
+					INNER JOIN customers ON penjualans.customer_id = customers.id
+					INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
+					LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
+					GROUP BY
+					penjualans.id,
+					penjualans.nomor,
+					penjualans.created,
+					customers.nama
+					)a WHERE a.bayar>=a.total AND (a.nomor ='" .$_GET['nomor'] . "' OR a.nama ='" . $_POST['pelanggan'] . "' OR SUBSTR(a.created  FROM 1 FOR 10) BETWEEN '" . $tgla . "' AND '" . $tglb . "')");
+
+		// } else {
+		//
+		// $data = $this -> Penjualan -> query("SELECT GROUP_CONCAT(id)id FROM (SELECT
+		// penjualans.id,
+		// penjualans.nomor,
+		// penjualans.created,
+		// customers.nama,
+		// Sum(bayars.bayar)bayar,
+		// bayars.total
+		// FROM
+		// penjualans
+		// INNER JOIN customers ON penjualans.customer_id = customers.id
+		// INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
+		// LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
+		// GROUP BY
+		// penjualans.id,
+		// penjualans.nomor,
+		// penjualans.created,
+		// customers.nama
+		// )a WHERE a.bayar>=a.total");
+		// }
+		$this -> set(compact('data'));
+		// debug($data);die();
+		if ($this -> request -> is('ajax')) {
+			$this -> autoRender = false;
+
+			$this -> paginate = array('fields' => array('SUM(Bayar.bayar)bayar', 'Bayar.total', 'Penjualan.id', 'Penjualan.nomor', 'Penjualan.created', 'Cus.nama'), 'conditions' => array('Penjualan.id IN (' . $cek[0][0]['id'] . ')'), 'group' => 'Penjualan.nomor', 'joins' => array( array('table' => 'customers', 'alias' => 'Cus', 'type' => 'INNER', 'conditions' => array('Cus.id = Penjualan.customer_id')), array('table' => 'bayars', 'alias' => 'Bayar', 'type' => 'INNER', 'conditions' => array('Bayar.id_penjualan = Penjualan.id')), array('table' => 'bahanbakus', 'alias' => 'Baku', 'type' => 'LEFT', 'conditions' => array('Baku.penjualan_id = Penjualan.id'))));
+
+			$this -> DataTable -> mDataProp = true;
+			// debug($this -> DataTable -> getResponse());
+			// die ;
+			echo json_encode($this -> DataTable -> getResponse());
+			// die();
 			// echo json_encode($this -> DataTable -> getResponse());
 		}
 		// }
@@ -300,7 +286,7 @@ class PenjualansController extends AppController {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('norandom'=>$_POST['norandom'],'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"], ));
+		@$itemArray = array($data[0]['products']['id'] => array('norandom' => $_POST['norandom'], 'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"], ));
 
 		if (!empty($_SESSION["cart_depan"])) {
 			$arr = array();
@@ -334,7 +320,7 @@ class PenjualansController extends AppController {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArraysamping = array($data[0]['products']['id'] => array('norandom'=>$_POST['norandom'],'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"]));
+		@$itemArraysamping = array($data[0]['products']['id'] => array('norandom' => $_POST['norandom'], 'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_samping"])) {
 			$arr = array();
@@ -368,7 +354,7 @@ class PenjualansController extends AppController {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('norandom'=>$_POST['norandom'],'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"]));
+		@$itemArray = array($data[0]['products']['id'] => array('norandom' => $_POST['norandom'], 'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_belakang"])) {
 			$arr = array();
@@ -402,7 +388,7 @@ class PenjualansController extends AppController {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('norandom'=>$_POST['norandom'],'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"]));
+		@$itemArray = array($data[0]['products']['id'] => array('norandom' => $_POST['norandom'], 'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_aksesoris"])) {
 			$arr = array();
@@ -436,7 +422,7 @@ class PenjualansController extends AppController {
 		$produk = explode("|", $_POST['idp']);
 		$data = $this -> Penjualan -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$post = $_POST;
-		@$itemArray = array($data[0]['products']['id'] => array('norandom'=>$_POST['norandom'],'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"]));
+		@$itemArray = array($data[0]['products']['id'] => array('norandom' => $_POST['norandom'], 'id' => $data[0]['products']['id'], 'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["jml"], 'harga' => $_POST["harga"], 'subtotal' => ($_POST["harga"] * $_POST["jml"]) - $_POST["diskon"], 'diskon' => $_POST["diskon"]));
 
 		if (!empty($_SESSION["cart_service"])) {
 			$arr = array();
@@ -529,14 +515,14 @@ class PenjualansController extends AppController {
 	 *
 	 * @return void
 	 */
-	public function jumlahtot($id=null) {
+	public function jumlahtot($id = null) {
 		$this -> layout = false;
 		//       print_r($_SESSION);
 		$sumd = 0;
 		if (!empty($_SESSION['cart_depan'])) {
 			foreach (@$_SESSION['cart_depan'] as $j) {
-				if($id==$j['norandom']){
-				$sumd += $j['subtotal'];
+				if ($id == $j['norandom']) {
+					$sumd += $j['subtotal'];
 				}
 			}
 		}
@@ -544,33 +530,33 @@ class PenjualansController extends AppController {
 		if (!empty($_SESSION['cart_samping'])) {
 
 			foreach (@$_SESSION['cart_samping'] as $j) {
-				if($id==$j['norandom']){
-				$sums += $j['subtotal'];
-				}	
+				if ($id == $j['norandom']) {
+					$sums += $j['subtotal'];
+				}
 			}
 		}
 
 		@$sumb = 0;
 		if (!empty($_SESSION['cart_belakang'])) {
 			foreach (@$_SESSION['cart_belakang'] as $sj) :
-				if($id==$sj['norandom']){
-				$sumb += $sj['subtotal'];
+				if ($id == $sj['norandom']) {
+					$sumb += $sj['subtotal'];
 				}
 			endforeach;
 		}
 		@$suma = 0;
 		if (!empty($_SESSION['cart_aksesoris'])) {
 			foreach (@$_SESSION['cart_aksesoris'] as $j) {
-				if($id==$j['norandom']){
-				$suma += $j['subtotal'];
+				if ($id == $j['norandom']) {
+					$suma += $j['subtotal'];
 				}
 			}
 		}
 		@$sumsc = 0;
 		if (!empty($_SESSION['cart_service'])) {
 			foreach (@$_SESSION['cart_service'] as $j) {
-				if($id==$j['norandom']){
-				$sumsc += $j['subtotal'];
+				if ($id == $j['norandom']) {
+					$sumsc += $j['subtotal'];
 				}
 			}
 		}
@@ -630,11 +616,12 @@ class PenjualansController extends AppController {
 				}
 				$count = count($zn['DetailPenjualan']['id_product']) - 1;
 				for ($i = 0; $i <= $count; $i++) {
+					$aa = explode("-", $zn['Penjualan']['id_karyawan']);
 					$data['DetailPenjualan']['penjualan_id'] = $lastin;
 					@$data['DetailPenjualan']['id_product'] = $zn['DetailPenjualan']['id_product'][$i];
 					@$data['DetailPenjualan']['qty'] = $zn['DetailPenjualan']['qty'][$i];
 					@$data['DetailPenjualan']['harga'] = $zn['DetailPenjualan']['harga'][$i];
-					@$data['DetailPenjualan']['id_karyawan'] = explode("-", $zn['Penjualan']['id_karyawan'])['1'];
+					@$data['DetailPenjualan']['id_karyawan'] = $aa['1'];
 					@$data['DetailPenjualan']['disc'] = $zn['DetailPenjualan']['disc'][$i];
 					@$data['DetailPenjualan']['ket'] = $zn['Penjualan']['ket'];
 					//                                                    print_r($data);exit;

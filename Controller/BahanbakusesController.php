@@ -230,6 +230,7 @@ class BahanbakusesController extends AppController {
                 GROUP BY detail_penjualans.id
 
 ");
+                
 
 		$bayar = $this -> Bahanbakus -> query(" SELECT Sum(bayars.bayar) as bayare FROM `bayars` WHERE bayars.id_penjualan='$id' ");
 		$nyicil = $this -> Bahanbakus -> query(" SELECT bayars.bayar,bayars.created, bayars.id FROM `bayars` WHERE bayars.id_penjualan='$id' ");

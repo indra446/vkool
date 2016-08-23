@@ -71,6 +71,16 @@
         <td>:</td>
         <td><?php echo $data[0]['customers']['hp'];?></td>
     </tr>
+    <tr>
+        <td>Sales</td>
+        <td>:</td>
+        <td><?php echo $data[0]['karyawans']['nama'];?></td>
+    </tr>
+    <tr>
+        <td>Info</td>
+        <td>:</td>
+        <td><?php echo $data[0]['detail_penjualans']['ket'];?></td>
+    </tr>
     
 </table>
     <table class="table table-striped" style="width: 500px; border: 1px solid gray;" id="order">
@@ -91,7 +101,7 @@
     <?php endforeach;?>
 </table>
 </div>
-<a href="<?php echo $this->webroot;?>penjualans/add">Kembali</a>
+<!--<a href="<?php echo $this->webroot;?>penjualans/add">Kembali</a>-->
 <?php
 		echo $this -> Html -> script(array('lib/jquery.printElement.min'));
 	?>

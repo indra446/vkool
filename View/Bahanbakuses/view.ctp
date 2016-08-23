@@ -16,19 +16,6 @@
             if (!isNaN(result)) {
                 document.getElementById('totalall').value = result;
             }
-//        $.ajax({
-//        type: "POST",
-//        url: "<?php // echo $this->webroot; ?>bahanbakuses/updatedisc/<?php // echo$id;?>",
-//        data: { idp : $("#discount").val(),jml :$("#hiddendiscount").val()},
-//         success: function(html) {
-//        $('#PenjualanIdProduct').val("");
-//        $('#PenjualanQty').val("");
-//        $('#PenjualanHarga').val("");
-//        $('#PenjualanDisc').val("");
-//        jq("#isi_cart").html(html);
-//       
-//        }
-//        });
         }
 </script>
 <script>
@@ -48,6 +35,11 @@
                 document.getElementById('kbayar').value = result;
                
             }}
+        if(result<0){
+            labele='Uang Kembali';
+            document.getElementById('labelkbyar').innerHTML = labele;
+        }else {labele='Kurang Bayar';
+            document.getElementById('labelkbyar').innerHTML = labele; }
         }
 </script>
 <script>
@@ -199,16 +191,16 @@ var sd=$$e("#sdbyr").val();
 var totsd=tot-sd;
 var id = clicked.id;
          bootbox.dialog({
-        title: "Input Pembayaran",
-        message:'<table class="table"><tr><td><p>Riwayat Pembayaran <a class="btn btn-success btn-sm" href="<?php echo $this->webroot;?>bayars/riwayat/<?php echo $id; ?>">Detail</a></p><br>'+
-            '<table class="table table-striped"><tr><th style="width: 95px;">Tanggal</th><th>Jumlah Bayar</th></tr>'+
-         <?php foreach ($nyicil as $ny):?> '<tr><td><?php echo substr($ny['bayars']['created'],0,10); ?></td><td><?php echo $ny['bayars']['bayar'];?></td></tr>'+ <?php endforeach;?>
+        title: "Input Pembayaran","className" : "my-custom-class",
+        message:'<table class="table"><tr><td><?php if(!empty($nyicil)){?> <p>Riwayat Pembayaran  <a class="btn btn-success btn-sm" href="<?php echo $this->webroot;?>bayars/riwayat/<?php echo $id; ?>">Detail</a><?php } ?></p><br>'+
+            '<table class="table table-striped"><tr><th style="width: 95px;"><?php if(!empty($nyicil)){?>Tanggal<?php }?></th><th><?php if(!empty($nyicil)){?>Jumlah Bayar<?php } ?></th></tr>'+
+             <?php foreach ($nyicil as $ny):?> '<tr><td><?php echo substr($ny['bayars']['created'],0,10); ?></td><td><?php echo $ny['bayars']['bayar'];?></td></tr>'+ <?php endforeach;?>
             '</table>'+    
             '</td><td>'+ 
             '<table class="table">' +
             '<tr><td>Total</td><td>:</td><td><?php echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
-            '<tr><td>Discount</td><td>:</td><td><input id="discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+disc+' class="form-control" readonly></td></tr>'+
-            ' <tr><td>Hidden Discount</td><td>:</td><td> <input id="hid_discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+hdisc+' class="form-control" readonly></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php //echo $t=$totalnya-$dis1-$dis2;?>'+tot+'</td></tr><tr><td>Pembayaran</td><td>:</td><td><?php echo $b;?></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control" id="sisatagihan" name="discount" readonly value="'+totsd+'" onkeyup="sumi();"></td></tr><tr></table>'+
+            '<tr><td>Discount</td><td>:</td><td><input id="discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+disc+' class="form-control input-sm" readonly></td></tr>'+
+            ' <tr><td>Hidden Discount</td><td>:</td><td> <input id="hid_discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+hdisc+' class="form-control input-sm" readonly></td></tr><tr><td>Total Tagihan</td><td>:</td><td><?php //echo $t=$totalnya-$dis1-$dis2;?>'+tot+'</td></tr><tr><td>Pembayaran</td><td>:</td><td><?php if(!empty($b)){echo $b;}else{echo "0";}?></td></tr><tr><td>Sisa Tagihan</td><td>:</td><td ><input type="text" class="form-control input-sm" id="sisatagihan" name="discount" readonly value="'+totsd+'" onkeyup="sumi();"></td></tr><tr></table>'+
             '<form class="form-horizontal j-forms" action="#" id="j-forms-validation" method="post" accept-charset="utf-8"> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Metode Pembayaran</label> ' +
@@ -219,19 +211,19 @@ var id = clicked.id;
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Keterangan</label> ' +
             '<div class="col-md-8"> ' +
-            '<input id="ket" name="ket" type="textarea" placeholder="Keterangan" class="form-control"> ' +
+            '<input id="ket" name="ket" type="textarea" placeholder="Keterangan" class="form-control input-sm"> ' +
             '</div></div> ' +
             '<div class="form-group"> ' +
             '<label class="col-md-4 control-label" for="name">Bayar</label> ' +
             '<div class="col-md-8"> ' +
-            '<input required="" id="bayar" name="bayar" type="number" placeholder="Bayar"  <?php //if(!empty($b)){echo 'min="1"';}else{echo 'min="0"';} ?> class="form-control" onkeyup="sumi();"> ' +
-            '<input id="total" name="bayar" type="hidden" value="'+tot+'" placeholder="Bayar" class="form-control"> ' +
-            '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control"> ' +
+            '<input required="" id="bayar" name="bayar" type="number" placeholder="Bayar"  <?php //if(!empty($b)){echo 'min="1"';}else{echo 'min="0"';} ?> class="form-control input-sm" onkeyup="sumi();"> ' +
+            '<input id="total" name="bayar" type="hidden" value="'+tot+'" placeholder="Bayar" class="form-control input-sm"> ' +
+            '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control input-sm"> ' +
             '</div></div> ' +
             '<div class="form-group"> ' +
-            '<label class="col-md-4 control-label" for="name">Kurang Bayar</label> ' +
+            '<label class="col-md-4 control-label" for="name" id="labelkbyar">Kurang Bayar</label> ' +
             '<div class="col-md-8"> ' +
-            '<input id="kbayar" name="kbayar" type="number" placeholder="Kurang Bayar"  class="form-control"> ' +
+            '<input id="kbayar" name="kbayar" type="number" placeholder="Kurang Bayar"  class="form-control input-sm" readonly> ' +
             '</div></div> ' +
             '</div> ' +
             '</form></td></tr></table>',
@@ -274,3 +266,8 @@ var id = clicked.id;
         }    });
 }	
 </script>
+<style>
+	.my-custom-class .modal-dialog{
+    width:60%;
+}
+</style>

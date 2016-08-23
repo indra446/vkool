@@ -27,6 +27,7 @@
             <p style="margin-top: 7px;"> <?php echo Date('Y-m-d H:i:s'); ?></p>
         </div>
     </div>
+    
     <div class="form-group">
         <label class="col-md-2 control-label">Nomor Nota</label>
         <label class="col-md-2 control-label">:</label>

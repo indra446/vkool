@@ -15,17 +15,17 @@
      </div>
 </div>
 
-<div class="pembelians form">
+<!-- <div class="pembelians form">
 	<h4>Filter</h4>
-<?php echo $this->Form->create('Penjualan', array('id'=>'j-forms-validation','class' => 'form-horizontal j-forms')); ?>
+<?php echo $this->Form->create('Penjualan', array('action'=>'rekaphistori','id'=>'j-forms-validation','class' => 'form-horizontal j-forms')); ?>
     <div class="form-group unit">
         <label class="col-md-2 control-label">Nomor Nota</label>
         <div class=" col-md-4">
-            <?php echo $this->Form->input('nomor', array('id'=>'nomor','class' => 'form-control', 'label' => false)); ?>
+            <?php echo $this->Form->input('nomor', array('name'=>'nomor','id'=>'nomor','class' => 'form-control', 'label' => false)); ?>
         </div>
         <label class="col-md-2 control-label">Pelanggan</label>
         <div class=" col-md-4">
-            <?php echo $this->Form->input('pelanggan', array('id'=>'pelanggan','class' => 'form-control', 'label' => false)); ?>
+            <?php echo $this->Form->input('pelanggan', array('name'=>'pelanggan','id'=>'pelanggan','class' => 'form-control', 'label' => false)); ?>
         </div>
     </div>	
        <div class="form-group">
@@ -41,8 +41,9 @@
        <div class="form-footer">
 		<?php echo $this -> Form -> button('Lihat', array('id'=>'lihat','type' => 'submit', 'class' => 'btn btn-primary')); ?>
 	</div>
-</div>
-<hr>
+</div> -->
+
+<!-- <hr> -->
 <div id="data">
 	<table id="tbhistori" class="table">
 	<thead>
@@ -50,7 +51,7 @@
 			<th>Nomor Nota</th>
 			<th>Tanggal</th>
 			<th>Nama Pelanggan</th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
+			<th class="actions">Aksi</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -69,30 +70,33 @@
 </div>
 <?php echo $this -> Html -> script(array('jquery-1.10.2')); ?>
 
-<!-- <script type="text/javascript">
-var jq=jQuery.noConflict();
-	    jq( '#lihat' ).on( 'click', function() {
-	    
-	    	jq('#data').html('<div align="center">sedang memproses data...<br><img src="<?php echo $this -> webroot; ?>img/loading.gif" /></div>');
-	    	var nm=jq("#nomor").val();
-	    	var plg=jq("#pelanggan").val();
-	    	var tgla=jq("#start").val();
-	    	var tglb=jq("#end").val();
-	    	jq('#data').load('<?php echo $this -> webroot; ?>Penjualans/rekaphistori?sEcho=1&iColumns=4&sColumns=%2C%2C%2C&iDisplayStart=0&iDisplayLength=10&mDataProp_0=Penjualan.nomor&sSearch_0=&bRegex_0=false&bSearchable_0=true&bSortable_0=true&mDataProp_1=Penjualan.created&sSearch_1=&bRegex_1=false&bSearchable_1=true&bSortable_1=true&mDataProp_2=Cus.nama&sSearch_2=&bRegex_2=false&bSearchable_2=true&bSortable_2=true&mDataProp_3=Penjualan.nomor&sSearch_3=&bRegex_3=false&bSearchable_3=true&bSortable_3=true&sSearch=&bRegex=false&iSortCol_0=0&sSortDir_0=asc&iSortingCols=1&_=1471490197175');
+<script type="text/javascript">
+// var jq=jQuery.noConflict();
+	    // jq( '#lihat' ).on( 'click', function() {
+// 	    
+	    	// jq('#data').html('<div align="center">sedang memproses data...<br><img src="<?php echo $this -> webroot; ?>img/loading.gif" /></div>');
+	    	// var nm=jq("#nomor").val();
+	    	// var plg=jq("#pelanggan").val();
+	    	// var tgla=jq("#start").val();
+	    	// var tglb=jq("#end").val();
+	    	// // jq('#data').load('<?php echo $this -> webroot; ?>Penjualans/rekaphistori');
 				// jq.ajax({
+				// dataType: 'json',
 				// type: "POST",
 				// url: "<?php echo $this -> webroot; ?>Penjualans/rekaphistori",
 				// data: { 1:nm,2:tgla,3:tglb,4:plg },
-				// success: function(e) {
-				// // alert(JSON.stringify(e));
-				// // alert(e);
-				 // var json=e;
-				 // alert(json)
-				 // // jq("#data").html(html);
+				// success: function(result) {
+					// alert(result);
+	             // if (result.iTotalRecords == 0) {
+                                        // jq("#tbhistori").hide();
+                                // } else {
+	    								// jq('#data').load('<?php echo $this -> webroot; ?>Penjualans/rekaphistori');
+                                        // // fnCallback(result)
+                                // }
 				// }
 			// });
-            //code
-            return false;
-        });
-</script> -->
+            // //code
+            // return false;
+        // });
+</script>
 <div id="data2"></div>

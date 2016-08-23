@@ -18,6 +18,7 @@
         <label class="col-md-2 control-label">Vendor</label>
         <div class=" col-md-6">
         	 <div class="widget right-50">
+        	 <input type="hidden" value="<?php echo rand();?>" id="norandom">
             <?php echo $this->Form->input('vendorid', array('readonly'=>true,'id'=>'vendor','class' => 'form-control', 'label' => false, 'required' => true)); ?>
                 <label class="addon adn-50 adn-right" for="vendor">
                 <i class="fa fa-search" id="btn-show"></i>
@@ -116,6 +117,7 @@
 $(document).ready(function() {
  $('#add_produk').on('click', function(){
  	 var prod=$("#produk").val();
+    var norandom = $("#norandom").val();
  	 if(prod==""){
  	 alert("Produk masih kosong");
       return false;
@@ -123,7 +125,7 @@ $(document).ready(function() {
  	$.ajax({
 	type: "POST",
 	url: "<?php echo $this -> webroot; ?>Returs/cart/",
-	data: { idp : $("#produk").val(),qty :$("#qty").val() },
+	data: { orandom:norandom ,idp : $("#produk").val(),qty :$("#qty").val() },
 	success: function(html) {
 	$('#produk').val("");
 

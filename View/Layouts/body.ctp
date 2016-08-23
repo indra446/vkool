@@ -248,6 +248,7 @@
 		echo $this -> Html -> script(array('lib/jquery.dataTables','lib/dataTables.responsive','lib/dataTables.tableTools','lib/dataTables.bootstrap','lib/select2.full','lib/jquery.mask','lib/footable.all','lib/jquery.noty','lib/bootstrap-datepicker'));
 		echo $this -> fetch('script');
 		?>
+	
 <script type="text/javascript">
 	// var oTable;
 	var $tb = jQuery.noConflict();
@@ -357,15 +358,17 @@
             $tb('td:eq(7)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Penjualans/edit/'+aData.Penjualan.id+'"><i class="fa fa-edit"></i></a><a id="'+aData.Penjualan.id+'" onClick="deljual(this)" href="#myModal" role="button" class="btn btn-xs btn-danger" data-toggle="modal"><i class="fa fa-trash-o"></i></a>');
         }
     });
-    
+
+ 	    var nomor=$tb("#nomor").val();	
 		$tb("#tbhistori").dataTable({
-		// oTable=$tb('#example').dataTable({
+		// $tb('#tbhistori').dataTable({
 		"sPaginationType" : "full_numbers",
         "iDisplayLength": 10,
+        "bRetrive":true,
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": "<?php echo $this->webroot;?>Penjualans/histori",
-        "sDom": 'frtip',
+    	"sDom": 'frtip',
         "aoColumns": [
             {mData:"Penjualan.nomor"},
             {mData:"Penjualan.created"},
@@ -389,13 +392,13 @@
             $tb('td:eq(3)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Penjualans/detail/'+aData.Penjualan.id+'"><i class="fa fa-chevron-circle-right"></i>&nbsp;Detail</a>');
         }
     });
-		$tb("#tbrekaphistori").dataTable({
-		// oTable=$tb('#example').dataTable({
+ $tb('#tbrekaphistori').dataTable({
 		"sPaginationType" : "full_numbers",
         "iDisplayLength": 10,
+        // "bRetrive":true,
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": "<?php echo $this->webroot;?>Penjualans/rekaphistori",
+        "sAjaxSource": "<?php echo $this->webroot;?>Penjualans/rekaphistori/no="+nomor,
         "sDom": 'frtip',
         "aoColumns": [
             {mData:"Penjualan.nomor"},
@@ -420,7 +423,20 @@
             $tb('td:eq(3)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Penjualans/detail/'+aData.Penjualan.id+'"><i class="fa fa-chevron-circle-right"></i>&nbsp;Detail</a>');
         }
     });
+
  });
+ // $tb(document).ready(function() {
+//  	
+ 	    // $tb('#nomor, #pelanggan').keyup( function() {
+ 	    // var nomor=$tb("#nomor").val();	
+ 	    	// // alert(nomor)
+ 	    // $tb("#tbhistori").dataTable().fnDestroy();	
+       
+// 
+// 
+// 
+    	// } );
+// } ); 	
 </script>		
 <script type="text/javascript">
 var jq=jQuery.noConflict();

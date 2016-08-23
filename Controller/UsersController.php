@@ -155,8 +155,12 @@ class UsersController extends AppController {
 				$this -> Session -> setFlash('User tidak dapat disimpan', 'error');
 			}
 		} else {
+			$this->loadModel('Karyawan');
+			$karyawan = $this -> Karyawan -> find('list', array('fields' => array('Karyawan.id', 'Karyawan.nama'), 'order' => array('nama ASC')));
+			$this->set(compact('karyawan'));
 			$options = array('conditions' => array('User.' . $this -> User -> primaryKey => $id));
 			$this -> request -> data = $this -> User -> find('first', $options);
+			$this->set('dataedit',$this -> request -> data);
 		}
 	}
 

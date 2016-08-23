@@ -16,7 +16,7 @@
 <?php echo $this->Form->create('Bahanbakuses',array('class' => 'form-horizontal j-forms')); ?>   
 <div class="form-group">
     <h3>Penjualan</h3>
-    <label class="col-md-2 control-label">Nomer Nota</label>
+    <!-- <label class="col-md-2 control-label">Nomer Nota</label>
     <div class=" col-md-4 unit">
         <div class="input text"><input name="data[bahanbakuses][nota]" id="produk" class="form-control"  value="<?php if(!empty($nota)) { echo $nota;} ?>" type="text">
         </div>     
@@ -39,7 +39,7 @@
 <div class="form-footer">
         <?php echo $this->Form->button('Filter', array('type' => 'submit', 'class' => 'btn btn-primary')); ?>
     </div>
-    <?php echo $this->Form->end(); ?>
+    <?php echo $this->Form->end(); ?> -->
 <div class="widget-container">
     <table class="table data-tbl">
         <thead>

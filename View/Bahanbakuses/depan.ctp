@@ -12,6 +12,8 @@ $this->layout = false;
             <th>Hapus</th>
         </tr>
     </thead><tbody>
+    <?php echo $this->Form->create('Vendor', array('id' => 'j-forms-validation', 'class' => 'form-horizontal j-forms')); ?>
+
         <?php $x = 0; //debug($_SESSION["cartbb"]);
         if (!empty($_SESSION["cartbb"])) {
            $ses=1; foreach ($_SESSION["cartbb"] as $k => $item) {            
@@ -30,8 +32,32 @@ $this->layout = false;
                         <input name="data[Penjualan][idp][]" class="form-control" value="<?php echo $item['idp']; ?>" type="hidden" >
                         <input name="data[Penjualan][jenis][]" class="form-control" value="<?php echo $item['jenis']; ?>" type="hidden" >
                     </td>
+                    <td><button type='button' class='btn btn-xs btn-danger' id="<?php  echo $k?>" onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td>
                     <!--<td><button type='button' class='btn btn-xs btn-danger' id="<?php // echo $item['id'];?>" onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td>-->
-                </tr> 
+                </tr>
+                <tr><td colspan="6"><div class="form-content col-md-8">
+            <!-- start cloned right side buttons element -->
+            <div class="clone-rightside-btn-1">
+                <div class="j-row toclone-widget-right toclone">
+                    <div class="span6 unit">
+                        <div class="input">
+                            <?php echo $this->Form->input('telp', array('name' => 'data[Vendor][telp][]', 'placeholder' => 'telepon', 'class' => 'form-control', 'label' => false, 'required' => true)); ?>
+                        </div>
+                    </div>
+                    <div class="span6 unit">
+                        <div class="input">
+                            <?php echo $this->Form->input('pic', array('name' => 'data[Vendor][pic][]', 'placeholder' => 'pic', 'class' => 'form-control', 'label' => false, 'required' => true)); ?>
+                        </div>
+                    </div>
+                    <button type="button" class="primary-btn clone-btn-right clone">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <button type="button" class="secondary-btn clone-btn-right delete">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- end cloned right side buttons element -->		</div></td></tr> 
                 <tr>
                     <td>Masukkan Sisa</td>
 
@@ -46,11 +72,16 @@ $this->layout = false;
                         <input name="data[Penjualan][idpsisa][]" class="form-control" value="<?php echo $item['idp']; ?>" type="hidden" >
 
                     </td>
-                    <td><button type='button' class='btn btn-xs btn-danger' id="<?php  echo $k?>" onClick='configurator(this)'><i class='fa fa-trash-o'></i></button></td>
+                    <td></td>
                 </tr> 
         <?php $x++;
         $ses++;} }?>
     </table>
+        <?php echo $this->Form->end(); 
+        		echo $this -> Html -> script(array('lib/jquery', 'lib/jquery-migrate', 'lib/bootstrap', 'lib/jquery.ui', 'lib/jRespond', 'lib/nav.accordion', 'lib/hover.intent', 'lib/hammerjs', 'lib/jquery.hammer', 'lib/smoothscroll', 'lib/jquery.fitvids', 'lib/scrollup', 'lib/smoothscroll', 'lib/jquery.slimscroll', 'lib/jquery.syntaxhighlighter', 'lib/velocity', 'lib/smart-resize','lib/bootbox', 'lib/jquery.maskedinput','lib/jquery.validate', 'lib/jquery.form','lib/j-forms-validations','lib/additional-methods', 'lib/jquery-cloneya', 'apps'));
+		
+        ?>
+
     <br>
     <script type="text/javascript">
         function configurator(clicked) {

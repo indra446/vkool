@@ -162,6 +162,7 @@ class BayarsController extends AppController {
  * @return void
  */
 	public function riwayat($id = null) {
+           
 		$data=$this->Bayar->query("SELECT
 				bayars.id,
 				bayars.bayar,
@@ -180,7 +181,8 @@ class BayarsController extends AppController {
 				WHERE
 				bayars.id_penjualan=".$id."
 				GROUP BY bayars.id");
-		$this->set(compact('data'));		
+            $this->set(compact('data'));	
+             
 	}
 
 /**
@@ -277,7 +279,7 @@ class BayarsController extends AppController {
 			categories.kategori,
 			detail_penjualans.harga,penjualans.hidden_disc,penjualans.disc,
 			detail_penjualans.disc as disc_item,
-			bayars.bayar,
+			bayars.bayar,bayars.kembalian,
 			bayars.total,detail_penjualans.qty,b.bayar
 			FROM
 			bayars

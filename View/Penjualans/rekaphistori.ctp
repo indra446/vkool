@@ -1,5 +1,5 @@
 <?php //$this->layout=false;?>
-<!-- <div class="widget-header block-header margin-bottom-0 clearfix">
+<div class="widget-header block-header margin-bottom-0 clearfix">
     <div class="pull-left">
         <h3>Histori Penjualan</h3>
     </div>
@@ -43,9 +43,9 @@
 		<?php echo $this -> Form -> button('Lihat', array('id'=>'lihat','type' => 'button', 'class' => 'btn btn-primary')); ?>
 	</div>
 </div>
-<hr-->
+<hr
 <div id="data">
-	<table id="tbhistori" class="table">
+	<table id="tbrekaphistori" class="table">
 	<thead>
 	<tr>
 			<th>Nomor Nota</th>
@@ -66,55 +66,4 @@
 		?>
 <?php echo $this -> Html -> script(array('jquery-1.10.2')); ?>
 
-<script type="text/javascript">
-// var jq=jQuery.noConflict();
-		// jq("#tbrekaphistori").dataTable({
-		// // oTable=$tb('#example').dataTable({
-		// "sPaginationType" : "full_numbers",
-        // "iDisplayLength": 10,
-        // "bProcessing": true,
-        // "bServerSide": true,
-        // "sAjaxSource": "<?php echo $this->webroot;?>Penjualans/rekaphistori",
-        // "sDom": 'frtip',
-        // "aoColumns": [
-            // {mData:"Penjualan.nomor"},
-            // {mData:"Penjualan.created"},
-            // {mData:"Cus.nama"},
-            // {mData:"Penjualan.nomor"}
-//          
-        // ],
-        // "aoColumnDefs" : [{
-// 
-				// "sWidth" : "10%",
-				// "aTargets" : [3]
-			// },{
-// 
-				// "sWidth" : "20%",
-				// "aTargets" : [0,1]
-			// },],
-//         
-//         
-        // "fnCreatedRow": function(nRow, aData, iDataIndex){
-            // // $tb('td:eq(3)',nRow).html("<button class='btn btn-success  btn-xs'><i class='zmdi zmdi-check zmdi-hc-fw'></i></button>");
-            // jq('td:eq(3)',nRow).html('<a class="btn btn-primary btn-xs" href="<?php echo $this->webroot;?>Penjualans/detail/'+aData.Penjualan.id+'"><i class="fa fa-chevron-circle-right"></i>&nbsp;Detail</a>');
-        // }
-    // });
-	    // jq( '#lihat' ).on( 'click', function() {
-// 	    
-	    	// jq('#data').html('<div align="center">sedang memproses data...<br><img src="<?php echo $this -> webroot; ?>img/loading.gif" /></div>');
-	    	// var nm=jq("#nomor").val();
-	    	// var plg=jq("#pelanggan").val();
-	    	// var tgla=jq("#start").val();
-	    	// var tglb=jq("#end").val();
-				// jq.ajax({
-				// type: "POST",
-				// url: "<?php echo $this -> webroot; ?>Penjualans/rekaphistori",
-				// data: { 1:tgla,2:tglb,3:nm,4:plg },
-				// success: function(html) {
-				// jq("#data").html(html);
-				// }
-			// });
-            // //code
-            // return false;
-        // });
-</script>
+

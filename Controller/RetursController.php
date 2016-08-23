@@ -158,18 +158,20 @@ class RetursController extends AppController {
 		// debug($data);
 		$post = $_POST;
 		// $_SESSION['cart_retur'] = array();
-		@$itemArray = array($data[0]['products']['idp'] => array('id' => $data[0]['products']['idp'], 'idbaku' => $data[0]['bahanbakus']['id'],'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["qty"]));
+		@$itemArray = array($data[0]['products']['idp'] => array('norandom'=>$_POST['norandom'],'id' => $data[0]['products']['idp'], 'idbaku' => $data[0]['bahanbakus']['id'],'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["qty"]));
 		if (!empty($_SESSION["cart_retur"])) {
 			$arr = array();
 			foreach ($_SESSION["cart_retur"] as $s) {
-				$arr[] = $s['id'];
+				if($_POST['norandom']==$s['norandom']){
+				$arr[] = $s['idbaku'];
+				}
 			}
 			// debug($_SESSION["cart_retur"]);
-			if (in_array($data[0]['products']['idp'], $arr)) {
+			if (in_array($data[0]['bahanbakus']['id'], $arr)) {
 				// echo "match";
 				foreach ($_SESSION["cart_retur"] as $k => $v) {
 					// debug($data[0]['products']['id']."-".$v['id']."/".$k);
-					if ($data[0]['products']['idp'] == $v['id']) {
+					if ($data[0]['bahanbakus']['id'] == $v['idbaku']) {
 						$_SESSION["cart_retur"][$k]["jml"] = $_POST["qty"];
 						// $_SESSION["cart_retur"][$k]["sn"] = $_POST["sn"];
 					}

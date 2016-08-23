@@ -67,10 +67,19 @@
 		<td align="right"><?php echo h($returb[0]['jml']); ?></td>
 	</tr>
 <?php $c +=$returb[0]['jml'];endforeach; ?>
+<?php if(!empty($retura)){?>
 <tfoot><td colspan="2"><font style="font-weight: bold">Total</td><td align="right"><font style="font-weight: bold"><?php echo (($a+$i)-1)+$retura[0][0]['jml'];?></td></tfoot>
+<?php }else{?>
+<tfoot><td colspan="2"><font style="font-weight: bold">Total</td><td align="right"><font style="font-weight: bold"><?php echo (($a+$i)-1);?></td></tfoot>
+<?php } ?>		
 	</tbody>
 	</table>
 <?php } else{
-	echo "<h4>Stok yang masih tersedia: ".($sisa[0][0]['sisa']-$retura[0][0]['jml'])+$returb[0][0]['jml']." ".$sisa[0]['products']['satuan']."</h4>";
+	$cekretura = array_filter($retura);
+	if(!empty($sisa) && !empty($cekretura)){
+	echo "<h4>Stok yang masih tersedia: ".($sisa[0][0]['sisa']+$retura[0][0]['jml'])." ".$sisa[0]['products']['satuan']."</h4>";
+	}elseif(!empty($sisa)){
+	echo "<h4>Stok yang masih tersedia: ".($sisa[0][0]['sisa'])." ".$sisa[0]['products']['satuan']."</h4>";
+	}
 }?>	
 	</div>
