@@ -8,6 +8,7 @@
 	<tr>
 		<th >Tanggal</th>
 		<th width="15%">Jumlah Bayar</th>
+		<th width="15%">Keterangan Pembayaran</th>
 		<th width="10%">Nota A</th>
 		<th width="10%">Nota B</th>
 
@@ -18,6 +19,7 @@
 		<tr>
 			<td><?php echo date("d/m/Y", strtotime($d['bayars']['created'])); ?></td>
 			<td align="right"><?php if(!empty($d['bayars']['bayar'])){echo number_format($d['bayars']['bayar'],0,',','.');}else{echo "0";}?></td>
+			<td align="right"><?php echo $d['bayars']['ket'];?></td>
 			<td>	
 			<a id="<?php echo $d['bayars']['id']; ?>" onClick="configurator(this)" href="#myModal" role="button" class="btn btn-xs btn-danger" data-toggle="modal" title="cetak nota"><li class="fa fa-folder-open-o"></li></a>
 				<?php //echo $this -> Html -> link($this -> Html -> tag('i', '', array('class' => 'fa fa-print')) . "", array( 'action' => 'cetaknota', $d['bayars']['id']), array('title'=>'cetak nota','escape' => false,'class'=>'btn btn-danger btn-xs')); ?> 

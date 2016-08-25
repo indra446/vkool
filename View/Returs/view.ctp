@@ -35,10 +35,33 @@
 	<div class="w-section-header">
 		<h2>Produk Retur</h2>
 	</div>
-	<table class="table table-bordered foo-data-table">
+	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<th>ID</th>
+				<th>Nama Produk</th>
+				<th>Dimensi</th>
+				<th>Luas Dimensi</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($data as $data){
+			?>
+		<tr>
+			<td><?php echo $data['Product']['nama_produk']?></td>
+			<td><?php echo $data['Retur']['dm1']." x ".$data['Retur']['dm2'];?></td>
+			<td><?php echo number_format($data['Retur']['dm1']*$data['Retur']['dm2'],0,',','.')." mm2";?></td>
+
+		</tr>
+			<?php }
+			?>
+		</tbody>
+	</table>
+	<div class="w-section-header">
+		<h2>Produk Diterima</h2>
+	</div>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
 				<th>Nama Produk</th>
 				<th>Dimensi</th>
 				<th>Luas Dimensi</th>
@@ -46,14 +69,13 @@
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($data as $data){
+			<?php foreach ($dataterima as $terima){
 			?>
 		<tr>
-			<td><?php echo $data['Product']['id']?></td>
-			<td><?php echo $data['Product']['nama_produk']?></td>
-			<td><?php if($data['Product']['dimensi']!=NULL){ $dimensi=explode(",", $data['Product']['dimensi']); echo $dimensi[0]." x ".$dimensi[1];}?></td>
-			<td><?php if($data['Product']['dimensi']!=NULL){echo $dimensi[0]*$dimensi[1]." mm2";}?></td>
-			<td><?php echo $data['Retur']['qty']?></td>
+			<td><?php echo $terima['Product']['nama_produk']?></td>
+			<td><?php if($terima['Product']['dimensi']!=NULL){ $dimensi=explode(",", $terima['Product']['dimensi']); echo $dimensi[0]." x ".$dimensi[1];}?></td>
+			<td><?php if($terima['Product']['dimensi']!=NULL){echo number_format($dimensi[0]*$dimensi[1],0,',','.')." mm2";}?></td>
+			<td><?php echo $terima['Retur']['qty']?></td>
 		</tr>
 			<?php }
 			?>

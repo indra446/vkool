@@ -102,6 +102,7 @@ class ProductsController extends AppController {
 							FROM
 							returs
 							INNER JOIN products ON returs.product_id = products.id
+							WHERE returs.jenis=2
 							GROUP BY
 							returs.product_id)retur ON retur.id=products.id
 					GROUP BY
@@ -200,7 +201,7 @@ class ProductsController extends AppController {
 				returs
 				INNER JOIN products ON returs.product_id = products.id
 				WHERE
-				products.id='".$id."'
+				products.id='".$id."' AND returs.jenis=2
 				GROUP BY
 				returs.product_id");	
 		$returb=$this->Product->query("SELECT

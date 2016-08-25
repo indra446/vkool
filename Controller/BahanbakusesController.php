@@ -68,7 +68,7 @@ class BahanbakusesController extends AppController {
 							penjualans
 							INNER JOIN customers ON penjualans.customer_id = customers.id
 							INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
-							INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
+							LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
 							GROUP BY
 							penjualans.id,
 							penjualans.nomor,
@@ -115,7 +115,7 @@ class BahanbakusesController extends AppController {
 							penjualans
 							INNER JOIN customers ON penjualans.customer_id = customers.id
 							INNER JOIN bayars ON bayars.id_penjualan = penjualans.id
-							INNER JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
+							LEFT JOIN bahanbakus ON bahanbakus.penjualan_id=penjualans.id
 							GROUP BY
 							penjualans.id,
 							penjualans.nomor,
@@ -374,6 +374,7 @@ class BahanbakusesController extends AppController {
 				bahanbakus.modified,products.nama_produk
 				FROM
 				bahanbakus INNER JOIN products ON bahanbakus.product_id = products.id WHERE bahanbakus.tipe=2");
+			// debug($bhnbaku);	
 		$this -> set(compact('sisa', 'bhnbaku', 'produks', 'detailpenjualan', 'produkdepan', 'produksamping', 'produkbelakang', 'produkservice', 'produkaksesoris'));
 	}
 
@@ -436,22 +437,22 @@ class BahanbakusesController extends AppController {
 			$pd = $data[0]['products']['nama_produk'];
 		} else {
 			$data = $this -> Bahanbakus -> query(" SELECT bahanbakus.id,
-        CONCAT(dm1,',',dm2) AS dimensi,
-        bahanbakus.product_id,
-        bahanbakus.tipe,
-        products.nama_produk
-        FROM
-        bahanbakus
-        INNER JOIN products ON bahanbakus.product_id = products.id
-        where bahanbakus.id='" . $produk[0] . "'");
+			        CONCAT(dm1,',',dm2) AS dimensi,
+			        bahanbakus.product_id,
+			        bahanbakus.tipe,
+			        products.nama_produk
+			        FROM
+			        bahanbakus
+			        INNER JOIN products ON bahanbakus.product_id = products.id
+			        where bahanbakus.id='" . $produk[0] . "'");
 			$idp = $data['0']['bahanbakus']['id'];
 			$dm = $data[0][0]['dimensi'];
 			$pd = $data[0]['products']['nama_produk'];
 		}
-		// debug($data);die();
+		//debug($_POST);
 		//sesi panjang
 		// $idsesip="";
-		if (!empty($_POST['datap'])) {
+		if (!empty($_SESSION["cartbb"])) {
 			$sp = explode("&", $_POST['datap']);
 			// $idsesip = array();
 			foreach ($sp as $sp) {
@@ -470,10 +471,22 @@ class BahanbakusesController extends AppController {
 			}
 
 		}
+		//sesi jml
+		if (!empty($_POST['ids'])) {
+			$js = explode("&", $_POST['ids']);
+			// $idsesil = array();
+			foreach ($js as $js) {
+				$rjs = explode("=", $js);
+				$jmlsisa[] = $rjs[1];
+			}
+
+		}
+		// debug($_POST['ids']);
 		$this -> set(compact('idsesip', 'idsesil'));
 
-		@$itemArray = array($produk[0] => array('id' => $produk[0], 'dimensi' => $dm, 'nama' => $produk[2], 'idp' => $idp, 'jenis' => $produk[1], 'nama_produk' => $pd));
+		@$itemArray = array($produk[0] => array('ids'=>'','id' => $produk[0], 'dimensi' => $dm, 'nama' => $produk[2], 'idp' => $idp, 'jenis' => $produk[1], 'nama_produk' => $pd));
 		if (!empty($_SESSION["cartbb"])) {
+			if ($produk[1] == 'b') {
 			$ceksisa = $this -> Bahanbakus -> query("SELECT
 						products.id,
 						products.nama_produk,
@@ -511,7 +524,7 @@ class BahanbakusesController extends AppController {
 					WHERE products.id='" . $data['0']['bahanbakus']['product_id'] . "'
 					GROUP BY
 					products.id");
-
+			}
 			$arr = array();
 			foreach ($_SESSION["cartbb"] as $s) {
 				$arr[] = $s['id'];
@@ -522,7 +535,18 @@ class BahanbakusesController extends AppController {
 			// debug($bk);
 			// die();
 			//bahanbaku
-			// foreach ($_SESSION["cartbb"] as $k => $v) {
+			// debug($jmlsisa[0]);
+			// $kk=explode("|", $jmlsisa);
+			foreach ($_SESSION["cartbb"] as $k => $v) {
+				// $js=0;foreach ($jmlsisa as $jmlsisa){
+				// $exjmlsisa=explode("|", $jm);
+				// if  ($exjmlsisa[1] == $k) {
+						$_SESSION["cartbb"][$k]["ids"] = $jmlsisa;
+					// }
+				// $js++;}
+// // 					
+// // 				
+			}	
 
 			if ($produk[1] == 'b') {
 				if (in_array($produk['0'], $arr)) {
@@ -540,12 +564,12 @@ class BahanbakusesController extends AppController {
 					$idsesip = $idsesip;
 				} else {
 
-					$_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
+					$_SESSION["cartbb"] = array_merge($_SESSION["cartbb"],$itemArray);
 
 				}
 				// $_SESSION["cartbb"] = $itemArray;
 			} else {
-				$_SESSION["cartbb"] = array_merge($_SESSION["cartbb"], $itemArray);
+					$_SESSION["cartbb"] = array_merge($_SESSION["cartbb"],$itemArray);
 			}
 			// }
 			// }else{

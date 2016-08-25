@@ -56,10 +56,11 @@ class RetursController extends AppController {
 	 * @return void
 	 */
 	public function view($id = null) {
-		$data = $this -> Retur -> find('all', array('recursive' => 1, 'conditions' => array('Retur.noretur' => base64_decode($id))));
+		$data = $this -> Retur -> find('all', array('recursive' => 1, 'conditions' => array('AND'=>array('Retur.noretur' => base64_decode($id),'Retur.jenis=1'))));
+		$dataterima = $this -> Retur -> find('all', array('recursive' => 1, 'conditions' => array('AND'=>array('Retur.noretur' => base64_decode($id),'Retur.jenis=2'))));
 		$tgl = $this -> konversi_tanggal("d M Y", $data[0]['Retur']['tgl_transaksi']);
 		// debug($tgl);
-		$this -> set(compact('data', 'tgl'));
+		$this -> set(compact('data', 'tgl','dataterima'));
 	}
 
 	/**
@@ -68,11 +69,21 @@ class RetursController extends AppController {
 	 * @return void
 	 */
 	public function add() {
-		unset($_SESSION['cart_retur']);
+
 		
 		if ($this -> request -> is('post')) {
+			// debug($_POST);
+			// debug($_SESSION["cart_retur"]);
+			// debug($_SESSION["terima"]);
+			if(empty($_SESSION["cart_retur"]) && empty($_SESSION["terima"])){
+					echo '<script language="javascript">';
+					echo "window.alert('Produk masih kosong')";
+					// echo 'window.location== "../../add";';
+					echo '</script>';
+					exit();
+			}else{ 				
 			$cek = $this -> Retur -> find('first', array('fields' => 'MAX(Retur.noretur)noretur'));
-			// debug($this -> request -> data);die();
+			// die();
 			if ($cek[0]['noretur'] == NULL) {
 				$newno = "RE00001";
 			} else {
@@ -81,34 +92,94 @@ class RetursController extends AppController {
 				$newno = "RE".sprintf('%05d', $no+1);
 			}
                         $zn=$this -> request -> data;
-                        $count=count($this -> request -> data['Retur']['product_id'])-1;
-			for ($i=0;$i<=$count;$i++) {
-				$this->Retur->query("DELETE FROM bahanbakus WHERE id='".$zn['Retur']['idbaku'][$i]."'");
-				$vendor = explode("-", $this -> request -> data['Retur']['vendorid']);
+                        $zn=$_POST;
+                // $count=count($this -> request -> data['Retur']['product_id'])-1;
+			// for ($i=0;$i<=$count;$i++) {
+				// $this->Retur->query("DELETE FROM bahanbakus WHERE id='".$zn['Retur']['idbaku'][$i]."'");
+				// $vendor = explode("-", $this -> request -> data['Retur']['vendorid']);
+				// $a['Retur']['noretur'] = $newno;
+				// $a['Retur']['tgl_transaksi'] = date("Y-m-d", strtotime($zn['Retur']['tgl']));
+				// $a['Retur']['vendor_id'] = $vendor[0];
+				// $a['Retur']['ket'] = $this -> request -> data['Retur']['ket'];
+				// $a['Retur']['product_id'] = $zn['Retur']['product_id'][$i];
+				// $a['Retur']['bahanbakus_id'] = $zn['Retur']['idbaku'][$i];
+				// // $a['Retur']['sn'] = $d['sn'];
+				// $a['Retur']['qty'] =$zn['Retur']['qty'][$i];
+				// // $a['Retur']['jenis'] =$zn['Retur']['jenis'][$i];
+// //                                debug($a);exit;
+				// $this -> Retur -> create();
+				// $this -> Retur -> save($a, false);
+			// }
+			foreach ($_SESSION["cart_retur"] as $k => $item){
+				$this->Retur->query("DELETE FROM bahanbakus WHERE id='".$item['idbaku']."'");
+				$vendor = explode("-", $zn['vendor']);
 				$a['Retur']['noretur'] = $newno;
-				$a['Retur']['tgl_transaksi'] = date("Y-m-d", strtotime($zn['Retur']['tgl']));
+				$a['Retur']['tgl_transaksi'] = date("Y-m-d", strtotime($zn['tgl']));
 				$a['Retur']['vendor_id'] = $vendor[0];
-				$a['Retur']['ket'] = $this -> request -> data['Retur']['ket'];
-				$a['Retur']['product_id'] = $zn['Retur']['product_id'][$i];
-				$a['Retur']['bahanbakus_id'] = $zn['Retur']['idbaku'][$i];
-				// $a['Retur']['sn'] = $d['sn'];
-				$a['Retur']['qty'] =$zn['Retur']['qty'][$i];
-				// $a['Retur']['jenis'] =$zn['Retur']['jenis'][$i];
-//                                debug($a);exit;
+				$a['Retur']['ket'] = $zn['ket'];
+				$a['Retur']['product_id'] = $item['id'];
+				$a['Retur']['bahanbakus_id'] = $item['idbaku'];
+				$a['Retur']['dm1'] = $item['dm1'];
+				$a['Retur']['dm2'] = $item['dm2'];
+				$a['Retur']['jenis'] = 1;
+
+				$this -> Retur -> create();
+				$this -> Retur -> save($a, false);
+			}
+			foreach ($_SESSION["terima"] as $kk => $terima){
+				$vendor = explode("-", $zn['vendor']);
+				$a['Retur']['noretur'] = $newno;
+				$a['Retur']['tgl_transaksi'] = date("Y-m-d", strtotime($zn['tgl']));
+				$a['Retur']['vendor_id'] = $vendor[0];
+				$a['Retur']['ket'] = $zn['ket'];
+				$a['Retur']['product_id'] = $terima['id'];
+				$a['Retur']['dm1'] = "";
+				$a['Retur']['dm2'] = "";
+				$a['Retur']['qty'] = $terima['jml'];
+				$a['Retur']['jenis'] =2;
+	
+
 				$this -> Retur -> create();
 				$this -> Retur -> save($a, false);
 			}
 			unset($_SESSION["cart_retur"]);
-			// if ($this -> Retur -> save($this -> request -> data)) {
-			$this -> Session -> setFlash('Data berhasil disimpan', 'success');
-			return $this -> redirect(array('action' => 'index'));
+			unset($_SESSION['terima']);
+			$this->Session->setFlash(__('Data berhasil disimpan'));
+			// $this -> Session -> setFlash('Data berhasil disimpan', 'success');
+			return $this -> redirect(array('action' => 'add'));
 			// } else {
 			// $this -> Session -> setFlash(__('The Retur could not be saved. Please, try again.'));
-			// }
+			}
+		}else{
+			unset($_SESSION['cart_retur']);
+			unset($_SESSION['terima']);
 		}
+		$bhnbaku = $this -> Retur -> query("SELECT
+				bahanbakus.id,
+				bahanbakus.product_id,
+				bahanbakus.dm1,
+				bahanbakus.dm2,
+				bahanbakus.id_teknisi,
+				bahanbakus.penjualan_id,
+				bahanbakus.ket,
+				bahanbakus.created,
+				bahanbakus.modified,products.nama_produk
+				FROM
+				bahanbakus INNER JOIN products ON bahanbakus.product_id = products.id WHERE bahanbakus.tipe=2");
+		$produk=$this->Retur->query("SELECT
+				products.id,
+				products.nama_produk,
+				products.dimensi
+				FROM
+				products
+				WHERE
+				products.tipe = 'Luas' AND
+				products.aktif = 1
+				ORDER BY
+				products.nama_produk ASC");				
 		$products = $this -> Retur -> Product -> find('list');
 		$vendors = $this -> Retur -> Vendor -> find('all', array('recursive' => 0));
-		$this -> set(compact('products', 'vendors'));
+		$this -> set(compact('products', 'vendors','bhnbaku','produk'));
 	}
 
 	public function auto_produk($t = null) {
@@ -138,27 +209,38 @@ class RetursController extends AppController {
 			unset($_SESSION["cart_retur"]);
 		}
 	}
+	public function del_terima() {
+		if (!empty($_SESSION["terima"])) {
+			// foreach($_SESSION["terima"] as $k => $v) {
+			// debug($k);die();
+			// if($_POST["idp"] == $k)
+			unset($_SESSION["terima"][$_POST["id"]]);
+		} elseif (empty($_POST["id"])) {
+			unset($_SESSION["terima"]);
+		}
+	}
 
 	public function cart() {
 		// debug($_POST);die();
 		// if ($_POST) {
-		$produk = explode("|", $_POST['idp']);
+			$p=$_POST;
+		// $produk = explode("|", $_POST['idp']);
 		// $data = $this -> Retur -> query(" SELECT * FROM `products` WHERE id ='" . $produk[0] . "'");
 		$data = $this -> Retur -> query(" SELECT
-				bahanbakus.id,
+				bahanbakus.id,bahanbakus.dm1,bahanbakus.dm2,
 				products.id as idp,
 				products.nama_produk
 				FROM
 				bahanbakus
 				INNER JOIN products ON bahanbakus.product_id = products.id
 				WHERE
-				bahanbakus.tipe = 2 AND bahanbakus.id ='" . $produk[0] . "'
+				bahanbakus.tipe = 2 AND bahanbakus.id ='" . $p['id'] . "'
 				ORDER BY
 				products.nama_produk ASC");
 		// debug($data);
-		$post = $_POST;
+		// $post = $_POST;
 		// $_SESSION['cart_retur'] = array();
-		@$itemArray = array($data[0]['products']['idp'] => array('norandom'=>$_POST['norandom'],'id' => $data[0]['products']['idp'], 'idbaku' => $data[0]['bahanbakus']['id'],'nama' => $data[0]['products']['nama_produk'], 'jml' => $_POST["qty"]));
+		@$itemArray = array($data[0]['products']['idp'] => array('norandom'=>$_POST['norandom'],'id' => $data[0]['products']['idp'], 'idbaku' => $data[0]['bahanbakus']['id'],'nama' => $data[0]['products']['nama_produk'],'dm1'=>$data[0]['bahanbakus']['dm1'],'dm2'=>$data[0]['bahanbakus']['dm2']));
 		if (!empty($_SESSION["cart_retur"])) {
 			$arr = array();
 			foreach ($_SESSION["cart_retur"] as $s) {
@@ -172,8 +254,11 @@ class RetursController extends AppController {
 				foreach ($_SESSION["cart_retur"] as $k => $v) {
 					// debug($data[0]['products']['id']."-".$v['id']."/".$k);
 					if ($data[0]['bahanbakus']['id'] == $v['idbaku']) {
-						$_SESSION["cart_retur"][$k]["jml"] = $_POST["qty"];
+						// $_SESSION["cart_retur"][$k]["jml"] = $_POST["qty"];
 						// $_SESSION["cart_retur"][$k]["sn"] = $_POST["sn"];
+					echo '<script language="javascript">';
+					echo 'alert("Sisa Produk sudah digunakan")';
+					echo '</script>';
 					}
 				}
 			} else
@@ -183,7 +268,53 @@ class RetursController extends AppController {
 
 		// array_push($_SESSION['cart-item'], $data);
 		// array_push($_SESSION['cart-item'], $post);
-		$this -> set(compact('data', 'post'));
+		$this -> set(compact('data', 'p'));
+		// }
+	}
+	public function terima() {
+			$p=$_POST;
+			$produk = explode("|", $p['idp']);
+			$data = $this -> Retur -> query("SELECT
+				products.id,
+				products.nama_produk,
+				products.dimensi
+				FROM
+				products
+				WHERE
+				products.tipe = 'Luas' AND products.id='".$produk[0]."' AND
+				products.aktif = 1
+				ORDER BY
+				products.nama_produk ASC");
+
+		@$itemArray = array($produk[0] => array('norandom'=>$p['norandom'],'id' => $produk[0], 'nama' => $data[0]['products']['nama_produk'],'dm'=>$data[0]['products']['dimensi'],'jml'=>$p['qty']));
+		if (!empty($_SESSION["terima"])) {
+			$arr = array();
+			foreach ($_SESSION["terima"] as $s) {
+				if($p['norandom']==$s['norandom']){
+				$arr[] = $s['id'];
+				}
+			}
+			// debug($_SESSION["terima"]);
+			if (in_array($data[0]['products']['id'], $arr)) {
+				// echo "match";
+				foreach ($_SESSION["terima"] as $k => $v) {
+					// debug($data[0]['products']['id']."-".$v['id']."/".$k);
+					if ($data[0]['products']['id'] == $v['id']) {
+						$_SESSION["terima"][$k]["jml"] = $p["qty"];
+						// $_SESSION["terima"][$k]["sn"] = $p["sn"];
+					// echo '<script language="javascript">';
+					// echo 'alert("Produk sudah digunakan")';
+					// echo '</script>';
+					}
+				}
+			} else
+				$_SESSION["terima"] = array_merge($_SESSION["terima"], $itemArray);
+		} else
+			$_SESSION["terima"] = $itemArray;
+
+		// array_push($_SESSION['cart-item'], $data);
+		// array_push($_SESSION['cart-item'], $post);
+		$this -> set(compact('data', 'p'));
 		// }
 	}/**
 

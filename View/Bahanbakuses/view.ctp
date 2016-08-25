@@ -32,13 +32,13 @@
             else {
             	$(".simpan").show();
             if (!isNaN(result)) {
-                document.getElementById('kbayar').value = result;
+                document.getElementById('kbayar').value = Math.abs(result);
                
             }}
         if(result<0){
-            labele='Uang Kembali';
+            labele='<p style="color:black;">Uang Kembali</p>';
             document.getElementById('labelkbyar').innerHTML = labele;
-        }else {labele='Kurang Bayar';
+        }else {labele='<p style="color:red;">Kurang Bayar</p>';
             document.getElementById('labelkbyar').innerHTML = labele; }
         }
 </script>
@@ -192,11 +192,11 @@ var totsd=tot-sd;
 var id = clicked.id;
          bootbox.dialog({
         title: "Input Pembayaran","className" : "my-custom-class",
-        message:'<table class="table"><tr><td><?php if(!empty($nyicil)){?> <p>Riwayat Pembayaran  <a class="btn btn-success btn-sm" href="<?php echo $this->webroot;?>bayars/riwayat/<?php echo $id; ?>">Detail</a><?php } ?></p><br>'+
-            '<table class="table table-striped"><tr><th style="width: 95px;"><?php if(!empty($nyicil)){?>Tanggal<?php }?></th><th><?php if(!empty($nyicil)){?>Jumlah Bayar<?php } ?></th></tr>'+
+        message:'<table class="table"><tr><?php if(!empty($nyicil)){?><td> <p>Riwayat Pembayaran  <a class="btn btn-success btn-sm" href="<?php echo $this->webroot;?>bayars/riwayat/<?php echo $id; ?>">Detail</a></p><br>'+
+            '<table class="table table-striped"><tr><th style="width: 95px;">Tanggal</th><th>Jumlah Bayar</th></tr>'+
              <?php foreach ($nyicil as $ny):?> '<tr><td><?php echo substr($ny['bayars']['created'],0,10); ?></td><td><?php echo $ny['bayars']['bayar'];?></td></tr>'+ <?php endforeach;?>
             '</table>'+    
-            '</td><td>'+ 
+            '</td><?php } ?><td>'+ 
             '<table class="table">' +
             '<tr><td>Total</td><td>:</td><td><?php echo $totalnya=$totals[0][0]['total'];?></td></tr>' +
             '<tr><td>Discount</td><td>:</td><td><input id="discone" name="kbayar" type="number" placeholder="Kurang Bayar" value='+disc+' class="form-control input-sm" readonly></td></tr>'+
@@ -221,7 +221,7 @@ var id = clicked.id;
             '<input id="idpenju" name="bayar" type="hidden" value="<?php echo $id;?>" placeholder="Bayar" class="form-control input-sm"> ' +
             '</div></div> ' +
             '<div class="form-group"> ' +
-            '<label class="col-md-4 control-label" for="name" id="labelkbyar">Kurang Bayar</label> ' +
+        '<label class="col-md-4 control-label" for="name" id="labelkbyar"><p style="color: red;"> Kurang Bayar</p></label> ' +
             '<div class="col-md-8"> ' +
             '<input id="kbayar" name="kbayar" type="number" placeholder="Kurang Bayar"  class="form-control input-sm" readonly> ' +
             '</div></div> ' +
@@ -266,8 +266,4 @@ var id = clicked.id;
         }    });
 }	
 </script>
-<style>
-	.my-custom-class .modal-dialog{
-    width:60%;
-}
-</style>
+

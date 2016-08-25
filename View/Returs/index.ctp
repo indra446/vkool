@@ -1,3 +1,4 @@
+<?php echo $this -> Session -> flash(); ?>
 <div class="widget-header block-header margin-bottom-0 clearfix">
     <div class="pull-left">
         <h3>RETUR</h3>

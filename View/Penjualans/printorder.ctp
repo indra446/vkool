@@ -77,7 +77,7 @@
         <td><?php echo $data[0]['karyawans']['nama'];?></td>
     </tr>
     <tr>
-        <td>Info</td>
+        <td>Informasi Tambahan</td>
         <td>:</td>
         <td><?php echo $data[0]['detail_penjualans']['ket'];?></td>
     </tr>

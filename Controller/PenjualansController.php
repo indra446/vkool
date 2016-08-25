@@ -635,8 +635,11 @@ class PenjualansController extends AppController {
 				unset($_SESSION["cart_service"]);
 
 				//				$this -> Session -> setFlash('Data berhasil disimpan', 'success');
-				$this -> Session -> setFlash(__('Data berhasil disimpan'));
-				//                                   return $this->redirect(array('action' => 'printorder/'.$lastin,array('target'=>'_blank')));
+				// $this -> Session -> setFlash(__('Data berhasil disimpan'));
+					echo '<script language="javascript">';
+					echo 'alert("Penjualan berhasil ditambahkan")';
+					echo '</script>';
+				 return $this->redirect(array('action' => 'add'));
 				echo "<script> window.open('../penjualans/printorder/$lastin');</script>";
 
 			} else {

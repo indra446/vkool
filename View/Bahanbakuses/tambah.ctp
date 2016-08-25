@@ -54,6 +54,12 @@
             <?php echo $this->Form->input('harga', array('class' => 'form-control', 'label' => false,'type'=>'number','required')); ?>
         </div>
     </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Diskon</label>
+        <div class=" col-md-8">
+            <?php echo $this->Form->input('disc', array('class' => 'form-control', 'label' => false,'type'=>'number','required')); ?>
+        </div>
+    </div>
 
     <div class="form-footer">
         <?php echo $this->Form->button('Simpan', array('type' => 'submit', 'class' => 'btn btn-primary')); ?>

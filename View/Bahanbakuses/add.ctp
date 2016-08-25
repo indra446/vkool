@@ -167,11 +167,11 @@ echo $this->Html->script(array('lib/jquery.dataTables'));
         var id = clicked.id;
         var datap = $$e('input[name="data[Penjualan][pjgsisa][]"]').serialize();
         var datal = $$e('input[name="data[Penjualan][lbrsisa][]"]').serialize();
-
+        var ids=$$e('input[name="jmlsisa[]"]').serialize();
          $.ajax({
                     type: "POST",
                     url: "<?php echo $this->webroot; ?>Bahanbakuses/depan/",
-                    data: {idp:id,datal:datal,datap:datap },
+           			data: {ids:ids,idp: id,datal:datal,datap:datap },
                     success: function (html) {
                         $('#PenjualanIdProduct').html("");
                         $('#PenjualanQty').html("");

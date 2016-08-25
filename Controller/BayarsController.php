@@ -165,7 +165,7 @@ class BayarsController extends AppController {
            
 		$data=$this->Bayar->query("SELECT
 				bayars.id,
-				bayars.bayar,
+				bayars.bayar,bayars.ket,
 				bayars.id_penjualan,
 				bayars.total,bayars.kembalian,
 				bayars.created,
